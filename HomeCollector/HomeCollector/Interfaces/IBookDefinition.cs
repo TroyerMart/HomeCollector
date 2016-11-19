@@ -14,9 +14,10 @@ namespace HomeCollector.Interfaces
         VeryGood,   // some signs of wear, can't be ex-library
         Good,       // Average used product
         Fair,       // obviously well-worn product
-        Poor        // extensive external wear, soiled, binding defects
+        Poor,        // extensive external wear, soiled, binding defects
+        Undefined
     }
-    public interface IBook: ICollectableItem
+    public interface IBookDefinition: ICollectableDefinition
     {
         string Publisher { get; set; }
         string Author { get; set; }

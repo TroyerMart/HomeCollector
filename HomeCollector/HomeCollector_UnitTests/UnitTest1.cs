@@ -8,7 +8,7 @@ namespace HomeCollector_UnitTests
     [TestClass]
     public class UnitTest1
     {
-        private Mock<IBook> mockBook = new Mock<IBook>();
+        private Mock<IBookDefinition> mockBook = new Mock<IBookDefinition>();
 
         [TestMethod]
         public void TestMethod1()

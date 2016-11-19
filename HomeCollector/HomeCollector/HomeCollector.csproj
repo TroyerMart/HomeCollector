@@ -46,18 +46,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IBook.cs" />
-    <Compile Include="Interfaces\ICollectableItem.cs" />
+    <Compile Include="Exceptions\CollectableException.cs" />
+    <Compile Include="Exceptions\CollectionException.cs" />
+    <Compile Include="Factories\CollectableDefinitionFactory.cs" />
+    <Compile Include="Interfaces\IBookDefinition.cs" />
+    <Compile Include="Interfaces\ICollectableDefinition.cs" />
     <Compile Include="Interfaces\ICollectionBase.cs" />
     <Compile Include="Interfaces\ICollectionMember.cs" />
-    <Compile Include="Interfaces\IStamp.cs" />
+    <Compile Include="Interfaces\IStampDefinition.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Members\BookDefinition.cs" />
+    <Compile Include="Models\Members\CollectionMember.cs" />
     <Compile Include="Models\HomeCollection.cs" />
+    <Compile Include="Models\Members\StampDefinition.cs" />
+    <Compile Include="Models\Members\Stamp.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
@@ -86,7 +93,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Exceptions\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

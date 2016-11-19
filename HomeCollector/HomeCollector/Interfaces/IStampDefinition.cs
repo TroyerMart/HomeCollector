@@ -17,18 +17,19 @@ namespace HomeCollector.Interfaces
         VeryFine,   // well-centered stamp with ample margins
         Fine,       // significantly offset but still has four margins
         Average,    // has at least one side with margin trimmed or cut by perforation
-        Poor        // heavily cancelled, soiled, cut
+        Poor,        // heavily cancelled, soiled, cut
+        Undefined
     }
-    public interface IStamp: ICollectableItem
+    public interface IStampDefinition: ICollectableDefinition
     {
-        string Country { get; set; }
+        CountryEnum Country { get; set; }
         bool IsPostageStamp { get; set; }
         string ScottNumber { get; set; }
         string AlternateId { get; set; }
         int YearOfIssue { get; set; }
-        DateTime FirstDayOfIssue { get; set; } 
-        bool IsMintCondition { get; set; }       
-        StampConditionEnum Condition { get; set; }
+        DateTime FirstDayOfIssue { get; set; }
+        bool Equals(IStampDefinition itemToCompare, bool useAlternateId = false);    // same definition
+
     }
 
 }

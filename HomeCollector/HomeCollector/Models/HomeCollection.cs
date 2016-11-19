@@ -1,4 +1,5 @@
-﻿using HomeCollector.Interfaces;
+﻿using HomeCollector.Factories;
+using HomeCollector.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace HomeCollector.Models
         private List<ICollectionMember> _members;
         private Type _itemType;
 
-        public HomeCollection(ICollectableItem itemToCollect)
+        public HomeCollection(ICollectableDefinition itemToCollect)
         {
             _itemType = itemToCollect.GetType();
             _members = new List<ICollectionMember>();
@@ -30,19 +31,45 @@ namespace HomeCollector.Models
 
         public void AddMember(ICollectionMember memberToAdd)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _members.Add(memberToAdd);
+            } catch (Exception ex)
+            {
+                throw;
+            }
         }
-        // also want overload to pass in ICollectableItem and other params to create an ICollectionMember
+
+        public void AddMember(ICollectableDefinition collectableItem, string memberDetails = "",
+            decimal estimatedValue = 0, bool isPlaceholder = false, bool isFavorite = false
+            )
+        {
+            ICollectableDefinition newItem = CollectableDefinitionFactory.CreateCollectableItem(_itemType);
+            ICollectionMember newMember = new CollectionMember(newItem) {
+                MemberDetails = memberDetails,
+                EstimatedValue = estimatedValue,
+                IsPlaceholder = isPlaceholder,
+                IsFavorite = isFavorite
+            };
+            AddMember(newMember);
+        }
 
         public List<ICollectionMember> GetMembers()
         {
-            throw new NotImplementedException();
+            return _members;
         }
 
         public void RemoveMember(ICollectionMember memberToRemove)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _members.Remove(memberToRemove);
+            } catch (Exception ex)
+            {
+                throw;
+            }
         }
+
     }
 
 }
