@@ -1,4 +1,5 @@
-﻿using HomeCollector.Interfaces;
+﻿using HomeCollector.Exceptions;
+using HomeCollector.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +28,47 @@ namespace HomeCollector.Models
         {
         }
 
-        public bool Equals(ICollectableDefinition itemToCompare)
+        public bool Equals(ICollectableDefinition defnToCompare)
         {
-            throw new NotImplementedException();
+            if (defnToCompare == null)
+            {
+                throw new CollectableException("Cannot compare to a null item");
+            }
+            Type defnType = defnToCompare.GetType();
+            if (defnType != typeof(BookDefinition))
+            {
+                throw new CollectableException($"Invalid type {defnType}, expected type {typeof(BookDefinition)}");
+            }
+            BookDefinition bookDef = (BookDefinition)defnToCompare;
+            if (ISBN != bookDef.ISBN)
+            {
+                return false;
+            }
+            return true;
         }
+
+        public bool Equals(IBookDefinition defnToCompare, bool useTitleAuthor)
+        {
+            if (!useTitleAuthor)
+            {
+                return Equals(defnToCompare);
+            }
+            if (defnToCompare == null)
+            {
+                throw new CollectableException("Cannot compare to a null item");
+            }
+            if (Title != defnToCompare.Title)
+            {
+                return false;
+            }
+            if (Author != defnToCompare.Author)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
     }
 
 }

@@ -51,6 +51,10 @@ namespace HomeCollector.Models
 
         public bool Equals(IStampDefinition defnToCompare, bool useAlternateId)
         {
+            if (!useAlternateId)
+            {
+                return Equals(defnToCompare);
+            }
             if (defnToCompare == null)
             {
                 throw new CollectableException("Cannot compare to a null item");
@@ -59,19 +63,9 @@ namespace HomeCollector.Models
             {
                 return false;
             }
-            if (!useAlternateId)
+            if (AlternateId != defnToCompare.AlternateId)
             {
-                if (ScottNumber != defnToCompare.ScottNumber)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (AlternateId != defnToCompare.AlternateId)
-                {
-                    return false;
-                }
+                return false;
             }
             return true;
         }

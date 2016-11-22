@@ -61,6 +61,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Factories\CollectableDefinitionFactoryTests.cs" />
+    <Compile Include="Factories\StampDefinitionFactoryTests.cs" />
+    <Compile Include="Factories\BookDefinitionFactoryTests.cs" />
     <Compile Include="Models\Members\StampTests.cs" />
     <Compile Include="Models\Members\BookTests.cs" />
     <Compile Include="UnitTest1.cs" />
