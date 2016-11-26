@@ -4,12 +4,24 @@ using HomeCollector.Models;
 using HomeCollector.Factories;
 using HomeCollector.Interfaces;
 using HomeCollector.Exceptions;
+using System.Collections.Generic;
 
 namespace HomeCollector_UnitTests.Factories
 {
     [TestClass]
     public class BookDefinitionFactoryTests
     {
+        // test book factory
+        [TestMethod]
+        public void create_new_book_item_from_factory_does_not_return_null()
+        {
+            Type bookType = typeof(BookDefinition);
+
+            ICollectableDefinition newBook = CollectableDefinitionFactory.CreateCollectableItem(bookType);
+
+            Assert.IsNotNull(newBook);
+        }
+
         [TestMethod]
         public void create_new_book_item_from_factory_returns_bookdefinition_type()
         {
@@ -17,12 +29,12 @@ namespace HomeCollector_UnitTests.Factories
 
             ICollectableDefinition newBook = CollectableDefinitionFactory.CreateCollectableItem(bookType);
 
-            Assert.IsTrue(bookType == newBook.GetType());
+            Assert.IsTrue(bookType == newBook.ObjectType);
         }
 
-        // test defaults
+        // test default values
         [TestMethod]
-        public void create_new_book_item_from_factory_condition_defaults_to_undefined()
+        public void create_new_book_item_from_factory_bookcondition_defaults_to_undefined()
         {
             Type bookType = typeof(BookDefinition);
 
@@ -31,155 +43,38 @@ namespace HomeCollector_UnitTests.Factories
             Assert.IsTrue(newBook.Condition == BookConditionEnum.Undefined);
         }
 
-        // test equality
         [TestMethod]
-        public void compare_book_definitions_by_isbn_are_equal()
+        public void create_new_book_item_from_factory_getitems_does_not_return_null_list()
         {
             Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.ISBN = "978-0465002047";
-            IBookDefinition testbook = new BookDefinition()
-                { ISBN = book.ISBN };
+            BookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
 
-            bool isEqual = book.Equals(testbook);
+            IList<ICollectionMember> books = book.GetItems();
 
-            Assert.IsTrue(isEqual);
+            Assert.IsNotNull(books);
         }
 
         [TestMethod]
-        public void compare_book_definitions_by_isbn_are_not_equal()
+        public void create_new_book_item_from_factory_getitems_defaults_to_zero_items_in_list()
         {
             Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.ISBN = "978-0465002047";
-            IBookDefinition testbook = new BookDefinition()
-                { ISBN = "123-0000000000" };
+            BookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
 
-            bool isEqual = book.Equals(testbook);
+            IList<ICollectionMember> books = book.GetItems();
 
-            Assert.IsFalse(isEqual);
+            Assert.AreEqual(0, books.Count);
         }
 
         [TestMethod]
-        public void compare_book_definitions_explicitly_by_isbn_are_equal()
+        public void create_new_book_item_from_factory_datepublished_defaults_to_min_date()
         {
             Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.ISBN = "978-0465002047";
-            IBookDefinition testbook = new BookDefinition()
-                { ISBN = book.ISBN };
 
-            bool isEqual = book.Equals(testbook, false);
+            BookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
 
-            Assert.IsTrue(isEqual);
+            Assert.AreEqual(DateTime.MinValue, book.DatePublished);
         }
 
-        [TestMethod]
-        public void compare_book_definitions_explicitly_isbn_are_not_equal()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.ISBN = "978-0465002047";
-            IBookDefinition testbook = new BookDefinition()
-                { ISBN = "123-0000000000" };
 
-            bool isEqual = book.Equals(testbook, false);
-
-            Assert.IsFalse(isEqual);
-        }
-
-        [TestMethod]
-        public void compare_book_definitions_by_title_and_author_are_equal()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.Title = "Pebble in the Sky";
-            book.Author = "Asimov, Isaac";
-
-            IBookDefinition testbook = new BookDefinition()
-            {
-                Title = book.Title,
-                Author = book.Author
-            };
-
-            bool isEqual = book.Equals(testbook, true);
-
-            Assert.IsTrue(isEqual);
-        }
-
-        [TestMethod]
-        public void compare_book_definitions_by_title_and_author_are_not_equal_title()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.Title = "Pebble in the Sky";
-            book.Author = "Asimov, Isaac";
-
-            IBookDefinition testbook = new BookDefinition()
-            {
-                Title = "Something Else",
-                Author = book.Author
-            };
-
-            bool isEqual = book.Equals(testbook, true);
-
-            Assert.IsFalse(isEqual);
-        }
-
-        [TestMethod]
-        public void compare_book_definitions_by_title_and_author_are_not_equal_author()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.Title = "Pebble in the Sky";
-            book.Author = "Asimov, Isaac";
-
-            IBookDefinition testbook = new BookDefinition()
-            {
-                Title = book.Title,
-                Author = "Lee, Stan"
-            };
-
-            bool isEqual = book.Equals(testbook, true);
-
-            Assert.IsFalse(isEqual);
-        }
-
-        [TestMethod, ExpectedException(typeof(CollectableException))]
-        public void compare_book_definitions_returns_false_when_null()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            IBookDefinition testbook = null;
-
-            bool isEqual = book.Equals(testbook);
-
-            Assert.IsFalse(isEqual, "Expected test to throw exception when comparing to a null definition");
-        }
-
-        [TestMethod, ExpectedException(typeof(CollectableException))]
-        public void compare_book_definitions_by_title_and_author_returns_false_when_null()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            IBookDefinition testbook = null;
-
-            bool isEqual = book.Equals(testbook, true);
-
-            Assert.IsFalse(isEqual, "Expected test to throw exception when comparing a null definition");
-        }
-
-        [TestMethod, ExpectedException(typeof(CollectableException))]
-        public void compare_book_definitions_by_explicit_scottnumber_returns_false_when_null()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            IBookDefinition testbook = null;
-
-            bool isEqual = book.Equals(testbook, false);
-
-            Assert.IsFalse(isEqual, "Expected test to throw exception when comparing a null definition");
-        }
-        
     }
 }

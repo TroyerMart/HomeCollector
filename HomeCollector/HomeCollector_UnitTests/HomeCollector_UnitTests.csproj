@@ -63,8 +63,10 @@
     <Compile Include="Factories\CollectableDefinitionFactoryTests.cs" />
     <Compile Include="Factories\StampDefinitionFactoryTests.cs" />
     <Compile Include="Factories\BookDefinitionFactoryTests.cs" />
-    <Compile Include="Models\Members\StampTests.cs" />
-    <Compile Include="Models\Members\BookTests.cs" />
+    <Compile Include="Models\Members\StampDefinitionTests.cs" />
+    <Compile Include="Models\Members\BookDefinitionTests.cs" />
+    <Compile Include="Models\Members\BookItemTests.cs" />
+    <Compile Include="Models\Members\StampItemTests.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

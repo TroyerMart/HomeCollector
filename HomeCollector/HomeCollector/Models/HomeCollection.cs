@@ -36,23 +36,23 @@ namespace HomeCollector.Models
                 _members.Add(memberToAdd);
             } catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
-        public void AddMember(ICollectableDefinition collectableItem, string memberDetails = "",
-            decimal estimatedValue = 0, bool isPlaceholder = false, bool isFavorite = false
-            )
-        {
-            ICollectableDefinition newItem = CollectableDefinitionFactory.CreateCollectableItem(_itemType);
-            ICollectionMember newMember = new CollectionMember(newItem) {
-                MemberDetails = memberDetails,
-                EstimatedValue = estimatedValue,
-                IsPlaceholder = isPlaceholder,
-                IsFavorite = isFavorite
-            };
-            AddMember(newMember);
-        }
+        //public void AddMember(ICollectableDefinition collectableItem, string memberDetails = "",
+        //    decimal estimatedValue = 0, bool isPlaceholder = false, bool isFavorite = false
+        //    )
+        //{
+        //    ICollectableDefinition newItem = CollectableDefinitionFactory.CreateCollectableItem(_itemType);
+        //    ICollectionMember newMember = new CollectionMember(newItem) {
+        //        ItemDetails = memberDetails,
+        //        EstimatedValue = estimatedValue,
+        //        IsPlaceholder = isPlaceholder,
+        //        IsFavorite = isFavorite
+        //    };
+        //    AddMember(newMember);
+        //}
 
         public List<ICollectionMember> GetMembers()
         {
@@ -66,7 +66,7 @@ namespace HomeCollector.Models
                 _members.Remove(memberToRemove);
             } catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 

@@ -12,7 +12,7 @@ namespace HomeCollector_UnitTests.Factories
     public class CollectableDefinitionFactoryTests
     {
         [TestMethod, ExpectedException(typeof(CollectableException))]
-        public void create_new_item_from_null_type_fails()
+        public void create_new_collectable_item_from_null_type_throws_exception()
         {
             Type invalidType = null;
 
@@ -22,7 +22,7 @@ namespace HomeCollector_UnitTests.Factories
         }
 
         [TestMethod, ExpectedException(typeof(CollectableException))]
-        public void create_new_item_from_invalid_type_fails()
+        public void create_new_collectable_item_from_invalid_type_throws_exception()
         {
             Type invalidType = typeof(int);
 
@@ -32,7 +32,7 @@ namespace HomeCollector_UnitTests.Factories
         }
 
         [TestMethod, ExpectedException(typeof(CollectableException))]
-        public void create_new_item_from_ICollectableItem_type_fails()
+        public void create_new_collectable_item_from_ICollectableItem_interface_throws_exception()
         {
             Type invalidType = typeof(ICollectableDefinition);
 
@@ -42,15 +42,34 @@ namespace HomeCollector_UnitTests.Factories
         }
 
         [TestMethod, ExpectedException(typeof(CollectableException))]
-        public void create_new_item_from_interface_type_fails()
+        public void create_new_collectable_item_from_interface_type_throws_exception()
         {
             Type invalidType = typeof(IStampDefinition);
 
             ICollectableDefinition newItem = CollectableDefinitionFactory.CreateCollectableItem(invalidType);
 
-            Assert.IsFalse(true, "Expected test to fail if passed an interface instead of valid object type");
+            Assert.IsFalse(true, "Expected test to fail if passed an interface instead of valid collectable definition type");
         }
 
+        [TestMethod]
+        public void create_new_definition_from_valid_collectable_definition_stamptype_succeeds()
+        {
+            Type validType = typeof(StampDefinition);   // implements ICollectableDefinition
+
+            ICollectableDefinition newItem = CollectableDefinitionFactory.CreateCollectableItem(validType);
+
+            Assert.AreEqual(validType, newItem.ObjectType, "Expected to get instance of a stamp defintion type");
+        }
+
+        [TestMethod]
+        public void create_new_definition_from_valid_collectable_definition_booktype_succeeds()
+        {
+            Type validType = typeof(BookDefinition);   // implements ICollectableDefinition
+
+            ICollectableDefinition newItem = CollectableDefinitionFactory.CreateCollectableItem(validType);
+
+            Assert.AreEqual(validType, newItem.ObjectType, "Expected to get instance of a book definition type");
+        }
 
     }
 }

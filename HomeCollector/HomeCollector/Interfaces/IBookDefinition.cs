@@ -17,18 +17,16 @@ namespace HomeCollector.Interfaces
         Poor,        // extensive external wear, soiled, binding defects
         Undefined
     }
-    public interface IBookDefinition: ICollectableDefinition
+    public interface IBookDefinition
     {
+        string Title { get; set; }
         string Publisher { get; set; }
         string Author { get; set; }
         DateTime DatePublished { get; set; }
         string Edition { get; set; }
-        BookConditionEnum Condition { get; set; }
         string ISBN { get; set; }
         string Series { get; set; }
         int BookNumber { get;  set;}
-
-        bool Equals(IBookDefinition defnToCompare, bool useTitleAuthor);
 
     }
 

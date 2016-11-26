@@ -20,7 +20,7 @@ namespace HomeCollector.Interfaces
         Poor,        // heavily cancelled, soiled, cut
         Undefined
     }
-    public interface IStampDefinition: ICollectableDefinition
+    public interface IStampDefinition
     {
         CountryEnum Country { get; set; }
         bool IsPostageStamp { get; set; }
@@ -28,8 +28,6 @@ namespace HomeCollector.Interfaces
         string AlternateId { get; set; }
         int YearOfIssue { get; set; }
         DateTime FirstDayOfIssue { get; set; }
-
-        bool Equals(IStampDefinition itemToCompare, bool useAlternateId); 
 
     }
 

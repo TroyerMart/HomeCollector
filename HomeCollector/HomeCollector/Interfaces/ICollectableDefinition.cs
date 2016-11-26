@@ -11,10 +11,17 @@ namespace HomeCollector.Interfaces
     //    or a 2nd edition of Foundation by Isaac Asimov
     public interface ICollectableDefinition
     {
-        string Title { get; set; }
+        Type ObjectType { get; }
+
+        string DisplayName { get; set; }
         string Description { get; set; }    // description of the generic item
 
-        bool Equals(ICollectableDefinition defnToCompare);
+        IList<ICollectionMember> GetItems();
+        void AddItem(ICollectionMember itemToAdd);
+        void RemoveItem(ICollectionMember itemToRemove);
+
+        bool IsSame(ICollectableDefinition defnToCompare, bool useAlternateId);
+
     }
 
 }
