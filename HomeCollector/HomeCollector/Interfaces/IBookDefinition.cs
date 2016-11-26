@@ -28,6 +28,8 @@ namespace HomeCollector.Interfaces
         string Series { get; set; }
         int BookNumber { get;  set;}
 
+        bool Equals(IBookDefinition defnToCompare, bool useTitleAuthor);
+
     }
 
 }

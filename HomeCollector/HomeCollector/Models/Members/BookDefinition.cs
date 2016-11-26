@@ -15,12 +15,12 @@ namespace HomeCollector.Models
         public string Description { get; set; }    // description of the generic item
 
         // from IBook
-        public string Publisher { get; set; }
         public string Author { get; set; }
+        public string ISBN { get; set; }
+        public string Publisher { get; set; }
         public DateTime DatePublished { get; set; }
         public string Edition { get; set; }
         public BookConditionEnum Condition { get; set; } = BookConditionEnum.Undefined;
-        public string ISBN { get; set; }
         public string Series { get; set; }
         public int BookNumber { get; set; }
 

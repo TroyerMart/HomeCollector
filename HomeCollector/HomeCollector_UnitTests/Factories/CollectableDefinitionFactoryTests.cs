@@ -15,7 +15,9 @@ namespace HomeCollector_UnitTests.Factories
         public void create_new_item_from_null_type_fails()
         {
             Type invalidType = null;
+
             ICollectableDefinition newItem = CollectableDefinitionFactory.CreateCollectableItem(invalidType);
+
             Assert.IsFalse(true, "Expected test to fail if passed a null type");
         }
 
@@ -23,7 +25,9 @@ namespace HomeCollector_UnitTests.Factories
         public void create_new_item_from_invalid_type_fails()
         {
             Type invalidType = typeof(int);
+
             ICollectableDefinition newItem = CollectableDefinitionFactory.CreateCollectableItem(invalidType);
+
             Assert.IsFalse(true, "Expected test to fail if passed an invalid type");
         }
 
@@ -31,7 +35,9 @@ namespace HomeCollector_UnitTests.Factories
         public void create_new_item_from_ICollectableItem_type_fails()
         {
             Type invalidType = typeof(ICollectableDefinition);
+
             ICollectableDefinition newItem = CollectableDefinitionFactory.CreateCollectableItem(invalidType);
+
             Assert.IsFalse(true, "Expected test to fail if passed an invalid type");
         }
 
@@ -39,7 +45,9 @@ namespace HomeCollector_UnitTests.Factories
         public void create_new_item_from_interface_type_fails()
         {
             Type invalidType = typeof(IStampDefinition);
+
             ICollectableDefinition newItem = CollectableDefinitionFactory.CreateCollectableItem(invalidType);
+
             Assert.IsFalse(true, "Expected test to fail if passed an interface instead of valid object type");
         }
 

@@ -28,7 +28,8 @@ namespace HomeCollector.Interfaces
         string AlternateId { get; set; }
         int YearOfIssue { get; set; }
         DateTime FirstDayOfIssue { get; set; }
-        bool Equals(IStampDefinition itemToCompare, bool useAlternateId = false);    // same definition
+
+        bool Equals(IStampDefinition itemToCompare, bool useAlternateId); 
 
     }
 

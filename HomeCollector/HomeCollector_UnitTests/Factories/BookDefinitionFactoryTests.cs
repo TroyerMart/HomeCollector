@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HomeCollector.Models;
 using HomeCollector.Factories;
 using HomeCollector.Interfaces;
+using HomeCollector.Exceptions;
 
 namespace HomeCollector_UnitTests.Factories
 {
@@ -13,7 +14,9 @@ namespace HomeCollector_UnitTests.Factories
         public void create_new_book_item_from_factory_returns_bookdefinition_type()
         {
             Type bookType = typeof(BookDefinition);
+
             ICollectableDefinition newBook = CollectableDefinitionFactory.CreateCollectableItem(bookType);
+
             Assert.IsTrue(bookType == newBook.GetType());
         }
 
@@ -22,7 +25,9 @@ namespace HomeCollector_UnitTests.Factories
         public void create_new_book_item_from_factory_condition_defaults_to_undefined()
         {
             Type bookType = typeof(BookDefinition);
+
             BookDefinition newBook = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
+
             Assert.IsTrue(newBook.Condition == BookConditionEnum.Undefined);
         }
 
@@ -32,144 +37,112 @@ namespace HomeCollector_UnitTests.Factories
         {
             Type bookType = typeof(BookDefinition);
             IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.ISBN = "";
-
+            book.ISBN = "978-0465002047";
             IBookDefinition testbook = new BookDefinition()
                 { ISBN = book.ISBN };
 
-            Assert.IsTrue(book.Equals(testbook));
+            bool isEqual = book.Equals(testbook);
+
+            Assert.IsTrue(isEqual);
         }
 
-
-        // need to arrange all tests to Arrange Act  Assert - in books and stamps!
-
         [TestMethod]
-        public void compare_book_definitions_by_country_and_scottnumber_are_not_equal_country()
+        public void compare_book_definitions_by_isbn_are_not_equal()
         {
             Type bookType = typeof(BookDefinition);
             IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.Country = CountryEnum.USA;
-            book.ScottNumber = "1000";
+            book.ISBN = "978-0465002047";
+            IBookDefinition testbook = new BookDefinition()
+                { ISBN = "123-0000000000" };
+
+            bool isEqual = book.Equals(testbook);
+
+            Assert.IsFalse(isEqual);
+        }
+
+        [TestMethod]
+        public void compare_book_definitions_explicitly_by_isbn_are_equal()
+        {
+            Type bookType = typeof(BookDefinition);
+            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
+            book.ISBN = "978-0465002047";
+            IBookDefinition testbook = new BookDefinition()
+                { ISBN = book.ISBN };
+
+            bool isEqual = book.Equals(testbook, false);
+
+            Assert.IsTrue(isEqual);
+        }
+
+        [TestMethod]
+        public void compare_book_definitions_explicitly_isbn_are_not_equal()
+        {
+            Type bookType = typeof(BookDefinition);
+            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
+            book.ISBN = "978-0465002047";
+            IBookDefinition testbook = new BookDefinition()
+                { ISBN = "123-0000000000" };
+
+            bool isEqual = book.Equals(testbook, false);
+
+            Assert.IsFalse(isEqual);
+        }
+
+        [TestMethod]
+        public void compare_book_definitions_by_title_and_author_are_equal()
+        {
+            Type bookType = typeof(BookDefinition);
+            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
+            book.Title = "Pebble in the Sky";
+            book.Author = "Asimov, Isaac";
 
             IBookDefinition testbook = new BookDefinition()
             {
-                Country = CountryEnum.Canada,
-                ScottNumber = book.ScottNumber
+                Title = book.Title,
+                Author = book.Author
             };
 
-            Assert.IsFalse(book.Equals(testbook));
+            bool isEqual = book.Equals(testbook, true);
+
+            Assert.IsTrue(isEqual);
         }
 
         [TestMethod]
-        public void compare_book_definitions_by_country_and_scottnumber_are_not_equal_scottnumber()
+        public void compare_book_definitions_by_title_and_author_are_not_equal_title()
         {
             Type bookType = typeof(BookDefinition);
             IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.Country = CountryEnum.USA;
-            book.ScottNumber = "1000";
-
-            IBookDefinition testbook = new BookDefinition()
-            { ScottNumber = "1001", Country = book.Country };
-
-            Assert.IsFalse(book.Equals(testbook));
-        }
-        [TestMethod]
-        public void compare_book_definitions_by_country_and_explicit_scottnumber_are_equal()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.Country = CountryEnum.USA;
-            book.ScottNumber = "1000";
+            book.Title = "Pebble in the Sky";
+            book.Author = "Asimov, Isaac";
 
             IBookDefinition testbook = new BookDefinition()
             {
-                Country = book.Country,
-                ScottNumber = book.ScottNumber
+                Title = "Something Else",
+                Author = book.Author
             };
 
-            Assert.IsTrue(book.Equals(testbook, false));
+            bool isEqual = book.Equals(testbook, true);
+
+            Assert.IsFalse(isEqual);
         }
 
         [TestMethod]
-        public void compare_book_definitions_by_country_and_explicit_scottnumber_are_not_equal_country()
+        public void compare_book_definitions_by_title_and_author_are_not_equal_author()
         {
             Type bookType = typeof(BookDefinition);
             IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.Country = CountryEnum.USA;
-            book.ScottNumber = "1000";
+            book.Title = "Pebble in the Sky";
+            book.Author = "Asimov, Isaac";
 
             IBookDefinition testbook = new BookDefinition()
             {
-                Country = CountryEnum.Canada,
-                ScottNumber = book.ScottNumber
+                Title = book.Title,
+                Author = "Lee, Stan"
             };
 
-            Assert.IsFalse(book.Equals(testbook, false));
-        }
+            bool isEqual = book.Equals(testbook, true);
 
-        [TestMethod]
-        public void compare_book_definitions_by_country_and_explicit_scottnumber_are_not_equal_scottnumber()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.Country = CountryEnum.USA;
-            book.ScottNumber = "1000";
-
-            IBookDefinition testbook = new BookDefinition()
-            { ScottNumber = "1001", Country = book.Country };
-
-            Assert.IsFalse(book.Equals(testbook, false));
-        }
-
-        [TestMethod]
-        public void compare_book_definitions_by_country_and_alternateid_are_equal()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.Country = CountryEnum.USA;
-            book.AlternateId = "1000";
-
-            IBookDefinition testbook = new BookDefinition()
-            {
-                Country = book.Country,
-                AlternateId = book.AlternateId
-            };
-
-            Assert.IsTrue(book.Equals(testbook, true));
-        }
-
-        [TestMethod]
-        public void compare_book_definitions_by_country_and_alternateid_are_not_equal_country()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.Country = CountryEnum.USA;
-            book.AlternateId = "1000";
-
-            IBookDefinition testbook = new BookDefinition()
-            {
-                Country = CountryEnum.Canada,
-                ScottNumber = book.AlternateId
-            };
-
-            Assert.IsFalse(book.Equals(testbook, true));
-        }
-
-        [TestMethod]
-        public void compare_book_definitions_by_country_and_alternateid_are_not_equal_alternateid()
-        {
-            Type bookType = typeof(BookDefinition);
-            IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-            book.Country = CountryEnum.USA;
-            book.AlternateId = "1000";
-
-            IBookDefinition testbook = new BookDefinition()
-            {
-                Country = book.Country,
-                AlternateId = "1001"
-            };
-
-            Assert.IsFalse(book.Equals(testbook, true));
+            Assert.IsFalse(isEqual);
         }
 
         [TestMethod, ExpectedException(typeof(CollectableException))]
@@ -177,21 +150,23 @@ namespace HomeCollector_UnitTests.Factories
         {
             Type bookType = typeof(BookDefinition);
             IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-
             IBookDefinition testbook = null;
 
-            Assert.IsFalse(book.Equals(testbook), "Expected test to fail when comparing a null definition");
+            bool isEqual = book.Equals(testbook);
+
+            Assert.IsFalse(isEqual, "Expected test to throw exception when comparing to a null definition");
         }
 
         [TestMethod, ExpectedException(typeof(CollectableException))]
-        public void compare_book_definitions_by_alternateid_returns_false_when_null()
+        public void compare_book_definitions_by_title_and_author_returns_false_when_null()
         {
             Type bookType = typeof(BookDefinition);
             IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-
             IBookDefinition testbook = null;
 
-            Assert.IsFalse(book.Equals(testbook, true), "Expected test to fail when comparing a null definition");
+            bool isEqual = book.Equals(testbook, true);
+
+            Assert.IsFalse(isEqual, "Expected test to throw exception when comparing a null definition");
         }
 
         [TestMethod, ExpectedException(typeof(CollectableException))]
@@ -199,14 +174,12 @@ namespace HomeCollector_UnitTests.Factories
         {
             Type bookType = typeof(BookDefinition);
             IBookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
-
             IBookDefinition testbook = null;
 
-            Assert.IsFalse(book.Equals(testbook, false), "Expected test to fail when comparing a null definition");
+            bool isEqual = book.Equals(testbook, false);
+
+            Assert.IsFalse(isEqual, "Expected test to throw exception when comparing a null definition");
         }
-
-
-        // test equality
-
+        
     }
 }

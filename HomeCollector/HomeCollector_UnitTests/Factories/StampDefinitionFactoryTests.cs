@@ -49,14 +49,15 @@ namespace HomeCollector_UnitTests.Factories
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
             stamp.Country = CountryEnum.USA;
             stamp.ScottNumber = "1000";
-
             IStampDefinition testStamp = new StampDefinition()
             {
                 Country = stamp.Country,
                 ScottNumber = stamp.ScottNumber
             };
 
-            Assert.IsTrue(stamp.Equals(testStamp));
+            bool isEqual = stamp.Equals(testStamp);
+
+            Assert.IsTrue(isEqual);
         }
 
         [TestMethod]
@@ -66,14 +67,15 @@ namespace HomeCollector_UnitTests.Factories
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
             stamp.Country = CountryEnum.USA;
             stamp.ScottNumber = "1000";
-
             IStampDefinition testStamp = new StampDefinition()
             {
                 Country = CountryEnum.Canada,
                 ScottNumber = stamp.ScottNumber
             };
 
-            Assert.IsFalse(stamp.Equals(testStamp));
+            bool isEqual = stamp.Equals(testStamp);
+
+            Assert.IsFalse(isEqual);
         }
 
         [TestMethod]
@@ -83,58 +85,63 @@ namespace HomeCollector_UnitTests.Factories
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
             stamp.Country = CountryEnum.USA;
             stamp.ScottNumber = "1000";
-
             IStampDefinition testStamp = new StampDefinition()
             { ScottNumber = "1001", Country = stamp.Country };
 
-            Assert.IsFalse(stamp.Equals(testStamp));
+            bool isEqual = stamp.Equals(testStamp);
+
+            Assert.IsFalse(isEqual);
         }
+
         [TestMethod]
-        public void compare_stamp_definitions_by_country_and_explicit_scottnumber_are_equal()
+        public void compare_stamp_definitions_by_country_and_explicitly_by_scottnumber_are_equal()
         {
             Type stampType = typeof(StampDefinition);
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
             stamp.Country = CountryEnum.USA;
             stamp.ScottNumber = "1000";
-
             IStampDefinition testStamp = new StampDefinition()
             {
                 Country = stamp.Country,
                 ScottNumber = stamp.ScottNumber
             };
 
-            Assert.IsTrue(stamp.Equals(testStamp, false));
+            bool isEqual = stamp.Equals(testStamp, false);
+            
+            Assert.IsTrue(isEqual);
         }
 
         [TestMethod]
-        public void compare_stamp_definitions_by_country_and_explicit_scottnumber_are_not_equal_country()
+        public void compare_stamp_definitions_by_country_and_explicitly_by_scottnumber_are_not_equal_country()
         {
             Type stampType = typeof(StampDefinition);
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
             stamp.Country = CountryEnum.USA;
             stamp.ScottNumber = "1000";
-
             IStampDefinition testStamp = new StampDefinition()
             {
                 Country = CountryEnum.Canada,
                 ScottNumber = stamp.ScottNumber
             };
 
-            Assert.IsFalse(stamp.Equals(testStamp, false));
+            bool isEqual = stamp.Equals(testStamp, false);
+
+            Assert.IsFalse(isEqual);
         }
 
         [TestMethod]
-        public void compare_stamp_definitions_by_country_and_explicit_scottnumber_are_not_equal_scottnumber()
+        public void compare_stamp_definitions_by_country_and_explicitly_by_scottnumber_are_not_equal_scottnumber()
         {
             Type stampType = typeof(StampDefinition);
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
             stamp.Country = CountryEnum.USA;
             stamp.ScottNumber = "1000";
-
             IStampDefinition testStamp = new StampDefinition()
             { ScottNumber = "1001", Country = stamp.Country };
 
-            Assert.IsFalse(stamp.Equals(testStamp, false));
+            bool isEqual = stamp.Equals(testStamp, false);
+
+            Assert.IsFalse(isEqual);
         }
 
         [TestMethod]
@@ -144,14 +151,15 @@ namespace HomeCollector_UnitTests.Factories
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
             stamp.Country = CountryEnum.USA;
             stamp.AlternateId = "1000";
-
             IStampDefinition testStamp = new StampDefinition()
             {
                 Country = stamp.Country,
                 AlternateId = stamp.AlternateId
             };
 
-            Assert.IsTrue(stamp.Equals(testStamp, true));
+            bool isEqual = stamp.Equals(testStamp, true);
+
+            Assert.IsTrue(isEqual);
         }
 
         [TestMethod]
@@ -161,14 +169,15 @@ namespace HomeCollector_UnitTests.Factories
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
             stamp.Country = CountryEnum.USA;
             stamp.AlternateId = "1000";
-
             IStampDefinition testStamp = new StampDefinition()
             {
                 Country = CountryEnum.Canada,
                 ScottNumber = stamp.AlternateId
             };
 
-            Assert.IsFalse(stamp.Equals(testStamp, true));
+            bool isEqual = stamp.Equals(testStamp, true);
+
+            Assert.IsFalse(isEqual);
         }
 
         [TestMethod]
@@ -178,14 +187,15 @@ namespace HomeCollector_UnitTests.Factories
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
             stamp.Country = CountryEnum.USA;
             stamp.AlternateId = "1000";
-
             IStampDefinition testStamp = new StampDefinition()
             {
                 Country = stamp.Country,
                 AlternateId = "1001"
             };
 
-            Assert.IsFalse(stamp.Equals(testStamp, true));
+            bool isEqual = stamp.Equals(testStamp, true);
+
+            Assert.IsFalse(isEqual);
         }
 
         [TestMethod, ExpectedException(typeof(CollectableException))]
@@ -193,10 +203,11 @@ namespace HomeCollector_UnitTests.Factories
         {
             Type stampType = typeof(StampDefinition);
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-
             IStampDefinition testStamp = null;
 
-            Assert.IsFalse(stamp.Equals(testStamp), "Expected test to fail when comparing a null definition");
+            bool isEqual = stamp.Equals(testStamp);
+
+            Assert.IsFalse(isEqual, "Expected test to throw exception when comparing to a null definition");
         }
 
         [TestMethod, ExpectedException(typeof(CollectableException))]
@@ -204,21 +215,23 @@ namespace HomeCollector_UnitTests.Factories
         {
             Type stampType = typeof(StampDefinition);
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-
             IStampDefinition testStamp = null;
 
-            Assert.IsFalse(stamp.Equals(testStamp, true), "Expected test to fail when comparing a null definition");
+            bool isEqual = stamp.Equals(testStamp, true);
+
+            Assert.IsFalse(isEqual, "Expected test to throw exception when comparing a null definition");
         }
 
         [TestMethod, ExpectedException(typeof(CollectableException))]
-        public void compare_stamp_definitions_by_explicit_scottnumber_returns_false_when_null()
+        public void compare_stamp_definitions_by_explicitly_by_scottnumber_returns_false_when_null()
         {
             Type stampType = typeof(StampDefinition);
             IStampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-
             IStampDefinition testStamp = null;
 
-            Assert.IsFalse(stamp.Equals(testStamp, false), "Expected test to fail when comparing a null definition");
+            bool isEqual = stamp.Equals(testStamp, false);
+
+            Assert.IsFalse(isEqual, "Expected test to throw exception when comparing a null definition");
         }
 
     }
