@@ -17,7 +17,7 @@ namespace HomeCollector_UnitTests.Models.Members
         {
             Type stampType = typeof(StampDefinition);
             StampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-            stamp.Country = CountryEnum.USA;
+            stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampDefinition testStamp = new StampDefinition()
             {
@@ -35,11 +35,11 @@ namespace HomeCollector_UnitTests.Models.Members
         {
             Type stampType = typeof(StampDefinition);
             StampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-            stamp.Country = CountryEnum.USA;
+            stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampDefinition testStamp = new StampDefinition()
             {
-                Country = CountryEnum.Canada,
+                Country = StampCountryEnum.Canada,
                 ScottNumber = stamp.ScottNumber
             };
 
@@ -53,7 +53,7 @@ namespace HomeCollector_UnitTests.Models.Members
         {
             Type stampType = typeof(StampDefinition);
             StampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-            stamp.Country = CountryEnum.USA;
+            stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampDefinition testStamp = new StampDefinition()
             { ScottNumber = "1001", Country = stamp.Country };
@@ -68,7 +68,7 @@ namespace HomeCollector_UnitTests.Models.Members
         {
             Type stampType = typeof(StampDefinition);
             StampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-            stamp.Country = CountryEnum.USA;
+            stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampDefinition testStamp = new StampDefinition()
             {
@@ -86,11 +86,11 @@ namespace HomeCollector_UnitTests.Models.Members
         {
             Type stampType = typeof(StampDefinition);
             StampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-            stamp.Country = CountryEnum.USA;
+            stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampDefinition testStamp = new StampDefinition()
             {
-                Country = CountryEnum.Canada,
+                Country = StampCountryEnum.Canada,
                 ScottNumber = stamp.ScottNumber
             };
 
@@ -104,7 +104,7 @@ namespace HomeCollector_UnitTests.Models.Members
         {
             Type stampType = typeof(StampDefinition);
             StampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-            stamp.Country = CountryEnum.USA;
+            stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampDefinition testStamp = new StampDefinition()
             { ScottNumber = "1001", Country = stamp.Country };
@@ -119,7 +119,7 @@ namespace HomeCollector_UnitTests.Models.Members
         {
             Type stampType = typeof(StampDefinition);
             StampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-            stamp.Country = CountryEnum.USA;
+            stamp.Country = StampCountryEnum.USA;
             stamp.AlternateId = "1000";
             StampDefinition testStamp = new StampDefinition()
             {
@@ -137,11 +137,11 @@ namespace HomeCollector_UnitTests.Models.Members
         {
             Type stampType = typeof(StampDefinition);
             StampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-            stamp.Country = CountryEnum.USA;
+            stamp.Country = StampCountryEnum.USA;
             stamp.AlternateId = "1000";
             StampDefinition testStamp = new StampDefinition()
             {
-                Country = CountryEnum.Canada,
+                Country = StampCountryEnum.Canada,
                 ScottNumber = stamp.AlternateId
             };
 
@@ -155,7 +155,7 @@ namespace HomeCollector_UnitTests.Models.Members
         {
             Type stampType = typeof(StampDefinition);
             StampDefinition stamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
-            stamp.Country = CountryEnum.USA;
+            stamp.Country = StampCountryEnum.USA;
             stamp.AlternateId = "1000";
             StampDefinition testStamp = new StampDefinition()
             {

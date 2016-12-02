@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeCollector.Interfaces
 {
-    public enum CountryEnum
+    public enum StampCountryEnum
     {
         USA,
         Canada
@@ -22,7 +22,7 @@ namespace HomeCollector.Interfaces
     }
     public interface IStampDefinition
     {
-        CountryEnum Country { get; set; }
+        StampCountryEnum Country { get; set; }
         bool IsPostageStamp { get; set; }
         string ScottNumber { get; set; }
         string AlternateId { get; set; }

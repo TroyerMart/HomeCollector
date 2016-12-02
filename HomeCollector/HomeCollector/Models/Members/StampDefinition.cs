@@ -35,7 +35,7 @@ namespace HomeCollector.Models
         public string Description { get; set; }    // description of the generic item
 
         // from IStampDefinition
-        public CountryEnum Country { get; set; } = CountryEnum.USA;
+        public StampCountryEnum Country { get; set; } = StampCountryEnum.USA;
         public bool IsPostageStamp { get; set; } = true;
         public string ScottNumber { get; set; }
         public string AlternateId { get; set; }

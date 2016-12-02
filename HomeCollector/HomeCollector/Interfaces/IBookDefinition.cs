@@ -22,11 +22,12 @@ namespace HomeCollector.Interfaces
         string Title { get; set; }
         string Publisher { get; set; }
         string Author { get; set; }
+        int Year { get; set; }
         DateTime DatePublished { get; set; }
         string Edition { get; set; }
         string ISBN { get; set; }
         string Series { get; set; }
-        int BookNumber { get;  set;}
+        string BookCode { get;  set;}
 
     }
 

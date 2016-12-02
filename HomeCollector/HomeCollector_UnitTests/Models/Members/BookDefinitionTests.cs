@@ -48,6 +48,40 @@ namespace HomeCollector_UnitTests.Models.Members
             Assert.AreEqual(expectedValue, book.DisplayName);
         }
 
+        [TestMethod]
+        public void book_year_can_be_set_to_zero_successfully()
+        {
+            Type bookType = typeof(BookDefinition);
+            BookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
+
+            book.Year = 0;
+
+            Assert.AreEqual(0, book.Year);
+        }
+
+        [TestMethod]
+        public void book_year_can_be_set_to_valid_year_successfully()
+        {
+            Type bookType = typeof(BookDefinition);
+            BookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
+            int testYear = 2015;
+
+            book.Year = testYear;
+
+            Assert.AreEqual(testYear, book.Year);
+        }
+
+        [TestMethod, ExpectedException(typeof(CollectableException))]
+        public void book_year_cannot_be_set_to_negative()
+        {
+            Type bookType = typeof(BookDefinition);
+            BookDefinition book = (BookDefinition)CollectableDefinitionFactory.CreateCollectableItem(bookType);
+
+            book.Year = -100;
+
+            Assert.IsFalse(true, "Expected an exception to be thrown if a negative year is set");
+        }
+
         // test equality
         [TestMethod]
         public void compare_book_definitions_by_isbn_are_equal()

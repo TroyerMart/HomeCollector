@@ -11,10 +11,11 @@ namespace HomeCollector.Models
 {
     public class BookDefinition : IBookDefinition, ICollectableDefinition
     {
-        public const string DISPLAYNAME_DEFAULT = "default name";
+        public const string DISPLAYNAME_DEFAULT = "book name";
 
         private List<ICollectionMember> _items;
         private string _displayName = DISPLAYNAME_DEFAULT;
+        private int _year = 0;
 
         public Type ObjectType { get { return GetType(); } }
 
@@ -38,11 +39,22 @@ namespace HomeCollector.Models
         public string Author { get; set; }
         public string ISBN { get; set; }
         public string Publisher { get; set; }
+        public int Year {
+            get { return _year; }
+            set {
+                    if (value >= 0)
+                        _year = value;
+                    else
+                    {
+                        throw new CollectableException($"Unable to set book year {value}.  Year must not be negative.");
+                    }
+                }
+            }
         public DateTime DatePublished { get; set; } = DateTime.MinValue;
         public string Edition { get; set; }
         public BookConditionEnum Condition { get; set; } = BookConditionEnum.Undefined;
         public string Series { get; set; }
-        public int BookNumber { get; set; }
+        public string BookCode { get; set; }
 
         public BookDefinition()
         {

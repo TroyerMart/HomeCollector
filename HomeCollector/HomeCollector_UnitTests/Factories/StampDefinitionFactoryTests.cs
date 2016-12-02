@@ -28,7 +28,7 @@ namespace HomeCollector_UnitTests.Factories
 
             StampDefinition newStamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
 
-            Assert.IsTrue(newStamp.Country == CountryEnum.USA);
+            Assert.IsTrue(newStamp.Country == StampCountryEnum.USA);
         }
 
         [TestMethod]
