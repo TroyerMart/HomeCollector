@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HomeCollector.Models.Members
 {
-    public class StampItem: ICollectionMember
+    public class StampItem: ICollectableMember
     {
         decimal _estimatedValue = 0;
 

@@ -60,13 +60,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Factories\CollectableDefinitionFactoryTests.cs" />
-    <Compile Include="Factories\StampDefinitionFactoryTests.cs" />
-    <Compile Include="Factories\BookDefinitionFactoryTests.cs" />
-    <Compile Include="Models\Members\StampDefinitionTests.cs" />
-    <Compile Include="Models\Members\BookDefinitionTests.cs" />
+    <Compile Include="Controllers\CollectableBaseControllerTests.cs" />
+    <Compile Include="Factories\CollectableBaseFactoryTests.cs" />
+    <Compile Include="Factories\StampBaseFactoryTests.cs" />
+    <Compile Include="Factories\BookBaseFactoryTests.cs" />
+    <Compile Include="Models\Members\StampBaseTests.cs" />
+    <Compile Include="Models\Members\BookBaseTests.cs" />
     <Compile Include="Models\Members\BookItemTests.cs" />
     <Compile Include="Models\Members\StampItemTests.cs" />
+    <Compile Include="Models\Members\CollectableBaseTests.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

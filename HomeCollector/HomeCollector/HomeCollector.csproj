@@ -46,25 +46,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\CollectableDefinitionController.cs" />
+    <Compile Include="Controllers\CollectableBaseController.cs" />
     <Compile Include="Exceptions\CollectableException.cs" />
     <Compile Include="Exceptions\CollectionException.cs" />
-    <Compile Include="Factories\CollectableDefinitionFactory.cs" />
-    <Compile Include="Interfaces\IBookDefinition.cs" />
-    <Compile Include="Interfaces\ICollectableDefinition.cs" />
+    <Compile Include="Factories\CollectableBaseFactory.cs" />
+    <Compile Include="Interfaces\IBookBase.cs" />
+    <Compile Include="Interfaces\ICollectableBase.cs" />
     <Compile Include="Interfaces\ICollectionBase.cs" />
-    <Compile Include="Interfaces\ICollectionMember.cs" />
-    <Compile Include="Interfaces\IStampDefinition.cs" />
+    <Compile Include="Interfaces\ICollectableMember.cs" />
+    <Compile Include="Interfaces\IStampBase.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Members\BookDefinition.cs" />
+    <Compile Include="Models\Members\BookBase.cs" />
     <Compile Include="Models\Members\BookItem.cs" />
     <Compile Include="Models\HomeCollection.cs" />
-    <Compile Include="Models\Members\StampDefinition.cs" />
+    <Compile Include="Models\Members\StampBase.cs" />
     <Compile Include="Models\Members\StampItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

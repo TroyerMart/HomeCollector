@@ -17,7 +17,7 @@ namespace HomeCollector.Interfaces
         Poor,        // extensive external wear, soiled, binding defects
         Undefined
     }
-    public interface IBookDefinition
+    public interface IBookBase
     {
         string Title { get; set; }
         string Publisher { get; set; }

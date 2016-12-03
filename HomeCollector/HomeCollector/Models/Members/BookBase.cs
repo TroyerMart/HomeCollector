@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace HomeCollector.Models
 {
-    public class BookDefinition : IBookDefinition, ICollectableDefinition
+    public class BookBase : IBookBase, ICollectableBase
     {
         public const string DISPLAYNAME_DEFAULT = "book name";
 
-        private List<ICollectionMember> _items;
+        private List<ICollectableMember> _items;
         private string _displayName = DISPLAYNAME_DEFAULT;
         private int _year = 0;
 
         public Type ObjectType { get { return GetType(); } }
 
-        // from ICollectableDefinition
+        // from ICollectableBase
         public string DisplayName {
             get { return _displayName; }
             set
@@ -34,7 +34,7 @@ namespace HomeCollector.Models
 
         public string Description { get; set; }    // description of the generic item
 
-        // from IBookDefinition
+        // from IBookBase
         public string Title { get; set; }
         public string Author { get; set; }
         public string ISBN { get; set; }
@@ -56,18 +56,18 @@ namespace HomeCollector.Models
         public string Series { get; set; }
         public string BookCode { get; set; }
 
-        public BookDefinition()
+        public BookBase()
         {
-            _items = new List<ICollectionMember>();
+            _items = new List<ICollectableMember>();
         }
 
-        // from ICollectableDefinition
-        public IList<ICollectionMember> GetItems()
+        // from ICollectableBase
+        public IList<ICollectableMember> GetItems()
         {
             return _items;
         }
 
-        public void AddItem(ICollectionMember itemToAdd)
+        public void AddItem(ICollectableMember itemToAdd)
         {
             if (itemToAdd == null)
             {
@@ -81,23 +81,23 @@ namespace HomeCollector.Models
             _items.Add(itemToAdd);
         }
 
-        public void RemoveItem(ICollectionMember itemToRemove)
+        public void RemoveItem(ICollectableMember itemToRemove)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsSame(ICollectableDefinition defnToCompare, bool useTitleAuthor)
+        public bool IsSame(ICollectableBase itemToCompare, bool useTitleAuthor)
         {   
-            if (defnToCompare == null)
+            if (itemToCompare == null)
             {
                 throw new CollectableException("Cannot compare to a null item");
             }
-            Type defnType = defnToCompare.ObjectType;
-            if (defnType != typeof(BookDefinition))
+            Type defnType = itemToCompare.ObjectType;
+            if (defnType != typeof(BookBase))
             {
-                throw new CollectableException($"Invalid type {defnType}, expected type {typeof(BookDefinition)}");
+                throw new CollectableException($"Invalid type {defnType}, expected type {typeof(BookBase)}");
             }
-            BookDefinition bookDef = (BookDefinition)defnToCompare;
+            BookBase bookDef = (BookBase)itemToCompare;
             if (!useTitleAuthor)
             {
                 if (ISBN != bookDef.ISBN)

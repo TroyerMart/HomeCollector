@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace HomeCollector.Models
 {
-    public class StampDefinition : IStampDefinition, ICollectableDefinition
+    public class StampBase : IStampBase, ICollectableBase
     {
         public const string DISPLAYNAME_DEFAULT = "default name";
 
-        private List<ICollectionMember> _items;
+        private List<ICollectableMember> _items;
         private string _displayName = DISPLAYNAME_DEFAULT;
 
         public Type ObjectType { get { return GetType(); } }
 
-        // from ICollectableDefinition
+        // from ICollectableBase
         public string DisplayName
         {
             get { return _displayName; }
@@ -31,10 +31,10 @@ namespace HomeCollector.Models
             }
         }
 
-        // from ICollectableDefinition
+        // from ICollectableBase
         public string Description { get; set; }    // description of the generic item
 
-        // from IStampDefinition
+        // from IStampBase
         public StampCountryEnum Country { get; set; } = StampCountryEnum.USA;
         public bool IsPostageStamp { get; set; } = true;
         public string ScottNumber { get; set; }
@@ -42,39 +42,39 @@ namespace HomeCollector.Models
         public int YearOfIssue { get; set; }
         public DateTime FirstDayOfIssue { get; set; }
 
-        public StampDefinition()
+        public StampBase()
         {
-            _items = new List<ICollectionMember>();
+            _items = new List<ICollectableMember>();
         }
 
-        // from ICollectableDefinition
-        public IList<ICollectionMember> GetItems()
+        // from ICollectableBase
+        public IList<ICollectableMember> GetItems()
         {
             return _items;
         }
 
-        public void AddItem(ICollectionMember itemToAdd)
+        public void AddItem(ICollectableMember itemToAdd)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveItem(ICollectionMember itemToRemove)
+        public void RemoveItem(ICollectableMember itemToRemove)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsSame(ICollectableDefinition defnToCompare, bool useAlternateId)
+        public bool IsSame(ICollectableBase itemToCompare, bool useAlternateId)
         {
-            if (defnToCompare == null)
+            if (itemToCompare == null)
             {
                 throw new CollectableException("Cannot compare to a null item");
             }
-            Type defnType = defnToCompare.ObjectType;
-            if (defnType != typeof(StampDefinition))
+            Type defnType = itemToCompare.ObjectType;
+            if (defnType != typeof(StampBase))
             {
-                throw new CollectableException($"Invalid type {defnType}, expected type {typeof(StampDefinition)}");
+                throw new CollectableException($"Invalid type {defnType}, expected type {typeof(StampBase)}");
             }
-            StampDefinition stampDef = (StampDefinition)defnToCompare;
+            StampBase stampDef = (StampBase)itemToCompare;
             if (!useAlternateId)
             {
                 if (Country != stampDef.Country)

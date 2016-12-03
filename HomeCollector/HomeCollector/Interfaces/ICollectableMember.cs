@@ -8,7 +8,7 @@ namespace HomeCollector.Interfaces
 {
     // This represents a member of a generic collection, 
     // such as a stamp belonging to a stamp collection
-    public interface ICollectionMember
+    public interface ICollectableMember
     {
         Type ObjectType { get; }
 

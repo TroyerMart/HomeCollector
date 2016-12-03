@@ -20,7 +20,7 @@ namespace HomeCollector.Interfaces
         Poor,        // heavily cancelled, soiled, cut
         Undefined
     }
-    public interface IStampDefinition
+    public interface IStampBase
     {
         StampCountryEnum Country { get; set; }
         bool IsPostageStamp { get; set; }

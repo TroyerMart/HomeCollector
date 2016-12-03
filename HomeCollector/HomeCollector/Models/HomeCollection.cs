@@ -10,13 +10,15 @@ namespace HomeCollector.Models
 {
     public class HomeCollection : ICollectionBase
     {
-        private List<ICollectionMember> _members;
-        private Type _itemType;
+        private string _collectionName;
+        private List<ICollectableBase> _members;
+        private Type _collectableType;
 
-        public HomeCollection(ICollectableDefinition itemToCollect)
+        public HomeCollection(string collectionName, Type collectableType)
         {
-            _itemType = itemToCollect.GetType();
-            _members = new List<ICollectionMember>();
+            _collectionName = collectionName;
+            _collectableType = collectableType;
+            _members = new List<ICollectableBase>();
         }
 
         public string CollectionName { get; set; }
@@ -25,11 +27,11 @@ namespace HomeCollector.Models
         {
             get
             {
-                return _itemType;
+                return _collectableType;
             }
         }
 
-        public void AddMember(ICollectionMember memberToAdd)
+        public void AddToCollection(ICollectableBase memberToAdd)
         {
             try
             {
@@ -40,11 +42,11 @@ namespace HomeCollector.Models
             }
         }
 
-        //public void AddMember(ICollectableDefinition collectableItem, string memberDetails = "",
+        //public void AddMember(ICollectableBase collectableItem, string memberDetails = "",
         //    decimal estimatedValue = 0, bool isPlaceholder = false, bool isFavorite = false
         //    )
         //{
-        //    ICollectableDefinition newItem = CollectableDefinitionFactory.CreateCollectableItem(_itemType);
+        //    ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(_itemType);
         //    ICollectionMember newMember = new CollectionMember(newItem) {
         //        ItemDetails = memberDetails,
         //        EstimatedValue = estimatedValue,
@@ -54,12 +56,12 @@ namespace HomeCollector.Models
         //    AddMember(newMember);
         //}
 
-        public List<ICollectionMember> GetMembers()
+        public IList<ICollectableBase> GetMembers()
         {
             return _members;
         }
 
-        public void RemoveMember(ICollectionMember memberToRemove)
+        public void RemoveMember(ICollectableBase memberToRemove)
         {
             try
             {

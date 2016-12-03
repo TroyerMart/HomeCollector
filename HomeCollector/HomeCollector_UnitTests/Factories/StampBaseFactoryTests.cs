@@ -8,14 +8,14 @@ using HomeCollector.Exceptions;
 namespace HomeCollector_UnitTests.Factories
 {
     [TestClass]
-    public class StampDefinitionFactoryTests
+    public class StampBaseFactoryTests
     {
         [TestMethod]
-        public void create_new_stamp_item_from_factory_returns_stampdefinition_type()
+        public void create_new_stamp_item_from_factory_returns_stampbase_type()
         {
-            Type stampType = typeof(StampDefinition);
+            Type stampType = typeof(StampBase);
 
-            ICollectableDefinition newStamp = CollectableDefinitionFactory.CreateCollectableItem(stampType);
+            ICollectableBase newStamp = CollectableBaseFactory.CreateCollectableItem(stampType);
 
             Assert.IsTrue(stampType == newStamp.ObjectType);
         }
@@ -24,9 +24,9 @@ namespace HomeCollector_UnitTests.Factories
         [TestMethod]
         public void create_new_stamp_item_from_factory_country_defaults_to_usa()
         {
-            Type stampType = typeof(StampDefinition);
+            Type stampType = typeof(StampBase);
 
-            StampDefinition newStamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
+            StampBase newStamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(stampType);
 
             Assert.IsTrue(newStamp.Country == StampCountryEnum.USA);
         }
@@ -34,9 +34,9 @@ namespace HomeCollector_UnitTests.Factories
         [TestMethod]
         public void create_new_stamp_item_from_factory_isPostageStamp_defaults_to_true()
         {
-            Type stampType = typeof(StampDefinition);
+            Type stampType = typeof(StampBase);
 
-            StampDefinition newStamp = (StampDefinition)CollectableDefinitionFactory.CreateCollectableItem(stampType);
+            StampBase newStamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(stampType);
 
             Assert.IsTrue(newStamp.IsPostageStamp);
         }

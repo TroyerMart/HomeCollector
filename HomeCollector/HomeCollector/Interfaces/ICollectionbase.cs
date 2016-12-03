@@ -13,9 +13,9 @@ namespace HomeCollector.Interfaces
         string CollectionName { get; set; }
         Type CollectionType { get; }   // the actual type of objects allowed to be added
 
-        List<ICollectionMember> GetMembers();
-        void AddMember(ICollectionMember memberToAdd);
-        void RemoveMember(ICollectionMember memberToRemove);
+        IList<ICollectableBase> GetMembers();
+        void AddToCollection(ICollectableBase memberToAdd);
+        void RemoveMember(ICollectableBase memberToRemove);
 
     }
 
