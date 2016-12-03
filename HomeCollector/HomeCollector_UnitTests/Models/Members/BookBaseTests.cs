@@ -232,7 +232,7 @@ namespace HomeCollector_UnitTests.Models.Members
             Assert.IsFalse(isEqual, "Expected test to throw exception when comparing a null base instance");
         }
 
-       
+       //display name defaults
 
     }
 }

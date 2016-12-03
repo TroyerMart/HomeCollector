@@ -1,5 +1,6 @@
 ﻿using HomeCollector.Exceptions;
 using HomeCollector.Interfaces;
+using HomeCollector.Models.Members;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,12 +56,51 @@ namespace HomeCollector.Models
 
         public void AddItem(ICollectableMember itemToAdd)
         {
-            throw new NotImplementedException();
+            if (itemToAdd == null)
+            {
+                throw new CollectableException("Cannot add a null item");
+            }
+            Type itemType = itemToAdd.ObjectType;
+            if (itemType != typeof(StampItem))
+            {
+                throw new CollectableException($"Invalid type {itemType}, expected type {typeof(StampItem)}");
+            }
+            _items.Add(itemToAdd);
         }
 
         public void RemoveItem(ICollectableMember itemToRemove)
         {
-            throw new NotImplementedException();
+            if (itemToRemove == null)
+            {
+                throw new CollectableException("Cannot remove a null item");
+            }
+            if (_items.Count == 0)
+            {
+                throw new CollectableException("List is empty - Cannot remove item from list");
+            }
+            Type itemType = itemToRemove.ObjectType;
+            if (itemType != typeof(StampItem))
+            {
+                throw new CollectableException($"Invalid type {itemType}, expected type {typeof(StampItem)}");
+            }
+            try
+            {
+                int count = _items.Count;
+                _items.Remove(itemToRemove);
+                if (count == _items.Count)
+                {
+                    throw new CollectableException("Item was not removed from list");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CollectableException("Unable to remove item", ex);
+            }
+        }
+
+        public void ClearItems()
+        {
+            _items = new List<ICollectableMember>();
         }
 
         public bool IsSame(ICollectableBase itemToCompare, bool useAlternateId)

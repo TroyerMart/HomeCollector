@@ -19,6 +19,7 @@ namespace HomeCollector.Interfaces
         IList<ICollectableMember> GetItems();
         void AddItem(ICollectableMember itemToAdd);
         void RemoveItem(ICollectableMember itemToRemove);
+        void ClearItems();
 
         bool IsSame(ICollectableBase itemToCompare, bool useAlternateId);
         

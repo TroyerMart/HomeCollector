@@ -4,6 +4,8 @@ using HomeCollector.Interfaces;
 using Moq;
 using HomeCollector.Controllers;
 using System.Collections.Generic;
+using HomeCollector.Exceptions;
+using HomeCollector.Models;
 
 namespace HomeCollector_UnitTests.Controllers
 {
@@ -19,6 +21,46 @@ namespace HomeCollector_UnitTests.Controllers
             // setup the controller using a mock instance of a collectable base object
             mockCollectableBase = new Mock<ICollectableBase>();
             controller = new CollectableBaseController(mockCollectableBase.Object);
+        }
+
+        [TestMethod, ExpectedException(typeof(CollectableException))]
+        public void controller_initialized_with_null_collectable_base_object_fails()
+        {
+            ICollectableBase nullBase = null;
+
+            controller = new CollectableBaseController(nullBase);
+
+            Assert.IsFalse(true, "Expected the test to fail when initialized with a null object");
+        }
+
+        [TestMethod]
+        public void controller_initialized_with_collectable_base_object_returns_controller_instance()
+        {
+            try
+            {
+                ICollectableBase collectableBase = mockCollectableBase.Object;
+
+                controller = new CollectableBaseController(collectableBase);
+
+                Assert.IsNotNull(controller);
+            }
+            catch 
+            {
+                Assert.IsFalse(true, "Test should not fail when initialized with an object");
+            }          
+        }
+
+        [TestMethod]
+        public void controller_objecttype_returns_collectable_base_type()
+        {
+            Type objType = typeof(ICollectableBase);
+            ICollectableBase collectableBase = mockCollectableBase.Object;
+            mockCollectableBase.Setup(b => b.ObjectType).Returns(objType);
+            
+            controller = new CollectableBaseController(collectableBase);
+            Type objTestType = controller.ObjectType;
+
+            Assert.AreEqual(objType, objTestType);
         }
 
         [TestMethod]

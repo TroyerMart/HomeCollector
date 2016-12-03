@@ -1,4 +1,5 @@
-﻿using HomeCollector.Interfaces;
+﻿using HomeCollector.Exceptions;
+using HomeCollector.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,14 @@ namespace HomeCollector.Controllers
 
         public CollectableBaseController(ICollectableBase collectableBase)
         {
+            if (collectableBase == null)
+            {
+                throw new CollectableException("Controller must be initialized with a collectable base object");
+            }
             _collectableBase = collectableBase;
         }
+
+        public Type ObjectType { get { return _collectableBase.ObjectType; } }
 
         public void AddItem(ICollectableMember memberToAdd)
         {
