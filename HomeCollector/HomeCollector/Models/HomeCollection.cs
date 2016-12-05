@@ -11,14 +11,14 @@ namespace HomeCollector.Models
     public class HomeCollection : ICollectionBase
     {
         private string _collectionName;
-        private List<ICollectableBase> _members;
+        private List<ICollectableBase> _collection;
         private Type _collectableType;
 
         public HomeCollection(string collectionName, Type collectableType)
         {
             _collectionName = collectionName;
             _collectableType = collectableType;
-            _members = new List<ICollectableBase>();
+            _collection = new List<ICollectableBase>();
         }
 
         public string CollectionName { get; set; }
@@ -31,11 +31,11 @@ namespace HomeCollector.Models
             }
         }
 
-        public void AddToCollection(ICollectableBase memberToAdd)
+        public void AddToCollection(ICollectableBase collectableToAdd)
         {
             try
             {
-                _members.Add(memberToAdd);
+                _collection.Add(collectableToAdd);
             } catch (Exception ex)
             {
                 throw ex;
@@ -56,20 +56,25 @@ namespace HomeCollector.Models
         //    AddMember(newMember);
         //}
 
-        public IList<ICollectableBase> GetMembers()
+        public IList<ICollectableBase> GetCollection()
         {
-            return _members;
+            return _collection;
         }
 
-        public void RemoveMember(ICollectableBase memberToRemove)
+        public void RemoveFromCollection(ICollectableBase collectableToRemove)
         {
             try
             {
-                _members.Remove(memberToRemove);
+                _collection.Remove(collectableToRemove);
             } catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        public void ClearCollection()
+        {
+            _collection = new List<ICollectableBase>();
         }
 
     }

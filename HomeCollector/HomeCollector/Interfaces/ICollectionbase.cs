@@ -11,11 +11,12 @@ namespace HomeCollector.Interfaces
     public interface ICollectionBase
     {
         string CollectionName { get; set; }
-        Type CollectionType { get; }   // the actual type of objects allowed to be added
+        Type CollectionType { get; }   // the actual type of collectable objects allowed to be contained in the collection
 
-        IList<ICollectableBase> GetMembers();
-        void AddToCollection(ICollectableBase memberToAdd);
-        void RemoveMember(ICollectableBase memberToRemove);
+        IList<ICollectableBase> GetCollection();
+        void AddToCollection(ICollectableBase collectableToAdd);
+        void RemoveFromCollection(ICollectableBase collectableToRemove);
+        void ClearCollection();
 
     }
 

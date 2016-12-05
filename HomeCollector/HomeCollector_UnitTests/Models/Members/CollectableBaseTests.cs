@@ -23,11 +23,11 @@ namespace HomeCollector_UnitTests.Models.Members
             foreach (string collectableType in collectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, 0);
-                Mock<ICollectableMember> mockItem = GetMockMember(collectable.ObjectType.Name);
+                Mock<ICollectableItem> mockItem = GetMockItem(collectable.ObjectType.Name);
 
                 collectable.AddItem(mockItem.Object);
 
-                IList<ICollectableMember> list = collectable.GetItems();
+                IList<ICollectableItem> list = collectable.GetItems();
                 Assert.AreEqual(1, list.Count);
             }
         }
@@ -40,10 +40,10 @@ namespace HomeCollector_UnitTests.Models.Members
             foreach (string collectableType in collectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, N);
-                Mock<ICollectableMember> mockItem = GetMockMember(collectable.ObjectType.Name);
+                Mock<ICollectableItem> mockItem = GetMockItem(collectable.ObjectType.Name);
 
                 collectable.AddItem(mockItem.Object);
-                IList<ICollectableMember> list = collectable.GetItems();
+                IList<ICollectableItem> list = collectable.GetItems();
                 Assert.AreEqual(N + 1, list.Count);
             }
         }
@@ -60,7 +60,7 @@ namespace HomeCollector_UnitTests.Models.Members
                     collectable.AddItem(null);
                     Assert.IsFalse(true, "Expected to fail adding a null member");
                 }
-                catch (CollectableException ex)
+                catch (CollectableException)
                 {
                     Assert.IsTrue(true);
                 }
@@ -74,15 +74,15 @@ namespace HomeCollector_UnitTests.Models.Members
             List<String> collectableTypes = new List<string>() { "BookBase", "StampBase" };
             foreach (string collectableType in collectableTypes)
             {
-                Mock<ICollectableMember> mockItem;
+                Mock<ICollectableItem> mockItem;
                 ICollectableBase collectable = GetTestBase(collectableType, N);
                 if (collectable.ObjectType.Name == "BookBase")
                 {
-                    mockItem = GetMockMember("StampBase");
+                    mockItem = GetMockItem("StampBase");
                 }
                 else
                 {
-                    mockItem = GetMockMember("BookBase");
+                    mockItem = GetMockItem("BookBase");
                 }
 
                 try
@@ -90,7 +90,7 @@ namespace HomeCollector_UnitTests.Models.Members
                     collectable.AddItem(mockItem.Object);
                     Assert.IsFalse(true, "Expected to fail adding a member of the wrong type");
                 }
-                catch (CollectableException ex)
+                catch (CollectableException)
                 {
                     Assert.IsTrue(true);
                 }
@@ -106,11 +106,11 @@ namespace HomeCollector_UnitTests.Models.Members
             foreach (string collectableType in collectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, N);
-                ICollectableMember mockItem = collectable.GetItems()[N - 1];
+                ICollectableItem mockItem = collectable.GetItems()[N - 1];
 
                 collectable.RemoveItem(mockItem);
 
-                IList<ICollectableMember> list = collectable.GetItems();
+                IList<ICollectableItem> list = collectable.GetItems();
                 Assert.AreEqual(N - 1, list.Count);
             }
         }
@@ -123,7 +123,7 @@ namespace HomeCollector_UnitTests.Models.Members
             foreach (string collectableType in collectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, N);
-                Mock<ICollectableMember> mockItem = mockItem = GetMockMember(collectableType);
+                Mock<ICollectableItem> mockItem = mockItem = GetMockItem(collectableType);
 
                 collectable.RemoveItem(mockItem.Object);
             }
@@ -137,7 +137,7 @@ namespace HomeCollector_UnitTests.Models.Members
             foreach (string collectableType in collectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, N);
-                ICollectableMember mockItem = null;
+                ICollectableItem mockItem = null;
 
                 collectable.RemoveItem(mockItem);
             }
@@ -151,14 +151,14 @@ namespace HomeCollector_UnitTests.Models.Members
             foreach (string collectableType in collectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, N);
-                Mock<ICollectableMember> mockItem;
+                Mock<ICollectableItem> mockItem;
                 if (collectable.ObjectType.Name == "BookBase")
                 {
-                    mockItem = GetMockMember("StampBase");
+                    mockItem = GetMockItem("StampBase");
                 }
                 else
                 {
-                    mockItem = GetMockMember("BookBase");
+                    mockItem = GetMockItem("BookBase");
                 }
                 collectable.RemoveItem(mockItem.Object);
             }
@@ -172,7 +172,7 @@ namespace HomeCollector_UnitTests.Models.Members
             foreach (string collectableType in collectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, N);
-                Mock<ICollectableMember> mockItem = GetMockMember(collectable.ObjectType.Name);
+                Mock<ICollectableItem> mockItem = GetMockItem(collectable.ObjectType.Name);
 
                 collectable.RemoveItem(mockItem.Object);
             }
@@ -187,15 +187,15 @@ namespace HomeCollector_UnitTests.Models.Members
             foreach (string collectableType in collectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, 0);
-                Mock<ICollectableMember> mockItem1 = GetMockMember(collectable.ObjectType.Name);
-                Mock<ICollectableMember> mockItem2 = GetMockMember(collectable.ObjectType.Name);
-                Mock<ICollectableMember> mockItem3 = GetMockMember(collectable.ObjectType.Name);
+                Mock<ICollectableItem> mockItem1 = GetMockItem(collectable.ObjectType.Name);
+                Mock<ICollectableItem> mockItem2 = GetMockItem(collectable.ObjectType.Name);
+                Mock<ICollectableItem> mockItem3 = GetMockItem(collectable.ObjectType.Name);
 
                 collectable.AddItem(mockItem1.Object);
                 collectable.AddItem(mockItem2.Object);
                 collectable.AddItem(mockItem3.Object);
 
-                IList<ICollectableMember> items = collectable.GetItems();
+                IList<ICollectableItem> items = collectable.GetItems();
 
                 Assert.AreEqual(mockItem1.Object, items[0]);
                 Assert.AreEqual(mockItem2.Object, items[1]);
@@ -211,7 +211,7 @@ namespace HomeCollector_UnitTests.Models.Members
             {
                 ICollectableBase collectable = GetTestBase(collectableType, 0);
 
-                IList<ICollectableMember> items = collectable.GetItems();
+                IList<ICollectableItem> items = collectable.GetItems();
 
                 Assert.AreEqual(0, items.Count);
             }
@@ -229,7 +229,7 @@ namespace HomeCollector_UnitTests.Models.Members
 
                 collectable.ClearItems();
 
-                IList<ICollectableMember> list = collectable.GetItems();
+                IList<ICollectableItem> list = collectable.GetItems();
                 Assert.AreEqual(0, list.Count);
             }
         }
@@ -245,7 +245,7 @@ namespace HomeCollector_UnitTests.Models.Members
 
                 collectable.ClearItems();
 
-                IList<ICollectableMember> list = collectable.GetItems();
+                IList<ICollectableItem> list = collectable.GetItems();
                 Assert.AreEqual(0, list.Count);
             }
         }
@@ -270,13 +270,13 @@ namespace HomeCollector_UnitTests.Models.Members
             }
             for (int i=0; i<numberOfMembers; i++)
             {
-                Mock<ICollectableMember> mockItem = GetMockMember(typeName);
+                Mock<ICollectableItem> mockItem = GetMockItem(typeName);
                 testBase.AddItem(mockItem.Object);
             }
             return testBase;
         }
 
-        private Mock<ICollectableMember> GetMockMember(string typeName)
+        private Mock<ICollectableItem> GetMockItem(string typeName)
         {
             Type itemType = null;
             switch (typeName)
@@ -291,7 +291,7 @@ namespace HomeCollector_UnitTests.Models.Members
                     itemType = null;
                     break;
             }
-            Mock<ICollectableMember> mockItem = new Mock<ICollectableMember>();
+            Mock<ICollectableItem> mockItem = new Mock<ICollectableItem>();
             mockItem.Setup(b => b.ObjectType).Returns(itemType);
 
             return mockItem;

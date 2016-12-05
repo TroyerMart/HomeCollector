@@ -61,6 +61,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Controllers\CollectableBaseControllerTests.cs" />
+    <Compile Include="Controllers\HomeCollectionControllerTests.cs" />
     <Compile Include="Factories\CollectableBaseFactoryTests.cs" />
     <Compile Include="Factories\StampBaseFactoryTests.cs" />
     <Compile Include="Factories\BookBaseFactoryTests.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="Models\Members\BookItemTests.cs" />
     <Compile Include="Models\Members\StampItemTests.cs" />
     <Compile Include="Models\Members\CollectableBaseTests.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="Models\HomeCollectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

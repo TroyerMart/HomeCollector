@@ -23,17 +23,17 @@ namespace HomeCollector.Controllers
 
         public Type ObjectType { get { return _collectableBase.ObjectType; } }
 
-        public void AddItem(ICollectableMember memberToAdd)
+        public void AddItem(ICollectableItem itemToAdd)
         {
-            _collectableBase.AddItem(memberToAdd);
+            _collectableBase.AddItem(itemToAdd);
         }
 
-        public void RemoveItem(ICollectableMember memberToRemove)
+        public void RemoveItem(ICollectableItem itemToRemove)
         {
-            _collectableBase.RemoveItem(memberToRemove);
+            _collectableBase.RemoveItem(itemToRemove);
         }
 
-        public IList<ICollectableMember> GetItems()
+        public IList<ICollectableItem> GetItems()
         {
             return _collectableBase.GetItems();
         }

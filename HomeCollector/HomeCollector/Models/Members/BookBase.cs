@@ -13,7 +13,7 @@ namespace HomeCollector.Models
     {
         public const string DISPLAYNAME_DEFAULT = "book name";
 
-        private List<ICollectableMember> _items;
+        private List<ICollectableItem> _items;
         private string _displayName = DISPLAYNAME_DEFAULT;
         private int _year = 0;
 
@@ -58,16 +58,16 @@ namespace HomeCollector.Models
 
         public BookBase()
         {
-            _items = new List<ICollectableMember>();
+            _items = new List<ICollectableItem>();
         }
 
         // from ICollectableBase
-        public IList<ICollectableMember> GetItems()
+        public IList<ICollectableItem> GetItems()
         {
             return _items;
         }
 
-        public void AddItem(ICollectableMember itemToAdd)
+        public void AddItem(ICollectableItem itemToAdd)
         {
             if (itemToAdd == null)
             {
@@ -81,7 +81,7 @@ namespace HomeCollector.Models
             _items.Add(itemToAdd);
         }
 
-        public void RemoveItem(ICollectableMember itemToRemove)
+        public void RemoveItem(ICollectableItem itemToRemove)
         {
             if (itemToRemove == null)
             {
@@ -113,7 +113,7 @@ namespace HomeCollector.Models
 
         public void ClearItems()
         {
-            _items = new List<ICollectableMember>();
+            _items = new List<ICollectableItem>();
         }
 
         public bool IsSame(ICollectableBase itemToCompare, bool useTitleAuthor)

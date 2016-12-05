@@ -49,7 +49,7 @@ namespace HomeCollector_UnitTests.Factories
             Type bookType = typeof(BookBase);
             BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
 
-            IList<ICollectableMember> books = book.GetItems();
+            IList<ICollectableItem> books = book.GetItems();
 
             Assert.IsNotNull(books);
         }
@@ -60,7 +60,7 @@ namespace HomeCollector_UnitTests.Factories
             Type bookType = typeof(BookBase);
             BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
 
-            IList<ICollectableMember> books = book.GetItems();
+            IList<ICollectableItem> books = book.GetItems();
 
             Assert.AreEqual(0, books.Count);
         }

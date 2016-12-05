@@ -16,9 +16,9 @@ namespace HomeCollector.Interfaces
         string DisplayName { get; set; }
         string Description { get; set; }    // description of the generic item
 
-        IList<ICollectableMember> GetItems();
-        void AddItem(ICollectableMember itemToAdd);
-        void RemoveItem(ICollectableMember itemToRemove);
+        IList<ICollectableItem> GetItems();
+        void AddItem(ICollectableItem itemToAdd);
+        void RemoveItem(ICollectableItem itemToRemove);
         void ClearItems();
 
         bool IsSame(ICollectableBase itemToCompare, bool useAlternateId);

@@ -66,27 +66,27 @@ namespace HomeCollector_UnitTests.Controllers
         [TestMethod]
         public void calling_controller_additem_calls_collectable_additem()
         {
-            Mock<ICollectableMember> mockCollectableBaseToAdd = new Mock<ICollectableMember>();
+            Mock<ICollectableItem> mockCollectableBaseToAdd = new Mock<ICollectableItem>();
 
             controller.AddItem(mockCollectableBaseToAdd.Object);
 
-            mockCollectableBase.Verify(b => b.AddItem(It.IsAny<ICollectableMember>()), Times.Once);
+            mockCollectableBase.Verify(b => b.AddItem(It.IsAny<ICollectableItem>()), Times.Once);
         }
 
         [TestMethod]
         public void calling_controller_removeitem_calls_collectable_removeitem()
         {
-            Mock<ICollectableMember> mockCollectableBaseToRemove = new Mock<ICollectableMember>();
+            Mock<ICollectableItem> mockCollectableBaseToRemove = new Mock<ICollectableItem>();
 
             controller.RemoveItem(mockCollectableBaseToRemove.Object);
 
-            mockCollectableBase.Verify(b => b.RemoveItem(It.IsAny<ICollectableMember>()), Times.Once);
+            mockCollectableBase.Verify(b => b.RemoveItem(It.IsAny<ICollectableItem>()), Times.Once);
         }
 
         [TestMethod]
         public void calling_controller_getitems_calls_collectable_getitems()
         {
-            IList<ICollectableMember> items = controller.GetItems();
+            IList<ICollectableItem> items = controller.GetItems();
             
             mockCollectableBase.Verify(b => b.GetItems(), Times.Once);
         }

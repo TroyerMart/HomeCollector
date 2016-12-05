@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HomeCollector.Models.Members
 {
-    public class BookItem : ICollectableMember
+    public class BookItem : ICollectableItem
     {
         decimal _estimatedValue = 0;
 
@@ -18,7 +18,7 @@ namespace HomeCollector.Models.Members
 
         public Type ObjectType  {   get { return GetType(); }  }           
 
-        // from ICollectionMember
+        // from ICollectableItem
         public string ItemDetails { get; set; }  // detail information specific to this actual item
         public bool IsFavorite { get; set; } = false;
         public decimal EstimatedValue

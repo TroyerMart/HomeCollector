@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace HomeCollector.Interfaces
 {
-    // This represents a member of a generic collection, 
-    // such as a stamp belonging to a stamp collection
-    public interface ICollectableMember
+    // This represents an instance of a base type, 
+    // such as a particular stamp of a given base type belonging to a stamp collection
+    public interface ICollectableItem
     {
         Type ObjectType { get; }
 
