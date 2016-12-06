@@ -11,8 +11,6 @@ namespace HomeCollector_UnitTests.Factories
     [TestClass]
     public class CollectableBaseFactoryTests
     {
-        // IsICollectableType tests
-
         // factory tests based on explicit types
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void create_new_collectable_item_from_null_type_throws_exception()
@@ -141,6 +139,46 @@ namespace HomeCollector_UnitTests.Factories
             Assert.AreEqual(validTypeName.ToUpper(), newItem.ObjectType.Name.ToUpper(), "Expected to get instance of a book base type");
         }
 
+        // IsICollectableType tests
+        [TestMethod]
+        public void isicollectabletype_null_type_returns_false()
+        {
+            Type invalidType = null;
+
+            bool isICollectable = CollectableBaseFactory.IsICollectableType(invalidType);
+
+            Assert.IsFalse(isICollectable, "Expected to return false if passed a null type");
+        }
+
+        [TestMethod]
+        public void isicollectabletype_invalid_type_returns_false()
+        {
+            Type invalidType = typeof(int);
+
+            bool isICollectable = CollectableBaseFactory.IsICollectableType(invalidType);
+
+            Assert.IsFalse(isICollectable, "Expected to return false if passed an non-ICollectable type");
+        }
+
+        [TestMethod]
+        public void isicollectabletype_interface_type_returns_false()
+        {
+            Type invalidType = typeof(ICollectableBase);
+
+            bool isICollectable = CollectableBaseFactory.IsICollectableType(invalidType);
+
+            Assert.IsFalse(isICollectable, "Expected to return false if passed the ICollectable interface type");
+        }
+
+        [TestMethod]
+        public void isicollectabletype_valid_type_returns_true()
+        {
+            Type validType = typeof(StampBase);
+
+            bool isICollectable = CollectableBaseFactory.IsICollectableType(validType);
+
+            Assert.IsTrue(isICollectable, "Expected to return true if passed a ICollectable type");
+        }
 
     }
 }

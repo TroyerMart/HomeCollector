@@ -12,14 +12,14 @@ namespace HomeCollector.Factories
     public class CollectableBaseFactory
     {
         public static bool IsICollectableType (Type itemType)
-        {   // returns true if the type implements ICollectable
+        {   // returns true if the type implements ICollectable, but is not actually the interface itself
             if (itemType == null)
             {
-                throw new CollectableException($"Type to be checked cannot be null");
+                return false;
             }
             if (typeof(ICollectableBase).IsAssignableFrom(itemType))
             {
-                return true;
+                return (itemType != typeof(ICollectableBase));
             }
             return false;
         }
@@ -54,12 +54,16 @@ namespace HomeCollector.Factories
             {
                 throw new CollectableException($"TypeName cannot be null or empty");
             }
-            switch (itemTypeName.ToLower())
+            itemTypeName = itemTypeName.ToLower();
+            if (itemTypeName == typeof(BookBase).Name.ToLower()) {
+                return new BookBase();
+            }
+            else if (itemTypeName == typeof(StampBase).Name.ToLower())
             {
-                case "bookbase": return new BookBase();
-                case "stampbase": return new StampBase();
-                default:
-                    throw new CollectableException($"Undefined type {itemTypeName}, Must be of a type inherited from ICollectableBase");
+                return new StampBase();
+            } else
+            {
+                throw new CollectableException($"Undefined type {itemTypeName}, Must be of a type inherited from ICollectableBase");
             }
         }
     
