@@ -11,11 +11,28 @@ namespace HomeCollector.Factories
 {
     public class CollectableBaseFactory
     {
-        public static ICollectableBase CreateCollectableItem(Type itemType)
-        {   // this can be extended as more types are added
+        public static bool IsICollectableType (Type itemType)
+        {   // returns true if the type implements ICollectable
             if (itemType == null)
             {
-                throw new CollectableException($"Type cannot be null, Must be of a type inherited from ICollectableBase");
+                throw new CollectableException($"Type to be checked cannot be null");
+            }
+            if (typeof(ICollectableBase).IsAssignableFrom(itemType))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static ICollectableBase CreateCollectableItem(Type itemType)
+        {   // this can be extended as more types are added            
+            if (itemType == null)
+            {
+                throw new CollectableException($"Type cannot be null, Must be of a type implementing ICollectableBase");
+            }
+            if (! IsICollectableType(itemType))
+            {
+                throw new CollectableException($"Type must implement ICollectableBase");
             }
             if (itemType == typeof(BookBase)) {
                 return new BookBase();
@@ -26,7 +43,7 @@ namespace HomeCollector.Factories
             }
             else
             {
-                throw new CollectableException($"Undefined type {itemType.ToString()}, Must be of a type inherited from ICollectableBase");
+                throw new CollectableException($"Undefined type {itemType.ToString()}, Unknown type implementing ICollectableBase");
             }
         }
 
@@ -44,7 +61,6 @@ namespace HomeCollector.Factories
                 default:
                     throw new CollectableException($"Undefined type {itemTypeName}, Must be of a type inherited from ICollectableBase");
             }
-
         }
     
 

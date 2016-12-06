@@ -11,6 +11,8 @@ namespace HomeCollector_UnitTests.Factories
     [TestClass]
     public class CollectableBaseFactoryTests
     {
+        // IsICollectableType tests
+
         // factory tests based on explicit types
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void create_new_collectable_item_from_null_type_throws_exception()
