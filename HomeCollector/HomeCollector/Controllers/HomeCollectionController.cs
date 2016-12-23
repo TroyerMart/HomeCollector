@@ -57,12 +57,12 @@ namespace HomeCollector.Controllers
             _homeCollection.ClearCollection();
         }
 
-        public void SaveCollection()
+        public void SaveCollection(string fileName)
         {   // save the collection to persistent storage via Repository
 
         }
 
-        public void LoadCollection()
+        public void LoadCollection(string fileName)
         {   // load the collection from persistent storage via Repository
 
         }

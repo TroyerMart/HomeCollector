@@ -1,4 +1,5 @@
-﻿using HomeCollector.Factories;
+﻿using HomeCollector.Exceptions;
+using HomeCollector.Factories;
 using HomeCollector.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,25 @@ namespace HomeCollector.Models
 
         public HomeCollection(string collectionName, Type collectableType)
         {
-            _collectionName = collectionName;
+            if (! CollectableBaseFactory.IsICollectableType(collectableType))
+            {
+                throw new CollectionException($"Type {collectableType} must be of a valid Collectable Type");
+            }
+            CollectionName = collectionName;
             _collectableType = collectableType;
             _collection = new List<ICollectableBase>();
         }
 
-        public string CollectionName { get; set; }
+        public string CollectionName {
+            get { return _collectionName;  }
+            set {
+                    if (String.IsNullOrWhiteSpace(value))
+                    {
+                        throw new CollectionException($"Collection name cannot be empty or null");
+                    }
+                    _collectionName = value;
+                }
+        }
 
         public Type CollectionType  // the actual type of objects allowed to be added
         {
@@ -33,6 +47,15 @@ namespace HomeCollector.Models
 
         public void AddToCollection(ICollectableBase collectableToAdd)
         {
+            if (collectableToAdd == null)
+            {
+                throw new CollectionException("Cannot add a null collectable to the collection");
+            }
+            Type collectableType = collectableToAdd.ObjectType;
+            if (collectableType != CollectionType )
+            {
+                throw new CollectionException($"Cannot add a collectable of an invalid type to the collection, Type={collectableType}, but expected {CollectionType}");
+            }
             try
             {
                 _collection.Add(collectableToAdd);

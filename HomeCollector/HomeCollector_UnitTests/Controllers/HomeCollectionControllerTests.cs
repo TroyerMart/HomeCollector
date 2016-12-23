@@ -90,5 +90,13 @@ namespace HomeCollector_UnitTests.Controllers
             mockHomeCollection.Verify(b => b.GetCollection(), Times.Once);
         }
 
+        [TestMethod]
+        public void calling_controller_clearcollection_calls_homecontroller_clearcollection()
+        {
+            controller.ClearCollection();
+
+            mockHomeCollection.Verify(b => b.ClearCollection(), Times.Once);
+        }
+
     }
 }

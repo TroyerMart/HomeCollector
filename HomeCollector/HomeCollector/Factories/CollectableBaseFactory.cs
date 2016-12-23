@@ -11,6 +11,9 @@ namespace HomeCollector.Factories
 {
     public class CollectableBaseFactory
     {
+        public Type BookType = typeof(BookBase);
+        public Type StampType = typeof(StampBase);
+
         public static bool IsICollectableType (Type itemType)
         {   // returns true if the type implements ICollectable, but is not actually the interface itself
             if (itemType == null)
