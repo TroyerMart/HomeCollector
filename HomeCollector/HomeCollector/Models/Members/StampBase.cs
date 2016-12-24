@@ -16,9 +16,8 @@ namespace HomeCollector.Models
         private List<ICollectableItem> _items;
         private string _displayName = DISPLAYNAME_DEFAULT;
 
-        public Type ObjectType { get { return GetType(); } }
-
         // from ICollectableBase
+        public Type CollectableType { get { return GetType(); } }
         public string DisplayName
         {
             get { return _displayName; }
@@ -60,10 +59,10 @@ namespace HomeCollector.Models
             {
                 throw new CollectableException("Cannot add a null item");
             }
-            Type itemType = itemToAdd.ObjectType;
-            if (itemType != typeof(StampItem))
+            Type itemType = itemToAdd.CollectableType;
+            if (itemType != this.CollectableType)
             {
-                throw new CollectableException($"Invalid type {itemType}, expected type {typeof(StampItem)}");
+                throw new CollectableException($"Invalid type {itemType}, expected type {this.CollectableType}");
             }
             _items.Add(itemToAdd);
         }
@@ -78,10 +77,10 @@ namespace HomeCollector.Models
             {
                 throw new CollectableException("List is empty - Cannot remove item from list");
             }
-            Type itemType = itemToRemove.ObjectType;
-            if (itemType != typeof(StampItem))
+            Type itemType = itemToRemove.CollectableType;
+            if (itemType != this.CollectableType)
             {
-                throw new CollectableException($"Invalid type {itemType}, expected type {typeof(StampItem)}");
+                throw new CollectableException($"Invalid type {itemType}, expected type {this.CollectableType}");
             }
             try
             {
@@ -109,10 +108,10 @@ namespace HomeCollector.Models
             {
                 throw new CollectableException("Cannot compare to a null item");
             }
-            Type defnType = itemToCompare.ObjectType;
-            if (defnType != typeof(StampBase))
+            Type itemType = itemToCompare.CollectableType;
+            if (itemType != this.CollectableType)
             {
-                throw new CollectableException($"Invalid type {defnType}, expected type {typeof(StampBase)}");
+                throw new CollectableException($"Invalid type {itemType}, expected type {this.CollectableType}");
             }
             StampBase stampDef = (StampBase)itemToCompare;
             if (!useAlternateId)

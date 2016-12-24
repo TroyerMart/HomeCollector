@@ -10,7 +10,7 @@ namespace HomeCollector.Interfaces
     // such as a particular stamp of a given base type belonging to a stamp collection
     public interface ICollectableItem
     {
-        Type ObjectType { get; }
+        Type CollectableType { get; }
 
         bool IsFavorite { get; set; }
         decimal EstimatedValue { get; set; }

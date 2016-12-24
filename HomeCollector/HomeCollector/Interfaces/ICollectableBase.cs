@@ -12,7 +12,7 @@ namespace HomeCollector.Interfaces
 
     public interface ICollectableBase
     {
-        Type ObjectType { get; }
+        Type CollectableType { get; }
 
         string DisplayName { get; set; }
         string Description { get; set; }    // description of the generic item

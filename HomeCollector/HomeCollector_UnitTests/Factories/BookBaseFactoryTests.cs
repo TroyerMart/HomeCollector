@@ -15,9 +15,7 @@ namespace HomeCollector_UnitTests.Factories
         [TestMethod]
         public void create_new_book_item_from_factory_does_not_return_null()
         {
-            Type bookType = typeof(BookBase);
-
-            ICollectableBase newBook = CollectableBaseFactory.CreateCollectableItem(bookType);
+            ICollectableBase newBook = CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
 
             Assert.IsNotNull(newBook);
         }
@@ -25,20 +23,16 @@ namespace HomeCollector_UnitTests.Factories
         [TestMethod]
         public void create_new_book_item_from_factory_returns_bookbase_type()
         {
-            Type bookType = typeof(BookBase);
+            ICollectableBase newBook = CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
 
-            ICollectableBase newBook = CollectableBaseFactory.CreateCollectableItem(bookType);
-
-            Assert.IsTrue(bookType == newBook.ObjectType);
+            Assert.IsTrue(CollectableBaseFactory.BookType == newBook.CollectableType);
         }
 
         // test default values
         [TestMethod]
         public void create_new_book_item_from_factory_bookcondition_defaults_to_undefined()
         {
-            Type bookType = typeof(BookBase);
-
-            BookBase newBook = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase newBook = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
 
             Assert.IsTrue(newBook.Condition == BookConditionEnum.Undefined);
         }
@@ -46,8 +40,7 @@ namespace HomeCollector_UnitTests.Factories
         [TestMethod]
         public void create_new_book_item_from_factory_getitems_does_not_return_null_list()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
 
             IList<ICollectableItem> books = book.GetItems();
 
@@ -57,8 +50,7 @@ namespace HomeCollector_UnitTests.Factories
         [TestMethod]
         public void create_new_book_item_from_factory_getitems_defaults_to_zero_items_in_list()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
 
             IList<ICollectableItem> books = book.GetItems();
 
@@ -68,9 +60,7 @@ namespace HomeCollector_UnitTests.Factories
         [TestMethod]
         public void create_new_book_item_from_factory_datepublished_defaults_to_min_date()
         {
-            Type bookType = typeof(BookBase);
-
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
 
             Assert.AreEqual(DateTime.MinValue, book.DatePublished);
         }

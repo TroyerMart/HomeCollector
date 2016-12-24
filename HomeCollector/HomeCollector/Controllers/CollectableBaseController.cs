@@ -21,7 +21,7 @@ namespace HomeCollector.Controllers
             _collectableBase = collectableBase;
         }
 
-        public Type ObjectType { get { return _collectableBase.ObjectType; } }
+        public Type CollectableType { get { return _collectableBase.CollectableType; } }
 
         public void AddItem(ICollectableItem itemToAdd)
         {

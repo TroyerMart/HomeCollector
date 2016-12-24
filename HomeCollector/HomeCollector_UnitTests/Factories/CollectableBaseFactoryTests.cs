@@ -55,21 +55,21 @@ namespace HomeCollector_UnitTests.Factories
         [TestMethod]
         public void create_new_factory_instance_from_valid_collectable_base_stamptype_succeeds()
         {
-            Type validType = typeof(StampBase);   // implements ICollectableBase
+            Type validType = CollectableBaseFactory.StampType;   // implements ICollectableBase
 
             ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(validType);
 
-            Assert.AreEqual(validType, newItem.ObjectType, "Expected to get instance of a stamp base type");
+            Assert.AreEqual(validType, newItem.CollectableType, "Expected to get instance of a stamp base type");
         }
 
         [TestMethod]
         public void create_new_factory_instance_from_valid_collectable_base_booktype_succeeds()
         {
-            Type validType = typeof(BookBase);   // implements ICollectableBase
+            Type validType = CollectableBaseFactory.BookType;   // implements ICollectableBase
 
             ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(validType);
 
-            Assert.AreEqual(validType, newItem.ObjectType, "Expected to get instance of a book base type");
+            Assert.AreEqual(validType, newItem.CollectableType, "Expected to get instance of a book base type");
         }
 
 
@@ -117,7 +117,7 @@ namespace HomeCollector_UnitTests.Factories
 
             ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(validTypeName);
 
-            Assert.AreEqual(validTypeName, newItem.ObjectType.Name, "Expected to get instance of a stamp base type");
+            Assert.AreEqual(validTypeName, newItem.CollectableType.Name, "Expected to get instance of a stamp base type");
         }
 
         [TestMethod]
@@ -127,7 +127,7 @@ namespace HomeCollector_UnitTests.Factories
 
             ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(validTypeName);
 
-            Assert.AreEqual(validTypeName, newItem.ObjectType.Name, "Expected to get instance of a book base type");
+            Assert.AreEqual(validTypeName, newItem.CollectableType.Name, "Expected to get instance of a book base type");
         }
         [TestMethod]
         public void create_new_factory_instance_from_valid_collectable_base_name_case_insensitive_succeeds()
@@ -136,7 +136,7 @@ namespace HomeCollector_UnitTests.Factories
 
             ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(validTypeName);
 
-            Assert.AreEqual(validTypeName.ToUpper(), newItem.ObjectType.Name.ToUpper(), "Expected to get instance of a book base type");
+            Assert.AreEqual(validTypeName.ToUpper(), newItem.CollectableType.Name.ToUpper(), "Expected to get instance of a book base type");
         }
 
         // IsICollectableType tests
@@ -145,7 +145,7 @@ namespace HomeCollector_UnitTests.Factories
         {
             Type invalidType = null;
 
-            bool isICollectable = CollectableBaseFactory.IsICollectableType(invalidType);
+            bool isICollectable = CollectableBaseFactory.IsCollectableType(invalidType);
 
             Assert.IsFalse(isICollectable, "Expected to return false if passed a null type");
         }
@@ -155,7 +155,7 @@ namespace HomeCollector_UnitTests.Factories
         {
             Type invalidType = typeof(int);
 
-            bool isICollectable = CollectableBaseFactory.IsICollectableType(invalidType);
+            bool isICollectable = CollectableBaseFactory.IsCollectableType(invalidType);
 
             Assert.IsFalse(isICollectable, "Expected to return false if passed an non-ICollectable type");
         }
@@ -165,7 +165,7 @@ namespace HomeCollector_UnitTests.Factories
         {
             Type invalidType = typeof(ICollectableBase);
 
-            bool isICollectable = CollectableBaseFactory.IsICollectableType(invalidType);
+            bool isICollectable = CollectableBaseFactory.IsCollectableType(invalidType);
 
             Assert.IsFalse(isICollectable, "Expected to return false if passed the ICollectable interface type");
         }
@@ -173,9 +173,9 @@ namespace HomeCollector_UnitTests.Factories
         [TestMethod]
         public void isicollectabletype_valid_type_returns_true()
         {
-            Type validType = typeof(StampBase);
+            Type validType = CollectableBaseFactory.StampType;
 
-            bool isICollectable = CollectableBaseFactory.IsICollectableType(validType);
+            bool isICollectable = CollectableBaseFactory.IsCollectableType(validType);
 
             Assert.IsTrue(isICollectable, "Expected to return true if passed a ICollectable type");
         }

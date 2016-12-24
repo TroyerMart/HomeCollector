@@ -13,18 +13,18 @@ namespace HomeCollector_UnitTests.Factories
         [TestMethod]
         public void create_new_stamp_item_from_factory_returns_stampbase_type()
         {
-            Type stampType = typeof(StampBase);
+            Type stampType = CollectableBaseFactory.StampType;
 
             ICollectableBase newStamp = CollectableBaseFactory.CreateCollectableItem(stampType);
 
-            Assert.IsTrue(stampType == newStamp.ObjectType);
+            Assert.IsTrue(stampType == newStamp.CollectableType);
         }
 
         // test defaults
         [TestMethod]
         public void create_new_stamp_item_from_factory_country_defaults_to_usa()
         {
-            Type stampType = typeof(StampBase);
+            Type stampType = CollectableBaseFactory.StampType;
 
             StampBase newStamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(stampType);
 
@@ -34,7 +34,7 @@ namespace HomeCollector_UnitTests.Factories
         [TestMethod]
         public void create_new_stamp_item_from_factory_isPostageStamp_defaults_to_true()
         {
-            Type stampType = typeof(StampBase);
+            Type stampType = CollectableBaseFactory.StampType;
 
             StampBase newStamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(stampType);
 

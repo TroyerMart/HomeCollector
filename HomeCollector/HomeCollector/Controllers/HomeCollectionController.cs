@@ -31,7 +31,7 @@ namespace HomeCollector.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new CollectionException(ex.Message, ex);
             }
         }
 
@@ -48,7 +48,7 @@ namespace HomeCollector.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new CollectionException(ex.Message, ex);
             }
         }
 

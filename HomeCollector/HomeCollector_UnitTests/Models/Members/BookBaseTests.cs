@@ -17,8 +17,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void display_name_cannot_be_set_to_null()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
 
             book.DisplayName = null;
 
@@ -28,8 +27,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void display_name_cannot_be_set_to_blank_string()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
 
             book.DisplayName = "";
 
@@ -40,8 +38,7 @@ namespace HomeCollector_UnitTests.Models.Members
         public void display_name_set_to_nonblank_value()
         {
             string expectedValue = "Display Name";
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
 
             book.DisplayName = expectedValue;
 
@@ -51,8 +48,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void book_year_can_be_set_to_zero_successfully()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
 
             book.Year = 0;
 
@@ -62,8 +58,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void book_year_can_be_set_to_valid_year_successfully()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
             int testYear = 2015;
 
             book.Year = testYear;
@@ -74,8 +69,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void book_year_cannot_be_set_to_negative()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
 
             book.Year = -100;
 
@@ -86,8 +80,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_book_base_instances_by_isbn_are_equal()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
             book.ISBN = "978-0465002047";
             BookBase testbook = new BookBase()
             { ISBN = book.ISBN };
@@ -100,8 +93,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_book_base_instances_by_isbn_are_not_equal()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
             book.ISBN = "978-0465002047";
             BookBase testbook = new BookBase()
             { ISBN = "123-0000000000" };
@@ -114,8 +106,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_book_base_instances_explicitly_by_isbn_are_equal()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
             book.ISBN = "978-0465002047";
             BookBase testbook = new BookBase()
             { ISBN = book.ISBN };
@@ -128,8 +119,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_book_base_instances_explicitly_isbn_are_not_equal()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
             book.ISBN = "978-0465002047";
             BookBase testbook = new BookBase()
             { ISBN = "123-0000000000" };
@@ -142,8 +132,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_book_base_instances_by_title_and_author_are_equal()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
             book.Title = "Pebble in the Sky";
             book.Author = "Asimov, Isaac";
 
@@ -161,8 +150,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_book_base_instances_by_title_and_author_are_not_equal_title()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
             book.Title = "Pebble in the Sky";
             book.Author = "Asimov, Isaac";
 
@@ -180,8 +168,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_book_base_instances_by_title_and_author_are_not_equal_author()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
             book.Title = "Pebble in the Sky";
             book.Author = "Asimov, Isaac";
 
@@ -199,8 +186,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void compare_book_base_instances_returns_false_when_null()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
             BookBase testbook = null;
 
             bool isEqual = book.IsSame(testbook, false);
@@ -211,8 +197,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void compare_book_base_instances_by_title_and_author_returns_false_when_null()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
             BookBase testbook = null;
 
             bool isEqual = book.IsSame(testbook, true);
@@ -223,8 +208,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void compare_book_base_instances_by_explicit_scottnumber_returns_false_when_null()
         {
-            Type bookType = typeof(BookBase);
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(bookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
             BookBase testbook = null;
 
             bool isEqual = book.IsSame(testbook, false);

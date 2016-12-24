@@ -55,10 +55,10 @@ namespace HomeCollector_UnitTests.Controllers
         {
             Type objType = typeof(ICollectableBase);
             ICollectableBase collectableBase = mockCollectableBase.Object;
-            mockCollectableBase.Setup(b => b.ObjectType).Returns(objType);
+            mockCollectableBase.Setup(b => b.CollectableType).Returns(objType);
             
             controller = new CollectableBaseController(collectableBase);
-            Type objTestType = controller.ObjectType;
+            Type objTestType = controller.CollectableType;
 
             Assert.AreEqual(objType, objTestType);
         }

@@ -17,9 +17,8 @@ namespace HomeCollector.Models
         private string _displayName = DISPLAYNAME_DEFAULT;
         private int _year = 0;
 
-        public Type ObjectType { get { return GetType(); } }
-
         // from ICollectableBase
+        public Type CollectableType { get { return GetType(); } }
         public string DisplayName {
             get { return _displayName; }
             set
@@ -73,10 +72,10 @@ namespace HomeCollector.Models
             {
                 throw new CollectableException("Cannot add a null item");
             }
-            Type itemType = itemToAdd.ObjectType;
-            if (itemType != typeof(BookItem))
+            Type itemType = itemToAdd.CollectableType;
+            if (itemType != this.CollectableType)
             {
-                throw new CollectableException($"Invalid type {itemType}, expected type {typeof(BookItem)}");
+                throw new CollectableException($"Invalid type {itemType}, expected type {this.CollectableType}");
             }
             _items.Add(itemToAdd);
         }
@@ -91,10 +90,10 @@ namespace HomeCollector.Models
             {
                 throw new CollectableException("List is empty - Cannot remove item from list");
             }
-            Type itemType = itemToRemove.ObjectType;
-            if (itemType != typeof(BookItem))
+            Type itemType = itemToRemove.CollectableType;
+            if (itemType != this.CollectableType)
             {
-                throw new CollectableException($"Invalid type {itemType}, expected type {typeof(BookItem)}");
+                throw new CollectableException($"Invalid type {itemType}, expected type {this.CollectableType}");
             }
             try
             {
@@ -122,10 +121,10 @@ namespace HomeCollector.Models
             {
                 throw new CollectableException("Cannot compare to a null item");
             }
-            Type defnType = itemToCompare.ObjectType;
-            if (defnType != typeof(BookBase))
+            Type itemType = itemToCompare.CollectableType;
+            if (itemType != this.CollectableType)
             {
-                throw new CollectableException($"Invalid type {defnType}, expected type {typeof(BookBase)}");
+                throw new CollectableException($"Invalid type {itemType}, expected type {this.CollectableType}");
             }
             BookBase bookDef = (BookBase)itemToCompare;
             if (!useTitleAuthor)

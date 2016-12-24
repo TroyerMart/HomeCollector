@@ -17,7 +17,7 @@ namespace HomeCollector.Models
 
         public HomeCollection(string collectionName, Type collectableType)
         {
-            if (! CollectableBaseFactory.IsICollectableType(collectableType))
+            if (! CollectableBaseFactory.IsCollectableType(collectableType))
             {
                 throw new CollectionException($"Type {collectableType} must be of a valid Collectable Type");
             }
@@ -51,7 +51,7 @@ namespace HomeCollector.Models
             {
                 throw new CollectionException("Cannot add a null collectable to the collection");
             }
-            Type collectableType = collectableToAdd.ObjectType;
+            Type collectableType = collectableToAdd.CollectableType;
             if (collectableType != CollectionType )
             {
                 throw new CollectionException($"Cannot add a collectable of an invalid type to the collection, Type={collectableType}, but expected {CollectionType}");

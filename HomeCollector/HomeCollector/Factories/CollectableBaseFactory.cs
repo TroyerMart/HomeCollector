@@ -11,11 +11,12 @@ namespace HomeCollector.Factories
 {
     public class CollectableBaseFactory
     {
-        public Type BookType = typeof(BookBase);
-        public Type StampType = typeof(StampBase);
+        public static Type BookType = typeof(BookBase);
+        public static Type StampType = typeof(StampBase);
+        public static List<Type> CollectableTypes = new List<Type>() { BookType, StampType };
 
-        public static bool IsICollectableType (Type itemType)
-        {   // returns true if the type implements ICollectable, but is not actually the interface itself
+        public static bool IsCollectableType (Type itemType)
+        {   // returns true if the type implements ICollectableBase, but is not actually the interface itself
             if (itemType == null)
             {
                 return false;
@@ -33,14 +34,14 @@ namespace HomeCollector.Factories
             {
                 throw new CollectableException($"Type cannot be null, Must be of a type implementing ICollectableBase");
             }
-            if (! IsICollectableType(itemType))
+            if (! IsCollectableType(itemType))
             {
                 throw new CollectableException($"Type must implement ICollectableBase");
             }
-            if (itemType == typeof(BookBase)) {
+            if (itemType == BookType) {
                 return new BookBase();
             }
-            else if (itemType == typeof(StampBase))
+            else if (itemType == StampType)
             {
                 return new StampBase();
             }
@@ -58,10 +59,10 @@ namespace HomeCollector.Factories
                 throw new CollectableException($"TypeName cannot be null or empty");
             }
             itemTypeName = itemTypeName.ToLower();
-            if (itemTypeName == typeof(BookBase).Name.ToLower()) {
+            if (itemTypeName == BookType.Name.ToLower()) {
                 return new BookBase();
             }
-            else if (itemTypeName == typeof(StampBase).Name.ToLower())
+            else if (itemTypeName == StampType.Name.ToLower())
             {
                 return new StampBase();
             } else

@@ -1,4 +1,5 @@
 ﻿using HomeCollector.Exceptions;
+using HomeCollector.Factories;
 using HomeCollector.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace HomeCollector.Models.Members
         {
         }
 
-        public Type ObjectType  { get { return GetType(); } }
+        public Type CollectableType  { get { return CollectableBaseFactory.StampType; } }
 
         // from ICollectableItem
         public string ItemDetails { get; set; }  // detail information specific to this actual item
