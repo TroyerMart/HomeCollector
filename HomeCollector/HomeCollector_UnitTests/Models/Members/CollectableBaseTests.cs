@@ -75,20 +75,14 @@ namespace HomeCollector_UnitTests.Models.Members
             int N = 3;
             foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
             {
-                Mock<ICollectableItem> mockItem;
+                Mock<ICollectableItem> mockWrongItemType;
                 ICollectableBase collectable = GetTestBase(collectableType, N);
-                if (collectable.CollectableType.Name == "BookBase")
-                {
-                    mockItem = GetMockItem(CollectableBaseFactory.StampType);
-                }
-                else
-                {
-                    mockItem = GetMockItem(CollectableBaseFactory.BookType);
-                }
+                mockWrongItemType = GetDifferentTypeMockItem(collectableType);
 
                 try
                 {
-                    collectable.AddItem(mockItem.Object);
+                    collectable.AddItem(mockWrongItemType.Object);
+
                     Assert.IsFalse(true, "Expected to fail adding a member of the wrong type");
                 }
                 catch (CollectableException)
@@ -100,7 +94,7 @@ namespace HomeCollector_UnitTests.Models.Members
 
         // test removing items  
         [TestMethod]
-        public void removeitem_from_existing_list()
+        public void removeitem_from_existing_list_success()
         {
             int N = 3;
             foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
@@ -115,62 +109,98 @@ namespace HomeCollector_UnitTests.Models.Members
             }
         }
 
-        [TestMethod, ExpectedException(typeof(CollectableException))]
+        [TestMethod]
         public void removeitem_from_existing_list_fails_when_list_is_empty()
         {
             int N = 0;
+            bool threwError = false;
             foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, N);
-                Mock<ICollectableItem> mockItem = mockItem = GetMockItem(collectableType);
+                Mock<ICollectableItem> mockItem =  GetMockItem(collectableType);
+                threwError = false;
 
-                collectable.RemoveItem(mockItem.Object);
+                try
+                {
+                    collectable.RemoveItem(mockItem.Object);
+                }
+                catch (CollectableException)
+                {
+                    threwError = true;
+                }
+
+                Assert.IsTrue(threwError, "Expected RemoveItem to throw a CollectableException error when removing an item from an empty item list");
             }
         }
 
-        [TestMethod, ExpectedException(typeof(CollectableException))]
+        [TestMethod]
         public void removeitem_from_existing_list_fails_when_item_is_null()
         {
             int N = 3;
+            bool threwError = false;
             foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, N);
                 ICollectableItem mockItem = null;
 
-                collectable.RemoveItem(mockItem);
+                try
+                {
+                    collectable.RemoveItem(mockItem);
+                }
+                catch (CollectableException)
+                {
+                    threwError = true;
+                }
+
+                Assert.IsTrue(threwError);
             }
         }
 
-        [TestMethod, ExpectedException(typeof(CollectableException))]
+        [TestMethod]
         public void removeitem_from_existing_list_fails_when_item_is_incorrect_type()
         {
             int N = 3;
+            bool threwError = false;
             foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, N);
-                Mock<ICollectableItem> mockItem;
-                if (collectableType == CollectableBaseFactory.BookType)
+                Mock<ICollectableItem> mockWrongItemType;
+                mockWrongItemType = GetDifferentTypeMockItem(collectableType);
+
+                try
                 {
-                    mockItem = GetMockItem(CollectableBaseFactory.StampType);
+                    collectable.RemoveItem(mockWrongItemType.Object);
                 }
-                else
+                catch (CollectableException)
                 {
-                    mockItem = GetMockItem(CollectableBaseFactory.BookType);
+                    threwError = true;
                 }
-                collectable.RemoveItem(mockItem.Object);
+
+                Assert.IsTrue(threwError);
             }
         }
 
-        [TestMethod, ExpectedException(typeof(CollectableException))]
+        [TestMethod]
         public void removeitem_from_existing_list_fails_when_item_is_not_in_list()
         {
             int N = 3;
+            bool threwError = false;
             foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
             {
+                threwError = false;
                 ICollectableBase collectable = GetTestBase(collectableType, N);
-                Mock<ICollectableItem> mockItem = GetMockItem(collectableType);
+                Mock<ICollectableItem> mockItemNotInList = GetMockItem(collectableType);
 
-                collectable.RemoveItem(mockItem.Object);
+                try
+                {
+                    collectable.RemoveItem(mockItemNotInList.Object);
+                }
+                catch (CollectableException)
+                {
+                    threwError = true;
+                }
+
+                Assert.IsTrue(threwError);
             }
         }
 
@@ -181,20 +211,22 @@ namespace HomeCollector_UnitTests.Models.Members
         {
             foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
             {
+                int N = 3;
+                List<Mock<ICollectableItem>> mockItems = new List<Mock<ICollectableItem>>();
                 ICollectableBase collectable = GetTestBase(collectableType, 0);
-                Mock<ICollectableItem> mockItem1 = GetMockItem(collectableType);
-                Mock<ICollectableItem> mockItem2 = GetMockItem(collectableType);
-                Mock<ICollectableItem> mockItem3 = GetMockItem(collectableType);
-
-                collectable.AddItem(mockItem1.Object);
-                collectable.AddItem(mockItem2.Object);
-                collectable.AddItem(mockItem3.Object);
+                for (int i=0; i<N; i++)
+                {
+                    Mock<ICollectableItem> mockItem = GetMockItem(collectableType);
+                    mockItems.Add(mockItem);
+                    collectable.AddItem(mockItem.Object);
+                }
 
                 IList<ICollectableItem> items = collectable.GetItems();
 
-                Assert.AreEqual(mockItem1.Object, items[0]);
-                Assert.AreEqual(mockItem2.Object, items[1]);
-                Assert.AreEqual(mockItem3.Object, items[2]);
+                for (int i = 0; i < N; i++)
+                {
+                    Assert.AreEqual(mockItems[i].Object, items[i]);
+                }
             }
         }
 
@@ -213,7 +245,7 @@ namespace HomeCollector_UnitTests.Models.Members
 
         // clear members
         [TestMethod]
-        public void clearitems_from_existing_list()
+        public void clearitems_from_existing_list_success()
         {
             int N = 3;
             foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
@@ -228,7 +260,7 @@ namespace HomeCollector_UnitTests.Models.Members
         }
 
         [TestMethod]
-        public void clearitems_from_empty_list()
+        public void clearitems_from_empty_list_success()
         {
             int N = 0;
             foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
@@ -249,10 +281,10 @@ namespace HomeCollector_UnitTests.Models.Members
             switch (baseType.Name)
             {
                 case "BookBase":
-                    testBase = (BookBase)CollectableBaseFactory.CreateCollectableItem(baseType);
+                    testBase = (BookBase)CollectableBaseFactory.CreateCollectableBase(baseType);
                     break;
                 case "StampBase":
-                    testBase = (StampBase)CollectableBaseFactory.CreateCollectableItem(baseType);
+                    testBase = (StampBase)CollectableBaseFactory.CreateCollectableBase(baseType);
                     break;
                 default:
                     break;
@@ -282,6 +314,21 @@ namespace HomeCollector_UnitTests.Models.Members
             }
             Mock<ICollectableItem> mockItem = new Mock<ICollectableItem>();
             mockItem.Setup(b => b.CollectableType).Returns(itemType);
+
+            return mockItem;
+        }
+
+        private Mock<ICollectableItem> GetDifferentTypeMockItem(Type collectableType)
+        {
+            Mock<ICollectableItem> mockItem;
+            if (collectableType == CollectableBaseFactory.CollectableTypes[0])
+            {
+                mockItem = GetMockItem(CollectableBaseFactory.CollectableTypes[1]);
+            }
+            else
+            {
+                mockItem = GetMockItem(CollectableBaseFactory.CollectableTypes[0]);
+            }
 
             return mockItem;
         }

@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HomeCollector.Models.Members;
 using HomeCollector.Exceptions;
 using HomeCollector.Interfaces;
+using HomeCollector.Factories;
 
 namespace HomeCollector_UnitTests.Models.Members
 {
@@ -82,6 +83,16 @@ namespace HomeCollector_UnitTests.Models.Members
             stamp.EstimatedValue = value;
 
             Assert.IsFalse(true, "Expected test to throw exception when setting a negative value");
+        }
+
+        [TestMethod]
+        public void new_instance_of_bootitem_has_correct_type()
+        {
+            StampItem stamp = new StampItem();
+
+            Type stampType = stamp.CollectableType;
+
+            Assert.AreEqual(CollectableBaseFactory.StampType, stampType);
         }
 
     }

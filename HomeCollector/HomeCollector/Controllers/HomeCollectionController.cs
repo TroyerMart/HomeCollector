@@ -31,7 +31,7 @@ namespace HomeCollector.Controllers
             }
             catch (Exception ex)
             {
-                throw new CollectionException(ex.Message, ex);
+                throw new CollectionException("Error adding item to collection", ex);
             }
         }
 
@@ -48,7 +48,7 @@ namespace HomeCollector.Controllers
             }
             catch (Exception ex)
             {
-                throw new CollectionException(ex.Message, ex);
+                throw new CollectionException("Error removing item from collection", ex);
             }
         }
 

@@ -13,7 +13,7 @@ namespace HomeCollector.Models
     {
         private string _collectionName;
         private List<ICollectableBase> _collection;
-        private Type _collectableType;
+        private Type _collectionType;
 
         public HomeCollection(string collectionName, Type collectableType)
         {
@@ -22,7 +22,7 @@ namespace HomeCollector.Models
                 throw new CollectionException($"Type {collectableType} must be of a valid Collectable Type");
             }
             CollectionName = collectionName;
-            _collectableType = collectableType;
+            _collectionType = collectableType;
             _collection = new List<ICollectableBase>();
         }
 
@@ -41,7 +41,7 @@ namespace HomeCollector.Models
         {
             get
             {
-                return _collectableType;
+                return _collectionType;
             }
         }
 
@@ -61,23 +61,9 @@ namespace HomeCollector.Models
                 _collection.Add(collectableToAdd);
             } catch (Exception ex)
             {
-                throw ex;
+                throw new CollectionException("Error adding item to collection", ex);
             }
         }
-
-        //public void AddMember(ICollectableBase collectableItem, string memberDetails = "",
-        //    decimal estimatedValue = 0, bool isPlaceholder = false, bool isFavorite = false
-        //    )
-        //{
-        //    ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(_itemType);
-        //    ICollectionMember newMember = new CollectionMember(newItem) {
-        //        ItemDetails = memberDetails,
-        //        EstimatedValue = estimatedValue,
-        //        IsPlaceholder = isPlaceholder,
-        //        IsFavorite = isFavorite
-        //    };
-        //    AddMember(newMember);
-        //}
 
         public IList<ICollectableBase> GetCollection()
         {
@@ -91,7 +77,7 @@ namespace HomeCollector.Models
                 _collection.Remove(collectableToRemove);
             } catch (Exception ex)
             {
-                throw ex;
+                throw new CollectionException("Error removing item from collection", ex);
             }
         }
 

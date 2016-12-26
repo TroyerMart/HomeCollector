@@ -11,32 +11,40 @@ namespace HomeCollector_UnitTests.Factories
     public class StampBaseFactoryTests
     {
         [TestMethod]
-        public void create_new_stamp_item_from_factory_returns_stampbase_type()
+        public void create_new_stamp_from_factory_does_not_return_null()
+        {
+            ICollectableBase newStamp = CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
+
+            Assert.IsNotNull(newStamp);
+        }
+
+        [TestMethod]
+        public void create_new_stamp_from_factory_returns_stampbase_type()
         {
             Type stampType = CollectableBaseFactory.StampType;
 
-            ICollectableBase newStamp = CollectableBaseFactory.CreateCollectableItem(stampType);
+            ICollectableBase newStamp = CollectableBaseFactory.CreateCollectableBase(stampType);
 
             Assert.IsTrue(stampType == newStamp.CollectableType);
         }
 
         // test defaults
         [TestMethod]
-        public void create_new_stamp_item_from_factory_country_defaults_to_usa()
+        public void create_new_stamp_from_factory_country_defaults_to_usa()
         {
             Type stampType = CollectableBaseFactory.StampType;
 
-            StampBase newStamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(stampType);
+            StampBase newStamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(stampType);
 
             Assert.IsTrue(newStamp.Country == StampCountryEnum.USA);
         }
 
         [TestMethod]
-        public void create_new_stamp_item_from_factory_isPostageStamp_defaults_to_true()
+        public void create_new_stamp_from_factory_isPostageStamp_defaults_to_true()
         {
             Type stampType = CollectableBaseFactory.StampType;
 
-            StampBase newStamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(stampType);
+            StampBase newStamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(stampType);
 
             Assert.IsTrue(newStamp.IsPostageStamp);
         }

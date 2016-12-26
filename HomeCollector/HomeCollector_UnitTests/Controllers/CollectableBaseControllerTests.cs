@@ -51,7 +51,7 @@ namespace HomeCollector_UnitTests.Controllers
         }
 
         [TestMethod]
-        public void controller_objecttype_returns_collectable_base_type()
+        public void controller_collectabletype_returns_initial_collectable_base_type()
         {
             Type objType = typeof(ICollectableBase);
             ICollectableBase collectableBase = mockCollectableBase.Object;

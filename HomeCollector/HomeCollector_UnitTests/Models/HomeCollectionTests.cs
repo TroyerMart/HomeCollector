@@ -5,6 +5,7 @@ using HomeCollector.Interfaces;
 using HomeCollector.Models;
 using Moq;
 using HomeCollector.Factories;
+using System.Collections.Generic;
 
 namespace HomeCollector_UnitTests.Models
 {
@@ -16,7 +17,7 @@ namespace HomeCollector_UnitTests.Models
         {
             string collectionName = null;
 
-            ICollectionBase testCollection = new HomeCollection(collectionName, CollectableBaseFactory.StampType);
+            ICollectionBase testCollection = new HomeCollection(collectionName, CollectableBaseFactory.CollectableTypes[0]);
 
             Assert.IsFalse(true, "Expected collection initialization to fail with null collection name");
         }
@@ -36,7 +37,7 @@ namespace HomeCollector_UnitTests.Models
         {
             string collectionName = "";
 
-            ICollectionBase testCollection = new HomeCollection(collectionName, CollectableBaseFactory.BookType);
+            ICollectionBase testCollection = new HomeCollection(collectionName, CollectableBaseFactory.CollectableTypes[0]);
 
             Assert.IsFalse(true, "Expected collection initialization to fail with empty collection name");
         }
@@ -44,9 +45,9 @@ namespace HomeCollector_UnitTests.Models
         [TestMethod, ExpectedException(typeof(CollectionException))]
         public void initialize_collection_invalid_collectiontype_throws_exception()
         {
-            Type collectionType = typeof(Int64);    // anything that is not ICollectableBase
+            Type invalidCollectionType = typeof(Int64);    // anything that is not ICollectableBase
 
-            ICollectionBase testCollection = new HomeCollection("initial", collectionType);
+            ICollectionBase testCollection = new HomeCollection("initial", invalidCollectionType);
 
             Assert.IsFalse(true, "Expected collection initialization to fail with invalid collection type");
         }
@@ -56,7 +57,7 @@ namespace HomeCollector_UnitTests.Models
         {
             string collectionName = "Test Collection";
 
-            ICollectionBase testCollection = new HomeCollection(collectionName, CollectableBaseFactory.StampType);
+            ICollectionBase testCollection = new HomeCollection(collectionName, CollectableBaseFactory.CollectableTypes[0]);
 
             Assert.AreEqual(collectionName, testCollection.CollectionName);
         }
@@ -64,28 +65,32 @@ namespace HomeCollector_UnitTests.Models
         [TestMethod]
         public void initialize_collection_sets_collectiontype_successfully()
         {
-            ICollectionBase testStampCollection = new HomeCollection("initial", CollectableBaseFactory.StampType);
-            ICollectionBase testBookCollection = new HomeCollection("initial", CollectableBaseFactory.BookType);
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectionBase testCollection = new HomeCollection("initial", collectableType);
 
-            Assert.AreEqual(CollectableBaseFactory.StampType, testStampCollection.CollectionType);
-            Assert.AreEqual(CollectableBaseFactory.BookType, testBookCollection.CollectionType);
+                Assert.AreEqual(collectableType, testCollection.CollectionType);
+            }            
         }
 
         [TestMethod]
-        public void set_get_collectionname_success()
+        public void collectionname_returns_set_value()
         {
-            ICollectionBase testCollection = new HomeCollection("initial", CollectableBaseFactory.StampType);
-            string validCollectionName = "Test Collection";
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectionBase testCollection = new HomeCollection("initial", collectableType);
+                string validCollectionName = "Test Collection";
 
-            testCollection.CollectionName = validCollectionName;
+                testCollection.CollectionName = validCollectionName;
 
-            Assert.AreEqual(validCollectionName, testCollection.CollectionName);
+                Assert.AreEqual(validCollectionName, testCollection.CollectionName);
+            }
         }
 
         [TestMethod, ExpectedException(typeof(CollectionException))]
         public void set_collectionname_with_null_throws_exception()
         {
-            ICollectionBase testCollection = new HomeCollection("initial", CollectableBaseFactory.StampType);
+            ICollectionBase testCollection = new HomeCollection("initial", CollectableBaseFactory.CollectableTypes[0]);
             string nullCollectionName = null;
 
             testCollection.CollectionName = nullCollectionName;
@@ -96,7 +101,7 @@ namespace HomeCollector_UnitTests.Models
         [TestMethod, ExpectedException(typeof(CollectionException))]
         public void set_collectionname_with_empty_value_throws_exception()
         {
-            ICollectionBase testCollection = new HomeCollection("initial", CollectableBaseFactory.StampType);
+            ICollectionBase testCollection = new HomeCollection("initial", CollectableBaseFactory.CollectableTypes[0]);
             string emptyCollectionName = " ";
 
             testCollection.CollectionName = emptyCollectionName;
@@ -104,19 +109,20 @@ namespace HomeCollector_UnitTests.Models
             Assert.IsFalse(true, "Expected set collectionname to fail with empty value");
         }
         [TestMethod]
-        public void get_collectiontype_returns_initialized_value()
+        public void get_collectiontype_returns_initialized_type()
         {
-            ICollectionBase stampCollection = new HomeCollection("initial", CollectableBaseFactory.StampType);
-            ICollectionBase bookCollection = new HomeCollection("initial", CollectableBaseFactory.BookType);
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectionBase collection = new HomeCollection("initial", collectableType);
 
-            Assert.AreEqual(CollectableBaseFactory.StampType, stampCollection.CollectionType);
-            Assert.AreEqual(CollectableBaseFactory.BookType, bookCollection.CollectionType);
+                Assert.AreEqual(collectableType, collection.CollectionType);
+            }
         }
 
         [TestMethod, ExpectedException(typeof(CollectionException))]
-        public void add_null_to_collection_throws_exception()
+        public void add_null_collectable_to_collection_throws_exception()
         {
-            ICollectionBase testCollection = new HomeCollection("initial", CollectableBaseFactory.BookType);
+            ICollectionBase testCollection = new HomeCollection("initial", CollectableBaseFactory.CollectableTypes[0]);
 
             ICollectableBase nullCollectable = null;
             testCollection.AddToCollection(nullCollectable);
@@ -124,10 +130,33 @@ namespace HomeCollector_UnitTests.Models
             Assert.IsFalse(true, "Expected that an exception is thrown when a null value is added to the collection");
         }
 
+        [TestMethod]
+        public void add_invalid_type_to_collection_throws_exception()
+        {
+            bool threwException = false;
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                threwException = false;
+                ICollectionBase collection = new HomeCollection("initial", collectableType);
+                ICollectableBase collectable = GetDifferentTypeMockCollectable(collectableType).Object; //CollectableBaseFactory.CreateCollectableBase(collectableType);
+
+                try
+                {
+                    collection.AddToCollection(collectable);
+                }
+                catch (CollectionException)
+                {
+                    threwException = true;
+                }
+
+                Assert.IsTrue(threwException, "Expected that an exception is thrown when an invalid type is added to the collection");
+            }
+        }
+        
         [TestMethod, ExpectedException(typeof(CollectionException))]
         public void add_invalid_type_to_stamp_collection_throws_exception()
         {
-            ICollectionBase stampCollection = new HomeCollection("initial", CollectableBaseFactory.StampType);
+            ICollectionBase stampCollection = new HomeCollection("initial", CollectableBaseFactory.CollectableTypes[1]);
 
             stampCollection.AddToCollection(new BookBase());
 
@@ -137,7 +166,7 @@ namespace HomeCollector_UnitTests.Models
         [TestMethod, ExpectedException(typeof(CollectionException))]
         public void add_invalid_type_to_book_collection_throws_exception()
         {
-            ICollectionBase bookCollection = new HomeCollection("initial", CollectableBaseFactory.BookType);
+            ICollectionBase bookCollection = new HomeCollection("initial", CollectableBaseFactory.CollectableTypes[0]);
 
             bookCollection.AddToCollection(new StampBase());
 
@@ -147,46 +176,133 @@ namespace HomeCollector_UnitTests.Models
         [TestMethod]
         public void add_valid_type_to_collection_succeeds()
         {
-            ICollectionBase stampCollection = new HomeCollection("initial", CollectableBaseFactory.StampType);
-            ICollectionBase bookCollection = new HomeCollection("initial", CollectableBaseFactory.BookType);
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectionBase collection = new HomeCollection("initial", collectableType);
+                ICollectableBase collectable = GetMockCollectableObject(collectableType);
 
-            ICollectableBase collectableStamp = new StampBase();
-            stampCollection.AddToCollection(collectableStamp);
-            ICollectableBase collectableBook = new BookBase();
-            bookCollection.AddToCollection(collectableBook);
+                collection.AddToCollection(collectable);
 
-            Assert.AreEqual(1, stampCollection.GetCollection().Count);
-            Assert.AreEqual(1, bookCollection.GetCollection().Count);
+                Assert.AreEqual(1, collection.GetCollection().Count);
+            }
         }
 
         [TestMethod]
-        public void getcollection_returns_books_added_to_collection()
+        public void getcollection_returns_count_of_collectables_added_to_collection()
         {
             int N = 3;
-            Type collectionType = CollectableBaseFactory.BookType;
-            ICollectionBase testCollection = new HomeCollection("initial", collectionType);
-
-            for (int i=0; i<N; i++)
+            foreach (Type collectionType in CollectableBaseFactory.CollectableTypes)
             {
-                ICollectableBase collectable = GetMockCollectableObject(collectionType);
-                testCollection.AddToCollection(collectable);
-            }
+                ICollectionBase testCollection = GetMockCollection(N, collectionType);
 
-            Assert.AreEqual(N, testCollection.GetCollection().Count);
+                int count = testCollection.GetCollection().Count;
+
+                Assert.AreEqual(N, count);
+            }
         }
 
-        // test GetCollection
-        // test RemoveFromCollection
-        // test ClearCollection
+        [TestMethod]
+        public void getcollection_returns_all_collectables_added_to_collection()
+        {
+            int N = 3;
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                Type collectionType = collectableType;
+                IList<ICollectableBase> collectables = new List<ICollectableBase>();
+                ICollectionBase testCollection = new HomeCollection("initial", collectionType);
 
+                for (int i = 0; i < N; i++)
+                {
+                    ICollectableBase collectable = GetMockCollectableObject(collectionType);
+                    collectables.Add(collectable);
 
-        // Helper methods
+                    testCollection.AddToCollection(collectable);
+                }
+                
+                for (int i=0; i<N; i++)
+                {
+                    Assert.AreEqual(collectables[i], testCollection.GetCollection()[i]);
+                }
+            }
+        }
 
-        private ICollectableBase  GetMockCollectableObject(Type collectionType)
+        [TestMethod]
+        public void removefromcollection_deletes_collectable_from_collection()
+        {
+            int N = 3;
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectionBase testCollection = GetMockCollection(N, collectableType);
+                ICollectableBase collectableToRemove = testCollection.GetCollection()[0]; //[N - 1];
+                
+                testCollection.RemoveFromCollection(collectableToRemove);
+
+                bool foundCollectable = false;
+                foreach (ICollectableBase collectable in testCollection.GetCollection())
+                {
+                    if (collectableToRemove == collectable)
+                    {
+                        foundCollectable = true;
+                        break;
+                    }
+                }
+                Assert.IsFalse(foundCollectable);
+            }
+        }
+
+        [TestMethod]
+        public void clearcollection_removes_all_collectables_from_collection()
+        {
+            int N = 3;
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectionBase testCollection = GetMockCollection(N, collectableType);
+
+                testCollection.ClearCollection();
+
+                Assert.AreEqual(0, testCollection.GetCollection().Count);
+            }
+        }
+
+        /****** helpers **********************************************************************************/
+
+        private Mock<ICollectableBase>  GetMockCollectable(Type collectionType)
         {
             Mock<ICollectableBase> collectable1 = new Mock<ICollectableBase>();
             collectable1.Setup(b => b.CollectableType).Returns(collectionType);
-            return collectable1.Object;
+            return collectable1;
+        }
+
+        private ICollectableBase GetMockCollectableObject(Type collectionType)
+        {
+            return GetMockCollectable(collectionType).Object;
+        }
+
+        private Mock<ICollectableBase> GetDifferentTypeMockCollectable(Type collectableType)
+        {
+            Mock<ICollectableBase> mockCollectable;
+            if (collectableType == CollectableBaseFactory.CollectableTypes[0])
+            {
+                mockCollectable = GetMockCollectable(CollectableBaseFactory.CollectableTypes[1]);
+            }
+            else
+            {
+                mockCollectable = GetMockCollectable(CollectableBaseFactory.CollectableTypes[0]);
+            }
+            return mockCollectable;
+        }
+
+        private ICollectionBase GetMockCollection(int N, Type collectableType)
+        {
+            Type collectionType = collectableType;
+            ICollectionBase testCollection = new HomeCollection("initial", collectionType);
+            for (int i = 0; i < N; i++)
+            {
+                ICollectableBase collectable = GetMockCollectableObject(collectableType);
+                testCollection.AddToCollection(collectable);
+            }
+
+            return testCollection;
         }
 
     }

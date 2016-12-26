@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HomeCollector.Models.Members;
 using HomeCollector.Interfaces;
 using HomeCollector.Exceptions;
+using HomeCollector.Factories;
 
 namespace HomeCollector_UnitTests.Models.Members
 {
@@ -48,34 +49,43 @@ namespace HomeCollector_UnitTests.Models.Members
         public void estimated_value_allows_zero_value_to_be_set()
         {
             decimal expectedValue = 0;
-            BookItem stamp = new BookItem();
+            BookItem book = new BookItem();
 
-            stamp.EstimatedValue = expectedValue;
+            book.EstimatedValue = expectedValue;
 
-            Assert.AreEqual(expectedValue, stamp.EstimatedValue);
+            Assert.AreEqual(expectedValue, book.EstimatedValue);
         }
 
         [TestMethod]
         public void estimated_value_allows_positive_value_to_be_set()
         {
             decimal expectedValue = 0.55M;
-            BookItem stamp = new BookItem();
+            BookItem book = new BookItem();
 
-            stamp.EstimatedValue = expectedValue;
+            book.EstimatedValue = expectedValue;
 
-            Assert.AreEqual(expectedValue, stamp.EstimatedValue);
+            Assert.AreEqual(expectedValue, book.EstimatedValue);
         }
 
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void estimated_value_set_to_negative_value_throws_exception()
         {
             decimal expectedValue = -10M;
-            BookItem stamp = new BookItem();
+            BookItem book = new BookItem();
 
-            stamp.EstimatedValue = expectedValue;
+            book.EstimatedValue = expectedValue;
 
             Assert.IsFalse(true, "Expected test to throw exception when setting a negative value");
         }
 
+        [TestMethod]
+        public void new_instance_of_bootitem_has_correct_type()
+        {
+            BookItem book = new BookItem();
+
+            Type bookType = book.CollectableType;
+
+            Assert.AreEqual(CollectableBaseFactory.BookType, bookType);
+        }
     }
 }

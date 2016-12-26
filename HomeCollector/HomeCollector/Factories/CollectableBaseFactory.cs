@@ -25,10 +25,13 @@ namespace HomeCollector.Factories
             {
                 return (itemType != typeof(ICollectableBase));
             }
+
+            // add in testing for member of CollectableTypes above
+
             return false;
         }
 
-        public static ICollectableBase CreateCollectableItem(Type itemType)
+        public static ICollectableBase CreateCollectableBase(Type itemType)
         {   // this can be extended as more types are added            
             if (itemType == null)
             {

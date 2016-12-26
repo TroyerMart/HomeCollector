@@ -13,54 +13,54 @@ namespace HomeCollector_UnitTests.Factories
     {
         // test book factory
         [TestMethod]
-        public void create_new_book_item_from_factory_does_not_return_null()
+        public void create_new_book_from_factory_does_not_return_null()
         {
-            ICollectableBase newBook = CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
+            ICollectableBase newBook = CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.BookType);
 
             Assert.IsNotNull(newBook);
         }
 
         [TestMethod]
-        public void create_new_book_item_from_factory_returns_bookbase_type()
+        public void create_new_book_from_factory_returns_bookbase_type()
         {
-            ICollectableBase newBook = CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
+            ICollectableBase newBook = CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.BookType);
 
             Assert.IsTrue(CollectableBaseFactory.BookType == newBook.CollectableType);
         }
 
         // test default values
         [TestMethod]
-        public void create_new_book_item_from_factory_bookcondition_defaults_to_undefined()
+        public void create_new_book_from_factory_bookcondition_defaults_to_undefined()
         {
-            BookBase newBook = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
+            BookBase newBook = (BookBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.BookType);
 
             Assert.IsTrue(newBook.Condition == BookConditionEnum.Undefined);
         }
 
         [TestMethod]
-        public void create_new_book_item_from_factory_getitems_does_not_return_null_list()
+        public void create_new_book_from_factory_getitems_does_not_return_null_list()
         {
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.BookType);
 
-            IList<ICollectableItem> books = book.GetItems();
+            IList<ICollectableItem> bookItems = book.GetItems();
 
-            Assert.IsNotNull(books);
+            Assert.IsNotNull(bookItems);
         }
 
         [TestMethod]
-        public void create_new_book_item_from_factory_getitems_defaults_to_zero_items_in_list()
+        public void create_new_book_from_factory_getitems_defaults_to_zero_items_in_list()
         {
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.BookType);
 
-            IList<ICollectableItem> books = book.GetItems();
+            IList<ICollectableItem> bookItems = book.GetItems();
 
-            Assert.AreEqual(0, books.Count);
+            Assert.AreEqual(0, bookItems.Count);
         }
 
         [TestMethod]
-        public void create_new_book_item_from_factory_datepublished_defaults_to_min_date()
+        public void create_new_book_from_factory_datepublished_defaults_to_min_date()
         {
-            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.BookType);
+            BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.BookType);
 
             Assert.AreEqual(DateTime.MinValue, book.DatePublished);
         }

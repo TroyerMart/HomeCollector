@@ -15,7 +15,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_stamp_base_instances_by_country_and_scottnumber_are_equal()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampBase testStamp = new StampBase()
@@ -32,7 +32,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_stamp_base_instances_by_country_and_scottnumber_are_not_equal_country()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampBase testStamp = new StampBase()
@@ -49,7 +49,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_stamp_base_instances_by_country_and_scottnumber_are_not_equal_scottnumber()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampBase testStamp = new StampBase()
@@ -63,7 +63,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_stamp_base_instances_by_country_and_explicitly_by_scottnumber_are_equal()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampBase testStamp = new StampBase()
@@ -80,7 +80,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_stamp_base_instances_by_country_and_explicitly_by_scottnumber_are_not_equal_country()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampBase testStamp = new StampBase()
@@ -97,7 +97,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_stamp_base_instances_by_country_and_explicitly_by_scottnumber_are_not_equal_scottnumber()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             stamp.Country = StampCountryEnum.USA;
             stamp.ScottNumber = "1000";
             StampBase testStamp = new StampBase()
@@ -111,7 +111,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_stamp_base_instances_by_country_and_alternateid_are_equal()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             stamp.Country = StampCountryEnum.USA;
             stamp.AlternateId = "1000";
             StampBase testStamp = new StampBase()
@@ -128,7 +128,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_stamp_base_instances_by_country_and_alternateid_are_not_equal_country()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             stamp.Country = StampCountryEnum.USA;
             stamp.AlternateId = "1000";
             StampBase testStamp = new StampBase()
@@ -145,7 +145,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void compare_stamp_base_instances_by_country_and_alternateid_are_not_equal_alternateid()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             stamp.Country = StampCountryEnum.USA;
             stamp.AlternateId = "1000";
             StampBase testStamp = new StampBase()
@@ -162,7 +162,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void compare_stamp_base_instances_returns_false_when_null()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             StampBase testStamp = null;
 
             bool isEqual = stamp.IsSame(testStamp, false);
@@ -173,7 +173,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void compare_stamp_base_instances_by_alternateid_returns_false_when_null()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             StampBase testStamp = null;
 
             bool isEqual = stamp.IsSame(testStamp, true);
@@ -184,7 +184,7 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod, ExpectedException(typeof(CollectableException))]
         public void compare_stamp_base_instances_by_explicitly_by_scottnumber_returns_false_when_null()
         {
-            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableItem(CollectableBaseFactory.StampType);
+            StampBase stamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.StampType);
             StampBase testStamp = null;
 
             bool isEqual = stamp.IsSame(testStamp, false);
