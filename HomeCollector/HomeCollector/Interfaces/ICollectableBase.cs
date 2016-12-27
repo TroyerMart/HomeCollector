@@ -16,8 +16,8 @@ namespace HomeCollector.Interfaces
 
         string DisplayName { get; set; }
         string Description { get; set; }    // description of the generic item
+        IList<ICollectableItem> ItemInstances {get;}
 
-        IList<ICollectableItem> GetItems();
         void AddItem(ICollectableItem itemToAdd);
         void RemoveItem(ICollectableItem itemToRemove);
         void ClearItems();

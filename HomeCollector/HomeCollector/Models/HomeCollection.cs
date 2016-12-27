@@ -15,26 +15,26 @@ namespace HomeCollector.Models
         private List<ICollectableBase> _collection;
         private Type _collectionType;
 
-        public HomeCollection(string collectionName, Type collectableType)
+        public HomeCollection(string collectionName, Type collectionType)
         {
-            if (! CollectableBaseFactory.IsCollectableType(collectableType))
+            if (!CollectableBaseFactory.IsCollectableType(collectionType))
             {
-                throw new CollectionException($"Type {collectableType} must be of a valid Collectable Type");
+                throw new CollectionException($"Type {collectionType} must be of a valid Collectable Type");
             }
             CollectionName = collectionName;
-            _collectionType = collectableType;
+            _collectionType = collectionType;
             _collection = new List<ICollectableBase>();
         }
 
         public string CollectionName {
-            get { return _collectionName;  }
+            get { return _collectionName; }
             set {
-                    if (String.IsNullOrWhiteSpace(value))
-                    {
-                        throw new CollectionException($"Collection name cannot be empty or null");
-                    }
-                    _collectionName = value;
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    throw new CollectionException($"Collection name cannot be empty or null");
                 }
+                _collectionName = value;
+            }
         }
 
         public Type CollectionType  // the actual type of objects allowed to be added
@@ -45,6 +45,8 @@ namespace HomeCollector.Models
             }
         }
 
+        public IList<ICollectableBase> Collectables { get { return _collection; } }
+
         public void AddToCollection(ICollectableBase collectableToAdd)
         {
             if (collectableToAdd == null)
@@ -52,7 +54,7 @@ namespace HomeCollector.Models
                 throw new CollectionException("Cannot add a null collectable to the collection");
             }
             Type collectableType = collectableToAdd.CollectableType;
-            if (collectableType != CollectionType )
+            if (collectableType != CollectionType)
             {
                 throw new CollectionException($"Cannot add a collectable of an invalid type to the collection, Type={collectableType}, but expected {CollectionType}");
             }
@@ -63,11 +65,6 @@ namespace HomeCollector.Models
             {
                 throw new CollectionException("Error adding item to collection", ex);
             }
-        }
-
-        public IList<ICollectableBase> GetCollection()
-        {
-            return _collection;
         }
 
         public void RemoveFromCollection(ICollectableBase collectableToRemove)

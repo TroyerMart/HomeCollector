@@ -37,7 +37,7 @@ namespace HomeCollector.Controllers
 
         public IList<ICollectableBase> GetCollection()
         {
-            return _homeCollection.GetCollection();
+            return _homeCollection.Collectables;
         }
 
         public void RemoveFromCollection(ICollectableBase collectableToRemove)

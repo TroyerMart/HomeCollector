@@ -69,7 +69,7 @@ namespace HomeCollector_UnitTests.Factories
         {
             string invalidTypeName = null;
 
-            ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(invalidTypeName);
+            ICollectableBase newItem = CollectableBaseFactory.CreateCollectableBase(invalidTypeName);
 
             Assert.IsFalse(true, "Expected test to fail if passed a null type");
         }
@@ -78,7 +78,7 @@ namespace HomeCollector_UnitTests.Factories
         {
             string invalidTypeName = "";
 
-            ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(invalidTypeName);
+            ICollectableBase newItem = CollectableBaseFactory.CreateCollectableBase(invalidTypeName);
 
             Assert.IsFalse(true, "Expected test to fail if passed a null type");
         }
@@ -87,7 +87,7 @@ namespace HomeCollector_UnitTests.Factories
         {
             string invalidTypeName = "unknown";
 
-            ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(invalidTypeName);
+            ICollectableBase newItem = CollectableBaseFactory.CreateCollectableBase(invalidTypeName);
 
             Assert.IsFalse(true, "Expected test to fail if passed an invalid type name");
         }
@@ -96,7 +96,7 @@ namespace HomeCollector_UnitTests.Factories
         {
             string validTypeName = "ICollectableBase";
 
-            ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(validTypeName);
+            ICollectableBase newItem = CollectableBaseFactory.CreateCollectableBase(validTypeName);
 
             Assert.IsFalse(true, "Expected test to fail if passed an interface type name");
         }
@@ -108,18 +108,18 @@ namespace HomeCollector_UnitTests.Factories
             {
                 string validTypeName = validType.Name;   // implements ICollectableBase
 
-                ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(validTypeName);
+                ICollectableBase newItem = CollectableBaseFactory.CreateCollectableBase(validTypeName);
 
                 Assert.AreEqual(validTypeName, newItem.CollectableType.Name, $"Expected to get instance of a {validTypeName} base type");
             }
         }
-                
+
         [TestMethod]
         public void create_new_factory_instance_from_valid_collectable_base_name_case_insensitive_succeeds()
         {
             string validTypeName = "BOOkBaSe";   // implements ICollectableBase
 
-            ICollectableBase newItem = CollectableBaseFactory.CreateCollectableItem(validTypeName);
+            ICollectableBase newItem = CollectableBaseFactory.CreateCollectableBase(validTypeName);
 
             Assert.AreEqual(validTypeName.ToUpper(), newItem.CollectableType.Name.ToUpper(), "Expected to get instance of a book base type");
         }
@@ -166,6 +166,84 @@ namespace HomeCollector_UnitTests.Factories
             }
         }
 
+        [TestMethod, ExpectedException(typeof(CollectableException))]
+        public void createcollectableitem_null_type_throws_exception()
+        {
+            //Type collectableType = CollectableBaseFactory.CollectableTypes[0];
+            //ICollectableBase collectable = null; // CollectableBaseFactory.CreateCollectableBase(collectableType);
+            Type nullType = null;
+
+            CollectableBaseFactory.CreateCollectableItem(nullType);
+
+            Assert.Fail("Expected CreateCollectableItem to fail when passed a null collectable type");
+        }
+
+        [TestMethod, ExpectedException(typeof(CollectableException))]
+        public void createcollectableitem_invalid_type_throws_exception()
+        {
+            Type collectableType = typeof(double);
+
+            CollectableBaseFactory.CreateCollectableItem(collectableType);
+
+            Assert.Fail("Expected CreateCollectableItem to fail when passed an invalid collectable type");
+        }
+
+        [TestMethod]
+        public void createcollectableitem_valid_type_returns_new_instance()
+        {
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectableItem newItem = CollectableBaseFactory.CreateCollectableItem(collectableType);
+
+                Assert.IsNotNull(newItem);
+            }
+        }
+
+        [TestMethod]
+        public void createcollectableitem_valid_type_returns_new_instance_with_type()
+        {
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectableItem newItem = CollectableBaseFactory.CreateCollectableItem(collectableType);
+
+                Assert.AreEqual(collectableType, newItem.CollectableType);
+            }
+        }
+
+        [TestMethod, ExpectedException(typeof(CollectableException))]
+        public void createandaddcollectableitem_null_collectable_throws_exception()
+        {
+            ICollectableBase nullCollectable = null; 
+
+            CollectableBaseFactory.CreateAndAddCollectableItem(nullCollectable);
+
+            Assert.Fail("Expected CreateAndAddCollectableItem to fail when passed a null collectable");
+        }
+
+        [TestMethod]
+        public void createandaddcollectableitem_valid_type_returns_new_item_with_type_set()
+        {
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectableBase collectable = CollectableBaseFactory.CreateCollectableBase(collectableType);
+                ICollectableItem newItem = CollectableBaseFactory.CreateAndAddCollectableItem(collectable);
+
+                Assert.AreEqual(collectableType, newItem.CollectableType);
+            }
+        }
+
+        [TestMethod]
+        public void createandaddcollectableitem_valid_type_adds_new_item_to_collectable()
+        {
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectableBase collectable = CollectableBaseFactory.CreateCollectableBase(collectableType);
+                ICollectableItem newItem = CollectableBaseFactory.CreateAndAddCollectableItem(collectable);
+                ICollectableItem fromCollectable = collectable.ItemInstances[0];
+
+                Assert.AreEqual(newItem, fromCollectable);
+            }
+        }
 
     }
 }

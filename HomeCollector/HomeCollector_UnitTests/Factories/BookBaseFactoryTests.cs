@@ -42,7 +42,7 @@ namespace HomeCollector_UnitTests.Factories
         {
             BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.BookType);
 
-            IList<ICollectableItem> bookItems = book.GetItems();
+            IList<ICollectableItem> bookItems = book.ItemInstances;
 
             Assert.IsNotNull(bookItems);
         }
@@ -52,7 +52,7 @@ namespace HomeCollector_UnitTests.Factories
         {
             BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.BookType);
 
-            IList<ICollectableItem> bookItems = book.GetItems();
+            IList<ICollectableItem> bookItems = book.ItemInstances;
 
             Assert.AreEqual(0, bookItems.Count);
         }

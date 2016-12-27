@@ -1,6 +1,7 @@
 ﻿using HomeCollector.Exceptions;
 using HomeCollector.Interfaces;
 using HomeCollector.Models;
+using HomeCollector.Models.Members;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +63,7 @@ namespace HomeCollector.Factories
         }
 
         // add property to return item by string name of type
-        public static ICollectableBase CreateCollectableItem(string itemTypeName)
+        public static ICollectableBase CreateCollectableBase(string itemTypeName)
         {   // this can be extended as more types are added
             if (string.IsNullOrWhiteSpace(itemTypeName))
             {
@@ -81,6 +82,41 @@ namespace HomeCollector.Factories
             }
         }
     
+        public static ICollectableItem CreateAndAddCollectableItem(ICollectableBase collectable)
+        {
+            if (collectable == null)
+            {
+                throw new CollectableException("Collectable cannot be null when adding an instance of it");
+            }
+            ICollectableItem newItem = CreateCollectableItem(collectable.CollectableType);
+            collectable.AddItem(newItem);
+            return newItem;
+        }
+
+        public static ICollectableItem CreateCollectableItem(Type itemType)
+        {   // this can be extended as more types are added            
+            if (itemType == null)
+            {
+                throw new CollectableException($"Type cannot be null, Must be of a type implementing ICollectableBase");
+            }
+            if (!IsCollectableType(itemType))
+            {
+                throw new CollectableException($"Type must implement ICollectableBase");
+            }
+            if (itemType == BookType)
+            {
+                return new BookItem();
+            }
+            else if (itemType == StampType)
+            {
+                return new StampItem();
+            }
+            else
+            {
+                throw new CollectableException($"Undefined type {itemType.ToString()}, Unknown type implementing ICollectableBase");
+            }
+        }
+
 
     }
 

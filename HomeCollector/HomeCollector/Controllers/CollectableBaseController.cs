@@ -35,7 +35,7 @@ namespace HomeCollector.Controllers
 
         public IList<ICollectableItem> GetItems()
         {
-            return _collectableBase.GetItems();
+            return _collectableBase.ItemInstances;
         }
 
         public bool IsSame(ICollectableBase itemToCompare, bool useAlternateId)

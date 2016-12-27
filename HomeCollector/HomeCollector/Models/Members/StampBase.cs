@@ -30,8 +30,8 @@ namespace HomeCollector.Models
                 _displayName = value;
             }
         }
+        public IList<ICollectableItem> ItemInstances { get { return _items; } }
 
-        // from ICollectableBase
         public string Description { get; set; }    // description of the generic item
 
         // from IStampBase
@@ -46,13 +46,7 @@ namespace HomeCollector.Models
         {
             _items = new List<ICollectableItem>();
         }
-
-        // from ICollectableBase
-        public IList<ICollectableItem> GetItems()
-        {
-            return _items;
-        }
-
+        
         public void AddItem(ICollectableItem itemToAdd)
         {
             if (itemToAdd == null)

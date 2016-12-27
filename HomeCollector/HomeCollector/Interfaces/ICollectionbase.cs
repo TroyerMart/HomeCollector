@@ -12,8 +12,8 @@ namespace HomeCollector.Interfaces
     {
         string CollectionName { get; set; }
         Type CollectionType { get; }   // the actual type of collectable objects allowed to be contained in the collection
+        IList<ICollectableBase> Collectables { get; }
 
-        IList<ICollectableBase> GetCollection();
         void AddToCollection(ICollectableBase collectableToAdd);
         void RemoveFromCollection(ICollectableBase collectableToRemove);
         void ClearCollection();

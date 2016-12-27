@@ -30,7 +30,6 @@ namespace HomeCollector.Models
                 _displayName = value;
             }
         }
-
         public string Description { get; set; }    // description of the generic item
 
         // from IBookBase
@@ -61,10 +60,7 @@ namespace HomeCollector.Models
         }
 
         // from ICollectableBase
-        public IList<ICollectableItem> GetItems()
-        {
-            return _items;
-        }
+        public IList<ICollectableItem> ItemInstances { get { return _items; } }
 
         public void AddItem(ICollectableItem itemToAdd)
         {

@@ -31,7 +31,7 @@ namespace HomeCollector_UnitTests.Models.Members
 
                 collectable.AddItem(mockItem.Object);
 
-                IList<ICollectableItem> list = collectable.GetItems();
+                IList<ICollectableItem> list = collectable.ItemInstances;
                 Assert.AreEqual(1, list.Count);
             }
         }
@@ -46,7 +46,7 @@ namespace HomeCollector_UnitTests.Models.Members
                 Mock<ICollectableItem> mockItem = GetMockItem(collectableType);
 
                 collectable.AddItem(mockItem.Object);
-                IList<ICollectableItem> list = collectable.GetItems();
+                IList<ICollectableItem> list = collectable.ItemInstances;
                 Assert.AreEqual(N + 1, list.Count);
             }
         }
@@ -100,11 +100,11 @@ namespace HomeCollector_UnitTests.Models.Members
             foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
             {
                 ICollectableBase collectable = GetTestBase(collectableType, N);
-                ICollectableItem mockItem = collectable.GetItems()[N - 1];
+                ICollectableItem mockItem = collectable.ItemInstances[N - 1];
 
                 collectable.RemoveItem(mockItem);
 
-                IList<ICollectableItem> list = collectable.GetItems();
+                IList<ICollectableItem> list = collectable.ItemInstances;
                 Assert.AreEqual(N - 1, list.Count);
             }
         }
@@ -221,7 +221,7 @@ namespace HomeCollector_UnitTests.Models.Members
                     collectable.AddItem(mockItem.Object);
                 }
 
-                IList<ICollectableItem> items = collectable.GetItems();
+                IList<ICollectableItem> items = collectable.ItemInstances;
 
                 for (int i = 0; i < N; i++)
                 {
@@ -237,7 +237,7 @@ namespace HomeCollector_UnitTests.Models.Members
             {
                 ICollectableBase collectable = GetTestBase(collectableType, 0);
 
-                IList<ICollectableItem> items = collectable.GetItems();
+                IList<ICollectableItem> items = collectable.ItemInstances;
 
                 Assert.AreEqual(0, items.Count);
             }
@@ -254,7 +254,7 @@ namespace HomeCollector_UnitTests.Models.Members
 
                 collectable.ClearItems();
 
-                IList<ICollectableItem> list = collectable.GetItems();
+                IList<ICollectableItem> list = collectable.ItemInstances;
                 Assert.AreEqual(0, list.Count);
             }
         }
@@ -269,7 +269,7 @@ namespace HomeCollector_UnitTests.Models.Members
 
                 collectable.ClearItems();
 
-                IList<ICollectableItem> list = collectable.GetItems();
+                IList<ICollectableItem> list = collectable.ItemInstances;
                 Assert.AreEqual(0, list.Count);
             }
         }

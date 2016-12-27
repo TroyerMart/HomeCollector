@@ -1,5 +1,7 @@
 ﻿using HomeCollector.Exceptions;
 using HomeCollector.Interfaces;
+using HomeCollector.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,7 @@ namespace HomeCollector.Repositories
 
         public HomeCollectionRepository(ICollectionBase homeCollection)
         {   
-            // should also inject the IO
+            // should also inject the IO ???
 
             if (homeCollection == null)
             {
@@ -24,15 +26,31 @@ namespace HomeCollector.Repositories
         }
 
         // save collection to disk
-        public void SaveCollection()
+        public void SaveCollection(string path, string filename)
         {
-            string jsonCollection = Newtonsoft.Json.JsonConvert.SerializeObject(_homeCollection);
-
-            //jsonCollection = 
-
+            string jsonCollection = ConvertCollectionToJson(_homeCollection);
+            // write to disk
         }
 
         // load collection from disk
+
+        internal static string ConvertCollectionToJson(ICollectionBase collectionToSerialize)
+        {
+            if (collectionToSerialize == null)
+            {
+                throw new CollectionException("Null collection cannot be serialized");
+            }
+            string jsonCollection = JsonConvert.SerializeObject(collectionToSerialize);
+            
+            return jsonCollection;
+        }
+
+        internal static ICollectionBase ConvertJsonToCollection(string jsonCollection)
+        {
+            ICollectionBase collection = JsonConvert.DeserializeObject<HomeCollection>(jsonCollection);
+
+            return collection;
+        }
 
     }
 

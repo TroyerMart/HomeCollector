@@ -183,7 +183,7 @@ namespace HomeCollector_UnitTests.Models
 
                 collection.AddToCollection(collectable);
 
-                Assert.AreEqual(1, collection.GetCollection().Count);
+                Assert.AreEqual(1, collection.Collectables.Count);
             }
         }
 
@@ -195,7 +195,7 @@ namespace HomeCollector_UnitTests.Models
             {
                 ICollectionBase testCollection = GetMockCollection(N, collectionType);
 
-                int count = testCollection.GetCollection().Count;
+                int count = testCollection.Collectables.Count;
 
                 Assert.AreEqual(N, count);
             }
@@ -221,7 +221,7 @@ namespace HomeCollector_UnitTests.Models
                 
                 for (int i=0; i<N; i++)
                 {
-                    Assert.AreEqual(collectables[i], testCollection.GetCollection()[i]);
+                    Assert.AreEqual(collectables[i], testCollection.Collectables[i]);
                 }
             }
         }
@@ -233,12 +233,12 @@ namespace HomeCollector_UnitTests.Models
             foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
             {
                 ICollectionBase testCollection = GetMockCollection(N, collectableType);
-                ICollectableBase collectableToRemove = testCollection.GetCollection()[0]; //[N - 1];
+                ICollectableBase collectableToRemove = testCollection.Collectables[0]; //[N - 1];
                 
                 testCollection.RemoveFromCollection(collectableToRemove);
 
                 bool foundCollectable = false;
-                foreach (ICollectableBase collectable in testCollection.GetCollection())
+                foreach (ICollectableBase collectable in testCollection.Collectables)
                 {
                     if (collectableToRemove == collectable)
                     {
@@ -260,11 +260,11 @@ namespace HomeCollector_UnitTests.Models
 
                 testCollection.ClearCollection();
 
-                Assert.AreEqual(0, testCollection.GetCollection().Count);
+                Assert.AreEqual(0, testCollection.Collectables.Count);
             }
         }
 
-        /****** helpers **********************************************************************************/
+        /****** helper methods ***********************************************************************/
 
         private Mock<ICollectableBase>  GetMockCollectable(Type collectionType)
         {

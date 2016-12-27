@@ -88,7 +88,7 @@ namespace HomeCollector_UnitTests.Controllers
         {
             IList<ICollectableItem> items = controller.GetItems();
             
-            mockCollectableBase.Verify(b => b.GetItems(), Times.Once);
+            mockCollectableBase.Verify(b => b.ItemInstances, Times.Once);
         }
 
         [TestMethod]

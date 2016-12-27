@@ -76,6 +76,7 @@
     <Compile Include="Models\Members\CollectableBaseTests.cs" />
     <Compile Include="Models\HomeCollectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\HomeCollectionRepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HomeCollector\HomeCollector.csproj">
