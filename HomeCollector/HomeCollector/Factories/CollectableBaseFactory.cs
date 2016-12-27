@@ -15,19 +15,26 @@ namespace HomeCollector.Factories
         public static Type StampType = typeof(StampBase);
         public static List<Type> CollectableTypes = new List<Type>() { BookType, StampType };
 
-        public static bool IsCollectableType (Type itemType)
+        public static bool IsCollectableType (Type testType)
         {   // returns true if the type implements ICollectableBase, but is not actually the interface itself
-            if (itemType == null)
+            if (testType == null)
             {
                 return false;
             }
-            if (typeof(ICollectableBase).IsAssignableFrom(itemType))
+
+            // explicitly test for membership in CollectableTypes above
+            foreach (Type validType in CollectableTypes)
             {
-                return (itemType != typeof(ICollectableBase));
+                if (validType == testType)
+                {
+                    return true;
+                }
             }
 
-            // add in testing for member of CollectableTypes above
-
+            if (typeof(ICollectableBase).IsAssignableFrom(testType))
+            {
+                return (testType != typeof(ICollectableBase));
+            }
             return false;
         }
 
