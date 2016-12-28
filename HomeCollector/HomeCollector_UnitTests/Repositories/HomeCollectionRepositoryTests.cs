@@ -7,6 +7,7 @@ using HomeCollector.Repositories;
 using HomeCollector.Exceptions;
 using HomeCollector.Models.Members;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace HomeCollector_UnitTests.Repositories
 {
@@ -42,7 +43,7 @@ namespace HomeCollector_UnitTests.Repositories
             int N = 3;
             foreach (Type collectionType in CollectableBaseFactory.CollectableTypes)
             {
-                ICollectionBase collection = GetTestCollection(collectionType, N, 0);
+                ICollectionBase collection = GetTestCollection("initial", collectionType, N, 0);
 
                 string json = HomeCollectionRepository.ConvertCollectionToJson(collection);
 
@@ -67,7 +68,7 @@ namespace HomeCollector_UnitTests.Repositories
             int M = 2;
             foreach (Type collectionType in CollectableBaseFactory.CollectableTypes)
             {  
-                ICollectionBase collection = GetTestCollection(collectionType, N, M);
+                ICollectionBase collection = GetTestCollection("initial", collectionType, N, M);
 
                 string json = HomeCollectionRepository.ConvertCollectionToJson(collection);
 
@@ -95,8 +96,6 @@ namespace HomeCollector_UnitTests.Repositories
             string expectedCollectionName = "test";
             
             string jsonBookCollection = @"{""CollectionName"":""test"",""CollectionType"":""HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"",""Collectables"":[]}";
-            //Type collectableType = CollectableBaseFactory.CollectableTypes[0];
-            //ICollectionBase collection = new HomeCollection(collectionName, collectableType);
 
             ICollectionBase collection = HomeCollectionRepository.ConvertJsonToCollection(jsonBookCollection);
             // This is a very fragile test.  Should look for expected tokens instead.
@@ -106,25 +105,197 @@ namespace HomeCollector_UnitTests.Repositories
             Assert.AreEqual(CollectableBaseFactory.BookType, collection.CollectionType);
         }
 
-        // want to test separately each type: book, stamp, ...
+        [TestMethod]
+        public void collection_serialize_deserialize_success()
+        {
+            string collectionName = "test";
+            int N = 2;
+            int M = 2;
+            foreach(Type collectionType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectionBase testCollection = GetTestCollection(collectionName, collectionType, N, M);
+
+                //string jsonCollection = @"{""CollectionName"":""test"",""CollectionType"":""HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"",""Collectables"":[]}";
+                string jsonCollection = HomeCollectionRepository.ConvertCollectionToJson(testCollection);
+                ICollectionBase resultCollection = HomeCollectionRepository.ConvertJsonToCollection(jsonCollection);
+                
+                Assert.AreEqual(collectionName, resultCollection.CollectionName);
+                Assert.AreEqual(collectionType, resultCollection.CollectionType);
+                Assert.AreEqual(N, resultCollection.Collectables.Count);
+                Assert.AreEqual(N * M, resultCollection.Collectables.Count * resultCollection.Collectables[0].ItemInstances.Count);
+            }
+        }
+
+        [TestMethod]
+        public void collectable_serialize_deserialize_book_success()
+        {
+            BookBase collectable = GetTestBookBase(2);
+            collectable.AddItem(GetTestBookItem(0));
+            collectable.AddItem(GetTestBookItem(1));
+
+            string jsonCollectable = JsonConvert.SerializeObject(collectable);
+            BookBase newCollectable = (BookBase)HomeCollectionRepository.GetCollectableFromJson(jsonCollectable, collectable.CollectableType);  //JsonConvert.DeserializeObject<BookBase>(jsonCollectable);
+
+            Assert.AreEqual(collectable.CollectableType, newCollectable.CollectableType);
+            Assert.AreEqual(collectable.Author, newCollectable.Author);
+            Assert.AreEqual(collectable.BookCode, newCollectable.BookCode);
+            Assert.AreEqual(collectable.DatePublished, newCollectable.DatePublished);
+            Assert.AreEqual(collectable.Description, newCollectable.Description);
+            Assert.AreEqual(collectable.DisplayName, newCollectable.DisplayName);
+            Assert.AreEqual(collectable.Edition, newCollectable.Edition);
+            Assert.AreEqual(collectable.ISBN, newCollectable.ISBN);
+            Assert.AreEqual(collectable.Publisher, newCollectable.Publisher);
+            Assert.AreEqual(collectable.Series, newCollectable.Series);
+            Assert.AreEqual(collectable.Title, newCollectable.Title);
+            Assert.AreEqual(collectable.Year, newCollectable.Year);
+        }
+
+        [TestMethod]
+        public void collectable_serialize_deserialize_stamp_success()
+        {
+            StampBase collectable = GetTestStampBase(5);
+            collectable.AddItem(GetTestStampItem(0));
+            collectable.AddItem(GetTestStampItem(1));
+            collectable.AddItem(GetTestStampItem(2));
+
+            string jsonItem = JsonConvert.SerializeObject(collectable);
+            StampBase newCollectable = (StampBase)HomeCollectionRepository.GetCollectableFromJson(jsonItem, collectable.CollectableType); //JsonConvert.DeserializeObject<StampBase>(jsonItem);
+
+            Assert.AreEqual(collectable.CollectableType, newCollectable.CollectableType);
+            Assert.AreEqual(collectable.AlternateId, newCollectable.AlternateId);
+            Assert.AreEqual(collectable.Country, newCollectable.Country);
+            Assert.AreEqual(collectable.Description, newCollectable.Description);
+            Assert.AreEqual(collectable.DisplayName, newCollectable.DisplayName);
+            Assert.AreEqual(collectable.FirstDayOfIssue, newCollectable.FirstDayOfIssue);
+            Assert.AreEqual(collectable.IsPostageStamp, newCollectable.IsPostageStamp);
+            Assert.AreEqual(collectable.ScottNumber, newCollectable.ScottNumber);
+            Assert.AreEqual(collectable.YearOfIssue, newCollectable.YearOfIssue);
+        }
+
+        [TestMethod]
+        public void instanceitem_serialize_deserialize_book_type_success()
+        {  
+            BookItem item = GetTestBookItem(7);
+            string jsonItem = JsonConvert.SerializeObject(item);
+
+            BookItem newItem = (BookItem)HomeCollectionRepository.GetCollectableItemFromJson(jsonItem, item.CollectableType);
+
+            Assert.AreEqual(item.CollectableType, newItem.CollectableType);
+            Assert.AreEqual(item.EstimatedValue, newItem.EstimatedValue);
+            Assert.AreEqual(item.ItemDetails, newItem.ItemDetails);
+            Assert.AreEqual(item.IsFavorite, newItem.IsFavorite);
+            Assert.AreEqual(item.Condition, newItem.Condition);
+        }
+
+        [TestMethod]
+        public void instanceitem_serialize_deserialize_stamp_type_success()
+        {
+            StampItem item = GetTestStampItem(4);
+            string jsonItem = JsonConvert.SerializeObject(item);
+
+            StampItem newItem = (StampItem)HomeCollectionRepository.GetCollectableItemFromJson(jsonItem, item.CollectableType);
+
+            Assert.AreEqual(item.CollectableType, newItem.CollectableType);
+            Assert.AreEqual(item.EstimatedValue, newItem.EstimatedValue);
+            Assert.AreEqual(item.ItemDetails, newItem.ItemDetails);
+            Assert.AreEqual(item.IsFavorite, newItem.IsFavorite);
+            Assert.AreEqual(item.Condition, newItem.Condition);
+        }
+
+        // test bad json
 
         /****** helper methods ***********************************************************************/
-        private ICollectionBase GetTestCollection(Type collectableType, int numberOfCollectables, int numberOfItemsPerCollectable = 0)
+        private BookItem GetTestBookItem(int i)
         {
+            BookItem item = new BookItem()
+            {
+                EstimatedValue = i * 0.75M,
+                IsFavorite = false,
+                ItemDetails = $"Test{i}",
+                Condition = BookConditionEnum.Fine
+            };
+            return item;
+        }
+        private BookBase GetTestBookBase(int i)
+        {
+            BookBase collectable = new BookBase()
+            {
+                Author = $"Author{i}",
+                BookCode = $"ABC{i}",
+                DatePublished = DateTime.Today.AddDays(-i),
+                Description = $"description{i}",
+                DisplayName = $"display{i}",
+                Edition = $"edition{i}",
+                ISBN = $"123-4442111-{i}",
+                Publisher = $"publisher{i}",
+                Series = null,
+                Title = $"title{i}",
+                Year = 2000 + i
+            };
+            return collectable;
+        }
+        private StampItem GetTestStampItem(int i)
+        {
+            StampItem item = new StampItem()
+            {
+                EstimatedValue = i * 0.50M,
+                IsFavorite = true,
+                ItemDetails = $"Test{i}",
+                Condition = StampConditionEnum.VeryFine,
+                IsMintCondition = true
+            };
+            return item;
+        }
+        private StampBase GetTestStampBase(int i)
+        {
+            StampBase collectable = new StampBase()
+            {
+                AlternateId = $"alternateid{i}",
+                Country = StampCountryEnum.USA,
+                Description = $"description{i}",
+                DisplayName = $"displayname{i}",
+                FirstDayOfIssue = DateTime.Today.AddDays(- i * 100),
+                IsPostageStamp = true,
+                ScottNumber = $"scottnumber{i}",
+                YearOfIssue =2000 + i
+            };
+            return collectable;
+        }
+
+        private ICollectionBase GetTestCollection(string collectionName, Type collectableType, int numberOfCollectables, int numberOfItemsPerCollectable = 0)
+        {
+            ICollectableBase collectable = null;
+            ICollectableItem item = null;
             Type collectionType = collectableType;
-            ICollectionBase testCollection = new HomeCollection("initial", collectionType);
+            ICollectionBase testCollection = new HomeCollection(collectionName, collectionType);
             for (int i = 0; i < numberOfCollectables; i++)
             {
-                ICollectableBase collectable = CollectableBaseFactory.CreateCollectableBase(collectableType);
-                collectable.DisplayName = $"Collectable{i}";
+                //ICollectableBase collectable = CollectableBaseFactory.CreateCollectableBase(collectableType);
+                //collectable.DisplayName = $"Collectable{i}";
+                if (collectionType == CollectableBaseFactory.BookType)
+                {
+                    collectable = GetTestBookBase(i);
+                    //((BookBase)collectable).Author = "Asimov";
+                } else if (collectionType == CollectableBaseFactory.StampType)
+                {
+                    collectable = GetTestStampBase(i);
+                    //((StampBase)collectable).Country = StampCountryEnum.Canada;
+                }
                 testCollection.AddToCollection(collectable);
 
                 for (int j=0; j<numberOfItemsPerCollectable; j++)
                 {
-                    ICollectableItem item = CollectableBaseFactory.CreateAndAddCollectableItem(collectable);
-                    //ICollectableItem item = new BookItem();   // need a factory??
-                    item.ItemDetails = $"Details{j}";
-                    //collectable.AddItem(item);
+                    if (collectionType == CollectableBaseFactory.BookType)
+                    {
+                        item = GetTestBookItem(i);
+                    }
+                    else if (collectionType == CollectableBaseFactory.StampType)
+                    {
+                        item = GetTestStampItem(i);
+                    }
+                    collectable.AddItem(item);
+                    //ICollectableItem item = CollectableBaseFactory.CreateAndAddCollectableItem(collectable);
+                    //item.ItemDetails = $"Details{j}";
                 }
             }
             return testCollection;

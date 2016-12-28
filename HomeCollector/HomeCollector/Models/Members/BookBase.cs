@@ -50,7 +50,6 @@ namespace HomeCollector.Models
             }
         public DateTime DatePublished { get; set; } = DateTime.MinValue;
         public string Edition { get; set; }
-        public BookConditionEnum Condition { get; set; } = BookConditionEnum.Undefined;
         public string Series { get; set; }
         public string BookCode { get; set; }
 

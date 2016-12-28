@@ -29,13 +29,13 @@ namespace HomeCollector_UnitTests.Factories
         }
 
         // test default values
-        [TestMethod]
-        public void create_new_book_from_factory_bookcondition_defaults_to_undefined()
-        {
-            BookBase newBook = (BookBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.BookType);
+        //[TestMethod]
+        //public void create_new_book_from_factory_bookcondition_defaults_to_undefined()
+        //{
+        //    BookBase newBook = (BookBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.BookType);
 
-            Assert.IsTrue(newBook.Condition == BookConditionEnum.Undefined);
-        }
+        //    Assert.IsTrue(newBook.Condition == BookConditionEnum.Undefined);
+        //}
 
         [TestMethod]
         public void create_new_book_from_factory_getitems_does_not_return_null_list()

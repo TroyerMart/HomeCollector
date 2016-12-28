@@ -117,6 +117,18 @@ namespace HomeCollector.Factories
             }
         }
 
+        public static Type GetTypeFromFullName(string fullTypeName)
+        {
+            foreach(Type collectableType in CollectableTypes)
+            {
+                if (fullTypeName.Contains(collectableType.Name))
+                {
+                    return collectableType;
+                }
+            }
+            throw new CollectableException($"Unable to parse a valid collectable type from string {fullTypeName}");
+        }
+
 
     }
 

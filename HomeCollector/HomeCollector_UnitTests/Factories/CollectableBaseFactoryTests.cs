@@ -245,5 +245,8 @@ namespace HomeCollector_UnitTests.Factories
             }
         }
 
+        // need tests for GetTypeFromFullName
+
+
     }
 }
