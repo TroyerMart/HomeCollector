@@ -15,7 +15,7 @@ namespace HomeCollector_UnitTests.Repositories
     public class HomeCollectionRepositoryTests
     {
         [TestMethod]
-        public void converttojson_serializes_new_collection_successfully()
+        public void convertcollectiontojson_serializes_new_collection_successfully()
         {
             string collectionName = "test";
             Type collectableType = CollectableBaseFactory.CollectableTypes[0];
@@ -28,7 +28,7 @@ namespace HomeCollector_UnitTests.Repositories
         }
 
         [TestMethod, ExpectedException(typeof(CollectionException))]
-        public void converttojson_throws_exception_when_collection_is_null()
+        public void convertcollectiontojson_throws_exception_when_collection_is_null()
         {
             ICollectionBase collection = null;
 
@@ -38,7 +38,7 @@ namespace HomeCollector_UnitTests.Repositories
         }
 
         [TestMethod]
-        public void converttojson_collection_with_collectables_only_success()
+        public void convertcollectiontojson_collection_with_collectables_only_success()
         {
             int N = 3;
             foreach (Type collectionType in CollectableBaseFactory.CollectableTypes)
@@ -115,7 +115,6 @@ namespace HomeCollector_UnitTests.Repositories
             {
                 ICollectionBase testCollection = GetTestCollection(collectionName, collectionType, N, M);
 
-                //string jsonCollection = @"{""CollectionName"":""test"",""CollectionType"":""HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"",""Collectables"":[]}";
                 string jsonCollection = HomeCollectionRepository.ConvertCollectionToJson(testCollection);
                 ICollectionBase resultCollection = HomeCollectionRepository.ConvertJsonToCollection(jsonCollection);
                 
@@ -203,6 +202,8 @@ namespace HomeCollector_UnitTests.Repositories
         }
 
         // test bad json
+
+
 
         /****** helper methods ***********************************************************************/
         private BookItem GetTestBookItem(int i)
