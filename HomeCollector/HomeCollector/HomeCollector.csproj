@@ -53,7 +53,10 @@
     <Compile Include="Controllers\CollectableBaseController.cs" />
     <Compile Include="Controllers\HomeCollectionController.cs" />
     <Compile Include="Exceptions\CollectableException.cs" />
+    <Compile Include="Exceptions\CollectableItemInstanceParseException.cs" />
+    <Compile Include="Exceptions\CollectableParseException.cs" />
     <Compile Include="Exceptions\CollectionException.cs" />
+    <Compile Include="Exceptions\CollectionParseException.cs" />
     <Compile Include="Factories\CollectableBaseFactory.cs" />
     <Compile Include="Interfaces\IBookBase.cs" />
     <Compile Include="Interfaces\ICollectableBase.cs" />
