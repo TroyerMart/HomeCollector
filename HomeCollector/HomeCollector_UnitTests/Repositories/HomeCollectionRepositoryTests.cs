@@ -14,6 +14,7 @@ namespace HomeCollector_UnitTests.Repositories
     [TestClass]
     public class HomeCollectionRepositoryTests
     {
+        // Test JSON serialization
         [TestMethod]
         public void convertcollectiontojson_serializes_new_collection_successfully()
         {
@@ -34,7 +35,7 @@ namespace HomeCollector_UnitTests.Repositories
 
             string json = HomeCollectionRepository.ConvertCollectionToJson(collection);
 
-            Assert.Fail("Should have thrown exception when repository is null");
+            Assert.Fail("Should have thrown exception when collection is null");
         }
 
         [TestMethod]
@@ -90,6 +91,7 @@ namespace HomeCollector_UnitTests.Repositories
             }
         }
 
+        // Test JSON de-serialization back to objects
         [TestMethod]
         public void convertjsontocollection_deserializes_to_collection_success()
         {
@@ -109,19 +111,19 @@ namespace HomeCollector_UnitTests.Repositories
         public void collection_serialize_deserialize_success()
         {
             string collectionName = "test";
-            int N = 2;
-            int M = 2;
+            int numberOfCollectables = 2;
+            int numberOfItemsPerCollectable = 2;
             foreach(Type collectionType in CollectableBaseFactory.CollectableTypes)
             {
-                ICollectionBase testCollection = GetTestCollection(collectionName, collectionType, N, M);
-
+                ICollectionBase testCollection = GetTestCollection(collectionName, collectionType, numberOfCollectables, numberOfItemsPerCollectable);
                 string jsonCollection = HomeCollectionRepository.ConvertCollectionToJson(testCollection);
+
                 ICollectionBase resultCollection = HomeCollectionRepository.ConvertJsonToCollection(jsonCollection);
                 
                 Assert.AreEqual(collectionName, resultCollection.CollectionName);
                 Assert.AreEqual(collectionType, resultCollection.CollectionType);
-                Assert.AreEqual(N, resultCollection.Collectables.Count);
-                Assert.AreEqual(N * M, resultCollection.Collectables.Count * resultCollection.Collectables[0].ItemInstances.Count);
+                Assert.AreEqual(numberOfCollectables, resultCollection.Collectables.Count);
+                Assert.AreEqual(numberOfCollectables * numberOfItemsPerCollectable, resultCollection.Collectables.Count * resultCollection.Collectables[0].ItemInstances.Count);
             }
         }
 
@@ -202,7 +204,85 @@ namespace HomeCollector_UnitTests.Repositories
         }
 
         // test bad json
+        [TestMethod]
+        public void getcollectableitemfromjson_deserialize_bad_format_throws_exception()
+        {
+            string jsonItem = "invalid JSON";
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                bool fail = false;
+                try
+                {
+                    ICollectableItem newItem = HomeCollectionRepository.GetCollectableItemFromJson(jsonItem, collectableType);
+                }
+                catch (CollectionException)
+                {
+                    fail = true;
+                    Assert.IsTrue(fail, "Expected exception to be thrown when JSON is invalid and cannot be parsed to an object");
+                }
+            }
+        }
 
+        [TestMethod]
+        public void getcollectablefromjson_deserialize_bad_format_throws_exception()
+        {
+            string jsonCollectable = "invalid JSON";
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                bool fail = false;
+                try
+                {
+                    ICollectableBase newCollectable = HomeCollectionRepository.GetCollectableFromJson(jsonCollectable, collectableType);
+                }
+                catch (CollectionException)
+                {
+                    fail = true;
+                    Assert.IsTrue(fail, "Expected exception to be thrown when JSON is invalid and cannot be parsed to an object");
+                }
+            }
+        }
+
+        [TestMethod]
+        public void convertjsontocollection_deserialize_format_missing_bracket_throws_exception()
+        {
+            string collectionName = "test";
+            int numberOfCollectables = 2;
+            int numberOfItemsPerCollectable = 2;
+            foreach (Type collectionType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectionBase testCollection = GetTestCollection(collectionName, collectionType, numberOfCollectables, numberOfItemsPerCollectable);
+                string jsonCollectionMissingTrailingBracket = HomeCollectionRepository.ConvertCollectionToJson(testCollection);
+                string jsonCollectionMissingLeadingBracket = jsonCollectionMissingTrailingBracket;
+                jsonCollectionMissingTrailingBracket = jsonCollectionMissingTrailingBracket.TrimEnd('}'); // remove bracket
+                jsonCollectionMissingLeadingBracket = jsonCollectionMissingLeadingBracket.TrimStart('{'); // remove bracket
+
+                bool failTrailing = false;
+                bool failLeading = false;
+                try
+                {
+                    ICollectionBase resultCollection = HomeCollectionRepository.ConvertJsonToCollection(jsonCollectionMissingTrailingBracket);
+                }
+                catch (CollectionException)
+                {
+                    failTrailing = true;
+                }
+                try
+                {
+                    ICollectionBase resultCollection = HomeCollectionRepository.ConvertJsonToCollection(jsonCollectionMissingTrailingBracket);
+                }
+                catch (CollectionException)
+                {
+                    failLeading = true;
+                }
+
+                Assert.IsTrue(failTrailing, "Expect exception to be thrown when missing JSON bracket(s)");
+                Assert.IsTrue(failLeading, "Expect exception to be thrown when missing JSON bracket(s)");
+            }
+        }
+
+        
+        // save - validate JSON before writing (make sure it can be deserialized)
+        // custom parse exceptions?
 
 
         /****** helper methods ***********************************************************************/
@@ -271,16 +351,12 @@ namespace HomeCollector_UnitTests.Repositories
             ICollectionBase testCollection = new HomeCollection(collectionName, collectionType);
             for (int i = 0; i < numberOfCollectables; i++)
             {
-                //ICollectableBase collectable = CollectableBaseFactory.CreateCollectableBase(collectableType);
-                //collectable.DisplayName = $"Collectable{i}";
                 if (collectionType == CollectableBaseFactory.BookType)
                 {
                     collectable = GetTestBookBase(i);
-                    //((BookBase)collectable).Author = "Asimov";
                 } else if (collectionType == CollectableBaseFactory.StampType)
                 {
                     collectable = GetTestStampBase(i);
-                    //((StampBase)collectable).Country = StampCountryEnum.Canada;
                 }
                 testCollection.AddToCollection(collectable);
 
@@ -295,8 +371,6 @@ namespace HomeCollector_UnitTests.Repositories
                         item = GetTestStampItem(i);
                     }
                     collectable.AddItem(item);
-                    //ICollectableItem item = CollectableBaseFactory.CreateAndAddCollectableItem(collectable);
-                    //item.ItemDetails = $"Details{j}";
                 }
             }
             return testCollection;
