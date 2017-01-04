@@ -245,8 +245,49 @@ namespace HomeCollector_UnitTests.Factories
             }
         }
 
-        // need tests for GetTypeFromFullName
+        [TestMethod]
+        public void gettypefromfullname_returns_collectable_type_successfully()
+        {
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectionBase collection = new HomeCollection("name", collectableType);
+                string fullName = collection.CollectionType.FullName;
 
+                Type collectionType = CollectableBaseFactory.GetTypeFromFullName(fullName);
+
+                Assert.AreEqual(collectableType, collectionType);
+            }
+        }
+
+        [TestMethod, ExpectedException(typeof(CollectableException))]
+        public void gettypefromfullname_invalid_name_throws_exception()
+        {
+            string invalidName = "bad name";
+
+            Type collectionType = CollectableBaseFactory.GetTypeFromFullName(invalidName);
+
+            Assert.Fail("Expected GetTypeFromFullName to fail when unable to parse type from name");
+        }
+
+        [TestMethod, ExpectedException(typeof(CollectableException))]
+        public void gettypefromfullname_null_name_throws_exception()
+        {
+            string invalidName = null;
+
+            Type collectionType = CollectableBaseFactory.GetTypeFromFullName(invalidName);
+
+            Assert.Fail("Expected GetTypeFromFullName to fail when unable to parse type from name");
+        }
+
+        [TestMethod, ExpectedException(typeof(CollectableException))]
+        public void gettypefromfullname_blank_name_throws_exception()
+        {
+            string invalidName = "";
+
+            Type collectionType = CollectableBaseFactory.GetTypeFromFullName(invalidName);
+
+            Assert.Fail("Expected GetTypeFromFullName to fail when unable to parse type from name");
+        }
 
     }
 }

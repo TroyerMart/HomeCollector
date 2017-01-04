@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeCollector.Exceptions
 {
-    public class CollectableItemInstanceParseException : Exception
+    public class CollectableItemInstanceParseException : CollectableException
     {
         public CollectableItemInstanceParseException() { }
         public CollectableItemInstanceParseException(string err) : base(err) { }

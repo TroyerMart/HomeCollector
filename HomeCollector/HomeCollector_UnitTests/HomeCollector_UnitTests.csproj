@@ -69,6 +69,7 @@
     <Compile Include="Factories\CollectableBaseFactoryTests.cs" />
     <Compile Include="Factories\StampBaseFactoryTests.cs" />
     <Compile Include="Factories\BookBaseFactoryTests.cs" />
+    <Compile Include="IO\FileIOTests.cs" />
     <Compile Include="Models\Members\StampBaseTests.cs" />
     <Compile Include="Models\Members\BookBaseTests.cs" />
     <Compile Include="Models\Members\BookItemTests.cs" />

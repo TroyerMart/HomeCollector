@@ -1,6 +1,7 @@
 ﻿using HomeCollector.Exceptions;
 using HomeCollector.Factories;
 using HomeCollector.Interfaces;
+using HomeCollector.IO;
 using HomeCollector.Models;
 using HomeCollector.Models.Members;
 using Newtonsoft.Json;
@@ -8,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,26 +19,75 @@ namespace HomeCollector.Repositories
     public class HomeCollectionRepository
     {
         private ICollectionBase _homeCollection;
+        private IFileIO _fileIO;
 
-        public HomeCollectionRepository(ICollectionBase homeCollection)
+        public HomeCollectionRepository(ICollectionBase homeCollection, IFileIO fileIO)
         {   
-            // should also inject the IO ???
+            if (fileIO == null)
+            {
+                throw new FileIOException("File IO must not be null");
+            }
 
             if (homeCollection == null)
             {
                 throw new CollectionException("Repository must be initialized with a collection base object");
             }
             _homeCollection = homeCollection;
+            _fileIO = fileIO;
         }
 
         // save collection to disk
-        public void SaveCollection(string path, string filename)
+        public void SaveCollection(string path, string filename, bool overwriteFile)
         {
-            string jsonCollection = ConvertCollectionToJson(_homeCollection);
-            // write to disk
+            string jsonCollection = null;
+
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new CollectionException("SaveCollection path cannot be null or blank");
+            }
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                throw new CollectionException("SaveCollection filename cannot be null or blank");
+            }
+            try
+            {
+                jsonCollection = ConvertCollectionToJson(_homeCollection);
+            }
+            catch (CollectionParseException ex)
+            {
+                throw new CollectionException($"Unable to save collection to {path}", ex);
+            }
+
+            string fullFilePath = FileIO.GetFullFilePath(path,filename);
+            _fileIO.WriteFile(fullFilePath, jsonCollection, overwriteFile);
+
         }
 
         // load collection from disk
+        public void LoadCollection(string path, string filename)
+        {
+            // read from file system, parse, and initialize
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new CollectionException("LoadCollection path cannot be null or blank");
+            }
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                throw new CollectionException("LoadCollection filename cannot be null or blank");
+            }
+            // read from disk
+            string fullFilePath = FileIO.GetFullFilePath(path, filename);
+            string jsonCollection = _fileIO.ReadFile(fullFilePath);
+               
+            try
+            {
+                _homeCollection = ConvertJsonToCollection(jsonCollection);
+            }   
+            catch (Exception ex)
+            {
+                throw new CollectionException($"Unable to load collection: {fullFilePath}", ex);
+            }      
+        }
 
         internal static string ConvertCollectionToJson(ICollectionBase collectionToSerialize)
         {
@@ -68,6 +119,7 @@ namespace HomeCollector.Repositories
                 foreach (var c in collectables)
                 {
                     string jsonCollectable = c.ToString();
+                    // add custom try/catch??
                     ICollectableBase collectable = GetCollectableFromJson(jsonCollectable, collectionType);
 
                     newCollection.AddToCollection(collectable);
@@ -76,7 +128,7 @@ namespace HomeCollector.Repositories
             }
             catch (Exception ex)
             {
-                throw new CollectionException($"Unable to parse Json into a collection object.  Type={collectionTypeName}, Json={jsonCollection}", ex);
+                throw new CollectionParseException($"Unable to parse Json into a collection object.  Type={collectionTypeName}, Json={jsonCollection}", ex);
             }            
         }
 
@@ -98,10 +150,11 @@ namespace HomeCollector.Repositories
                         newCollectable = JsonConvert.DeserializeObject<StampBase>(collectable.ToString());
                         break;
                     default:
-                        throw new CollectionException($"Unable to parse Json.  Unsupported collection type={collectionType}");
+                        throw new CollectableParseException($"Unable to parse Json.  Unsupported collection type={collectionType}");
                 }
                 foreach (var item in items)
                 {
+                    // add custom try/catch??
                     ICollectableItem newItem = GetCollectableItemFromJson(item.ToString(), collectionType);
                     newCollectable.AddItem(newItem);
                 }
@@ -110,7 +163,7 @@ namespace HomeCollector.Repositories
             }
             catch (Exception ex)
             {
-                throw new CollectionException($"Unable to parse Json into a collectable object.  Type={collectionType}, Json={jsonCollectable}", ex);
+                throw new CollectableParseException($"Unable to parse Json into a collectable object.  Type={collectionType}, Json={jsonCollectable}", ex);
             }
         }
 
@@ -128,12 +181,12 @@ namespace HomeCollector.Repositories
                         item = JsonConvert.DeserializeObject<StampItem>(jsonItem);
                         break;
                     default:
-                        throw new CollectionException($"Unable to parse Json.  Unsupported collection type={collectionType}");
+                        throw new CollectableItemInstanceParseException($"Unable to parse Json.  Unsupported collection type={collectionType}");
                 }
             }
             catch (Exception ex)
             {
-                throw new CollectionException($"Unable to parse Json into a collectable item.  Type={collectionType}, Json={jsonItem}", ex);
+                throw new CollectableItemInstanceParseException($"Unable to parse Json into a collectable item.  Type={collectionType}, Json={jsonItem}", ex);
             }
             return item;
         }

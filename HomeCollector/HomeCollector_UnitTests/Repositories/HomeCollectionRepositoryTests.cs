@@ -8,12 +8,51 @@ using HomeCollector.Exceptions;
 using HomeCollector.Models.Members;
 using System.Linq;
 using Newtonsoft.Json;
+using Moq;
 
 namespace HomeCollector_UnitTests.Repositories
 {
     [TestClass]
     public class HomeCollectionRepositoryTests
     {
+        Mock<IFileIO> _mockFileIO = new Mock<IFileIO>();
+
+        [TestInitialize]
+        public void InitializeTest()
+        {
+            _mockFileIO = new Mock<IFileIO>();
+        }
+
+        [TestMethod]
+        public void initialize_homecollection_repository_with_null_fails()
+        {
+            ICollectionBase nullCollection = null;
+            try
+            {
+                HomeCollectionRepository repo = new HomeCollectionRepository(nullCollection, _mockFileIO.Object);
+                Assert.Fail("HomeCollectionRepository initialization was expected to fail when passed a null value");
+            }
+            catch
+            {
+                Assert.IsTrue(true);
+            }
+        }
+
+        [TestMethod]
+        public void initialize_homecollection_repository_with_collection_success()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            try
+            {
+                HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+                Assert.IsTrue(true);
+            }
+            catch
+            {
+                Assert.Fail("HomeCollectionRepository was not successfully initialized");
+            }
+        }
+
         // Test JSON serialization
         [TestMethod]
         public void convertcollectiontojson_serializes_new_collection_successfully()
@@ -215,7 +254,7 @@ namespace HomeCollector_UnitTests.Repositories
                 {
                     ICollectableItem newItem = HomeCollectionRepository.GetCollectableItemFromJson(jsonItem, collectableType);
                 }
-                catch (CollectionException)
+                catch (CollectableItemInstanceParseException)
                 {
                     fail = true;
                     Assert.IsTrue(fail, "Expected exception to be thrown when JSON is invalid and cannot be parsed to an object");
@@ -234,7 +273,7 @@ namespace HomeCollector_UnitTests.Repositories
                 {
                     ICollectableBase newCollectable = HomeCollectionRepository.GetCollectableFromJson(jsonCollectable, collectableType);
                 }
-                catch (CollectionException)
+                catch (CollectableParseException)
                 {
                     fail = true;
                     Assert.IsTrue(fail, "Expected exception to be thrown when JSON is invalid and cannot be parsed to an object");
@@ -262,7 +301,7 @@ namespace HomeCollector_UnitTests.Repositories
                 {
                     ICollectionBase resultCollection = HomeCollectionRepository.ConvertJsonToCollection(jsonCollectionMissingTrailingBracket);
                 }
-                catch (CollectionException)
+                catch (CollectionParseException)
                 {
                     failTrailing = true;
                 }
@@ -270,7 +309,7 @@ namespace HomeCollector_UnitTests.Repositories
                 {
                     ICollectionBase resultCollection = HomeCollectionRepository.ConvertJsonToCollection(jsonCollectionMissingTrailingBracket);
                 }
-                catch (CollectionException)
+                catch (CollectionParseException)
                 {
                     failLeading = true;
                 }
@@ -280,10 +319,102 @@ namespace HomeCollector_UnitTests.Repositories
             }
         }
 
-        
-        // save - validate JSON before writing (make sure it can be deserialized)
-        // custom parse exceptions?
 
+        // save - validate JSON before writing (make sure it can be deserialized)
+        [TestMethod]
+        public void savecollection_fails_when_file_path_is_null()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+
+            string path = null;
+            string filename = "filename";
+
+            try
+            {
+                repo.SaveCollection(path, filename, false);
+                Assert.Fail("Expected save to fail when the path is null");
+            }
+            catch (CollectionException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+
+        [TestMethod]
+        public void savecollection_fails_when_file_path_is_blank()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            
+            string path = "";
+            string filename = "filename";
+            
+            try
+            {
+                repo.SaveCollection(path, filename, false);
+                Assert.Fail("Expected save to fail when the path is blank");
+            }
+            catch (CollectionException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+        [TestMethod]
+        public void savecollection_fails_when_filename_is_null()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+
+            string path = "filepath";
+            string filename = null;
+
+            try
+            {
+                repo.SaveCollection(path, filename, false);
+                Assert.Fail("Expected save to fail when the filename is null");
+            }
+            catch (CollectionException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+
+        [TestMethod]
+        public void savecollection_fails_when_filename_is_blank()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+
+            string path = "filepath";
+            string filename = "";
+
+            try
+            {
+                repo.SaveCollection(path, filename, false);
+                Assert.Fail("Expected save to fail when the filename is blank");
+            }
+            catch (CollectionException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+
+        [TestMethod]
+        public void savecollection_calls_convertcollectiontojson()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+
+            string path = "filepath";
+            string filename = "filename";
+
+            repo.SaveCollection(path, filename, false);
+
+            
+        }
+
+        // file read tests
 
         /****** helper methods ***********************************************************************/
         private BookItem GetTestBookItem(int i)

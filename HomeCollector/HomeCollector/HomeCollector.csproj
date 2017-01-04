@@ -57,12 +57,15 @@
     <Compile Include="Exceptions\CollectableParseException.cs" />
     <Compile Include="Exceptions\CollectionException.cs" />
     <Compile Include="Exceptions\CollectionParseException.cs" />
+    <Compile Include="Exceptions\FileIOException.cs" />
     <Compile Include="Factories\CollectableBaseFactory.cs" />
     <Compile Include="Interfaces\IBookBase.cs" />
     <Compile Include="Interfaces\ICollectableBase.cs" />
     <Compile Include="Interfaces\ICollectionBase.cs" />
     <Compile Include="Interfaces\ICollectableItem.cs" />
+    <Compile Include="Interfaces\IFileIO.cs" />
     <Compile Include="Interfaces\IStampBase.cs" />
+    <Compile Include="IO\FileIO.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

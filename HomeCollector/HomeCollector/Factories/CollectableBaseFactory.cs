@@ -119,6 +119,10 @@ namespace HomeCollector.Factories
 
         public static Type GetTypeFromFullName(string fullTypeName)
         {
+            if (string.IsNullOrWhiteSpace(fullTypeName))
+            {
+                throw new CollectableException($"Type name cannot be null or blank");
+            }
             foreach(Type collectableType in CollectableTypes)
             {
                 if (fullTypeName.Contains(collectableType.Name))
