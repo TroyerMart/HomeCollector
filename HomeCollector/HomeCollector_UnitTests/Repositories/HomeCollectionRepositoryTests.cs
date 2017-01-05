@@ -406,10 +406,12 @@ namespace HomeCollector_UnitTests.Repositories
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
             HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            _mockFileIO.Setup(f => f.GetFullFilePath(It.IsAny<string>(), It.IsAny<string>())).Returns((string p, string f) => p + @"\" + f);
+            //_mockFileIO.Setup(f => f.GetFullFilePath(It.IsAny<string>(), It.IsAny<string>())).Returns(@"filepath\filename");
 
             string path = "filepath";
             string filename = "filename";
-            string fullFilePath = FileIO.GetFullFilePath(path, filename);
+            string fullFilePath = FileIO.GetFullFilePathString(path, filename);
             bool overwrite = false;
 
             repo.SaveCollection(path, filename, overwrite);
@@ -448,9 +450,73 @@ namespace HomeCollector_UnitTests.Repositories
             _mockFileIO.Verify(r => r.WriteFile(It.IsAny<string>(), jsonCollection, It.IsAny<bool>()), Times.Once);
         }
 
-        // file read tests
+        // file read tests 
+        [TestMethod, ExpectedException(typeof(CollectionException))]
+        public void loadcollection_fileio_not_found_throws_exception()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            _mockFileIO.Setup(i => i.ReadFile(It.IsAny<string>())).Throws(new CollectionException());
+            string fullFilePath = "badfilepath";
 
+            ICollectionBase collection = repo.LoadCollection(fullFilePath);
 
+            Assert.Fail($"Expected exception to be thrown when the file is not found: {fullFilePath}");
+        }
+
+        [TestMethod, ExpectedException(typeof(CollectionException))]
+        public void loadcollection_file_invalid_json_content_throws_exception()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            string mockFileContent = "this is some invalid Json content";
+            _mockFileIO.Setup(i => i.ReadFile(It.IsAny<string>())).Returns(mockFileContent);
+            string fullFilePath = "filepath";
+
+            ICollectionBase collection = repo.LoadCollection(fullFilePath);
+
+            Assert.Fail($"Expected exception to be thrown when the file content cannot be parsed into a collection: {fullFilePath}");
+        }
+
+        [TestMethod]
+        public void loadcollection_file_valid_json_content_returns_collection()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+
+            foreach (Type collectionType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectionBase testCollection = GetTestCollection("test collection", collectionType, 1);
+                string testFileContent = HomeCollectionRepository.ConvertCollectionToJson(testCollection);
+                _mockFileIO.Setup(i => i.ReadFile(It.IsAny<string>())).Returns(testFileContent);
+                string fullFilePath = "filepath";
+
+                ICollectionBase collection = repo.LoadCollection(fullFilePath);
+
+                Assert.IsNotNull(collection);
+            }
+        }
+
+        [TestMethod]
+        public void loadcollection_with_path_filename_calls_getfullfilepath()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            _mockFileIO.Setup(f => f.GetFullFilePath(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((string p, string f) => p + @"\" + f);
+
+            foreach (Type collectionType in CollectableBaseFactory.CollectableTypes)
+            {
+                ICollectionBase testCollection = GetTestCollection("test collection", collectionType, 1);
+                string testFileContent = HomeCollectionRepository.ConvertCollectionToJson(testCollection);
+                _mockFileIO.Setup(i => i.ReadFile(It.IsAny<string>())).Returns(testFileContent);
+                string path = "path";
+                string filename = "filename";
+
+                ICollectionBase collection = repo.LoadCollection(path, filename);
+            }
+            _mockFileIO.Verify(r => r.GetFullFilePath(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(CollectableBaseFactory.CollectableTypes.Count));
+        }
 
 
         /****** helper methods ***********************************************************************/

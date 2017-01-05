@@ -13,6 +13,8 @@ namespace HomeCollector.Interfaces
         string ReadFile(string fullFilePath);
         void DeleteFile(string fullFilePath, bool forceDeleteIfReadonly = false);
 
+        string GetFullFilePath(string path, string filename);
+
     }
 
 }

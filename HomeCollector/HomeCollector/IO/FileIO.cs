@@ -98,8 +98,13 @@ namespace HomeCollector.IO
             }
         }
 
+        public string GetFullFilePath(string path, string filename)
+        {
+            return GetFullFilePathString(path, filename);
+        }
+
         // static methods
-        public static string GetFullFilePath(string path, string filename)
+        public static string GetFullFilePathString(string path, string filename)
         {
             if (string.IsNullOrWhiteSpace(path))
             {

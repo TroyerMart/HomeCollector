@@ -37,10 +37,23 @@ namespace HomeCollector.Repositories
         }
 
         // save collection to disk
-        public void SaveCollection(string path, string filename, bool overwriteFile = false)
+        public void SaveCollection(string fullFilePath, bool overwriteFile = false)
         {
             string jsonCollection = null;
+            try
+            {
+                jsonCollection = ConvertCollectionToJson(_homeCollection);
+            }
+            catch (CollectionParseException ex)
+            {
+                throw new CollectionException($"Unable to parse collection to Json", ex);
+            }
 
+            _fileIO.WriteFile(fullFilePath, jsonCollection, overwriteFile);
+        }
+
+        public void SaveCollection(string path, string filename, bool overwriteFile = false)
+        {
             if (string.IsNullOrWhiteSpace(path))
             {
                 throw new CollectionException("SaveCollection path cannot be null or blank");
@@ -49,22 +62,13 @@ namespace HomeCollector.Repositories
             {
                 throw new CollectionException("SaveCollection filename cannot be null or blank");
             }
-            try
-            {
-                jsonCollection = ConvertCollectionToJson(_homeCollection);
-            }
-            catch (CollectionParseException ex)
-            {
-                throw new CollectionException($"Unable to save collection to {path}", ex);
-            }
+            string fullFilePath = _fileIO.GetFullFilePath(path, filename);
 
-            string fullFilePath = FileIO.GetFullFilePath(path,filename);
-            _fileIO.WriteFile(fullFilePath, jsonCollection, overwriteFile);
-
+            SaveCollection(fullFilePath, overwriteFile);
         }
 
         // load collection from disk
-        public void LoadCollection(string path, string filename)
+        public ICollectionBase LoadCollection(string path, string filename)
         {
             // read from file system, parse, and initialize
             if (string.IsNullOrWhiteSpace(path))
@@ -75,20 +79,28 @@ namespace HomeCollector.Repositories
             {
                 throw new CollectionException("LoadCollection filename cannot be null or blank");
             }
-            // read from disk
-            string fullFilePath = FileIO.GetFullFilePath(path, filename);
+            string fullFilePath = _fileIO.GetFullFilePath(path, filename);
+
+            return LoadCollection(fullFilePath);
+        }
+
+        public ICollectionBase LoadCollection(string fullFilePath)
+        {
+            // read from file system, parse, and initialize
             string jsonCollection = _fileIO.ReadFile(fullFilePath);
-               
+
             try
             {
                 _homeCollection = ConvertJsonToCollection(jsonCollection);
-            }   
+            }
             catch (Exception ex)
             {
                 throw new CollectionException($"Unable to load collection: {fullFilePath}", ex);
-            }      
+            }
+            return _homeCollection;
         }
 
+        // Internal methods
         internal static string ConvertCollectionToJson(ICollectionBase collectionToSerialize)
         {
             if (collectionToSerialize == null)

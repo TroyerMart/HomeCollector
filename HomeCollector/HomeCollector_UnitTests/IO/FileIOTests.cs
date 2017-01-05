@@ -25,7 +25,7 @@ namespace HomeCollector_UnitTests.IO
             string path = null;
             string filename = "filename";
 
-            FileIO.GetFullFilePath(path, filename);
+            _fileIO.GetFullFilePath(path, filename);
 
             Assert.Fail("Expected GetFullFilePath to fail is the path is null");
         }
@@ -36,7 +36,7 @@ namespace HomeCollector_UnitTests.IO
             string path = "";
             string filename = "filename";
 
-            FileIO.GetFullFilePath(path, filename);
+            _fileIO.GetFullFilePath(path, filename);
 
             Assert.Fail("Expected GetFullFilePath to fail is the path is null");
         }
@@ -47,7 +47,7 @@ namespace HomeCollector_UnitTests.IO
             string path = "path";
             string filename = null;
 
-            FileIO.GetFullFilePath(path, filename);
+            _fileIO.GetFullFilePath(path, filename);
 
             Assert.Fail("Expected GetFullFilePath to fail is the path is null");
         }
@@ -58,7 +58,7 @@ namespace HomeCollector_UnitTests.IO
             string path = "path";
             string filename = "";
 
-            FileIO.GetFullFilePath(path, filename);
+            _fileIO.GetFullFilePath(path, filename);
 
             Assert.Fail("Expected GetFullFilePath to fail is the path is null");
         }
@@ -70,7 +70,7 @@ namespace HomeCollector_UnitTests.IO
             string filename = "filename";
             string expectedFullPath = path + @"\" + filename;
 
-            string fullFilePath = FileIO.GetFullFilePath(path, filename);
+            string fullFilePath = _fileIO.GetFullFilePath(path, filename);
 
             Assert.AreEqual(expectedFullPath, fullFilePath);
         }
@@ -82,7 +82,7 @@ namespace HomeCollector_UnitTests.IO
             string filename = "filename";
             string expectedFullPath = path + filename;
 
-            string fullFilePath = FileIO.GetFullFilePath(path, filename);
+            string fullFilePath = _fileIO.GetFullFilePath(path, filename);
 
             Assert.AreEqual(expectedFullPath, fullFilePath);
         }
