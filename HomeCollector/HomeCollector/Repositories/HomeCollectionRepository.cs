@@ -37,7 +37,7 @@ namespace HomeCollector.Repositories
         }
 
         // save collection to disk
-        public void SaveCollection(string path, string filename, bool overwriteFile)
+        public void SaveCollection(string path, string filename, bool overwriteFile = false)
         {
             string jsonCollection = null;
 

@@ -9,6 +9,7 @@ using HomeCollector.Models.Members;
 using System.Linq;
 using Newtonsoft.Json;
 using Moq;
+using HomeCollector.IO;
 
 namespace HomeCollector_UnitTests.Repositories
 {
@@ -401,20 +402,56 @@ namespace HomeCollector_UnitTests.Repositories
         }
 
         [TestMethod]
-        public void savecollection_calls_convertcollectiontojson()
+        public void savecollection_calls_writefile_with_fullpath_set()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
             HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
 
             string path = "filepath";
             string filename = "filename";
+            string fullFilePath = FileIO.GetFullFilePath(path, filename);
+            bool overwrite = false;
 
-            repo.SaveCollection(path, filename, false);
+            repo.SaveCollection(path, filename, overwrite);
 
-            
+            _mockFileIO.Verify(r => r.WriteFile(fullFilePath, It.IsAny<string>(), It.IsAny<bool>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void savecollection_calls_writefile_with_overwrite_flag_set()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+
+            string path = "filepath";
+            string filename = "filename";
+            bool overwrite = false;
+
+            repo.SaveCollection(path, filename, overwrite);
+
+            _mockFileIO.Verify(r => r.WriteFile(It.IsAny<string>(), It.IsAny<string>(), overwrite), Times.Once);
+        }
+
+        [TestMethod]
+        public void savecollection_calls_writefile_with_serialize_json_set()
+        {
+            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
+            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+
+            string path = "filepath";
+            string filename = "filename";
+            string jsonCollection = HomeCollectionRepository.ConvertCollectionToJson(mockCollection.Object);
+            bool overwrite = false;
+
+            repo.SaveCollection(path, filename, overwrite);
+
+            _mockFileIO.Verify(r => r.WriteFile(It.IsAny<string>(), jsonCollection, It.IsAny<bool>()), Times.Once);
         }
 
         // file read tests
+
+
+
 
         /****** helper methods ***********************************************************************/
         private BookItem GetTestBookItem(int i)

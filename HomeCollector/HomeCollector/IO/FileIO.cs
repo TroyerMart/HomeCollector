@@ -14,32 +14,74 @@ namespace HomeCollector.IO
         public string ReadFile(string fullFilePath)
         {
             string fileContent = null;
-            System.IO.FileInfo fi = new System.IO.FileInfo(fullFilePath);
-            if (!fi.Exists)
-            {
-                throw new FileIOException($"Unable to locate file: {fullFilePath}");
-            }
             try
             {
-                using (StreamReader sr = fi.OpenText())
+                FileInfo fi = GetFileInfo(fullFilePath);
+                if (! fi.Exists)
                 {
-                    fileContent = sr.ReadToEnd();
+                    throw new FileIOException($"Unable to locate file: {fullFilePath}");
+                }
+                try
+                {
+                    using (StreamReader sr = fi.OpenText())
+                    {
+                        fileContent = sr.ReadToEnd();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new FileIOException($"Unable to read file: {fullFilePath}", ex);
+                }
+                return fileContent;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void WriteFile(string fullFilePath, string fileContent, bool overwrite)
+        {        
+            try
+            {
+                FileInfo fi = GetFileInfo(fullFilePath);
+                if (fi.Exists)
+                {
+                    if (overwrite)
+                    {
+                        try
+                        {
+                            DeleteFile(fullFilePath);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new FileIOException($"Unable to delete existing file: {fullFilePath}", ex);
+                        }
+                    }
+                    else
+                    {
+                        throw new FileIOException($"File exists, so file was not overwritten: {fullFilePath}");
+                    }
+                }
+                using (StreamWriter sw = fi.CreateText())
+                {
+                    sw.Write(fileContent);
                 }
             }
             catch (Exception ex)
             {
-                throw new FileIOException($"Unable to read file: {fullFilePath}",ex);
-            }
-            return fileContent;
+                throw ex;
+            }             
         }
 
-        public void WriteFile(string fullFilePath, string fileContent, bool overwrite)
+        public void DeleteFile(string fullFilePath, bool forceDeleteIfReadonly = false)
         {
-            FileInfo fi = new FileInfo(fullFilePath);
-            if (fi.Exists)
+            try
             {
-                if (overwrite)
+                FileInfo fi = GetFileInfo(fullFilePath);
+                if (fi.Exists)
                 {
+                    fi.IsReadOnly = fi.IsReadOnly && (! forceDeleteIfReadonly);
                     try
                     {
                         fi.Delete();
@@ -47,19 +89,16 @@ namespace HomeCollector.IO
                     catch (Exception ex)
                     {
                         throw new FileIOException($"Unable to delete existing file: {fullFilePath}", ex);
-                    }                    
+                    }
                 }
-                else
-                {
-                    throw new FileIOException($"Unable to overwrite file: {fullFilePath}");
-                }                
             }
-            using (StreamWriter sw = fi.CreateText())
+            catch (Exception ex)
             {
-                sw.WriteLine(fileContent);
+                throw ex;
             }
         }
 
+        // static methods
         public static string GetFullFilePath(string path, string filename)
         {
             if (string.IsNullOrWhiteSpace(path))
@@ -82,6 +121,23 @@ namespace HomeCollector.IO
             return fullFilePath;
         }
 
+        public static FileInfo GetFileInfo(string fullFilePath)
+        {
+            FileInfo fi = null;
+            if (string.IsNullOrWhiteSpace(fullFilePath))
+            {
+                throw new FileIOException("Full file path cannot be null or blank");
+            }
+            try
+            {
+                fi = new FileInfo(fullFilePath);
+            } 
+            catch (Exception ex)
+            {
+                throw new FileIOException($"Unable to initialize FileInfo object for: {fullFilePath}", ex);
+            }
+            return fi;
+        }
     }
 
 }
