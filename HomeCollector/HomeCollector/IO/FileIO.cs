@@ -34,9 +34,9 @@ namespace HomeCollector.IO
                 }
                 return fileContent;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -68,13 +68,18 @@ namespace HomeCollector.IO
                     sw.Write(fileContent);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }             
         }
 
-        public void DeleteFile(string fullFilePath, bool forceDeleteIfReadonly = false)
+        public void DeleteFile(string fullFilePath)
+        {
+            bool forceDeleteIfReadonly = false;
+            DeleteFile(fullFilePath, forceDeleteIfReadonly);
+        }
+        public void DeleteFile(string fullFilePath, bool forceDeleteIfReadonly)
         {
             try
             {
@@ -92,9 +97,9 @@ namespace HomeCollector.IO
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

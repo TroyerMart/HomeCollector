@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HomeCollector.Factories
 {
-    public class CollectableBaseFactory
+    public static class CollectableBaseFactory
     {
         public static Type BookType = typeof(BookBase);
         public static Type StampType = typeof(StampBase);

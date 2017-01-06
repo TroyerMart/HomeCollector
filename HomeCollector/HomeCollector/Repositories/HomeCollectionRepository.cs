@@ -37,7 +37,12 @@ namespace HomeCollector.Repositories
         }
 
         // save collection to disk
-        public void SaveCollection(string fullFilePath, bool overwriteFile = false)
+        public void SaveCollection(string fullFilePath)
+        {
+            bool overwriteFile = false;
+            SaveCollection(fullFilePath, overwriteFile);
+        }
+        public void SaveCollection(string fullFilePath, bool overwriteFile)
         {
             string jsonCollection = null;
             try
@@ -52,7 +57,12 @@ namespace HomeCollector.Repositories
             _fileIO.WriteFile(fullFilePath, jsonCollection, overwriteFile);
         }
 
-        public void SaveCollection(string path, string filename, bool overwriteFile = false)
+        public void SaveCollection(string path, string filename)
+        {
+            bool overwriteFile = false;
+            SaveCollection(path, filename, overwriteFile);
+        }
+        public void SaveCollection(string path, string filename, bool overwriteFile)
         {
             if (string.IsNullOrWhiteSpace(path))
             {

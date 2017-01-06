@@ -11,23 +11,35 @@ namespace HomeCollector_UnitTests.Controllers
     [TestClass]
     public class HomeCollectionControllerTests
     {
-        Mock<ICollectionBase> mockHomeCollection;
+        Mock<ICollectionBase> _mockHomeCollection;
+        Mock<IFileIO> _mockFileIO = new Mock<IFileIO>();
         HomeCollectionController controller;
 
         [TestInitialize]
         public void InitializeTest()
         {
             // setup the controller using a mock instance of a collection base object
-            mockHomeCollection = new Mock<ICollectionBase>();
-            controller = new HomeCollectionController(mockHomeCollection.Object);
+            _mockHomeCollection = new Mock<ICollectionBase>();
+            controller = new HomeCollectionController(_mockHomeCollection.Object, _mockFileIO.Object);
         }
 
         [TestMethod, ExpectedException(typeof(CollectionException))]
-        public void controller_initialized_with_null_collection_base_object_fails()
+        public void controller_initialized_with_null_collection_base_fails()
         {
             ICollectionBase nullBase = null;
 
-            controller = new HomeCollectionController(nullBase);
+            controller = new HomeCollectionController(nullBase, _mockFileIO.Object);
+
+            Assert.IsFalse(true, "Expected the test to fail when initialized with a null object");
+        }
+
+        [TestMethod, ExpectedException(typeof(FileIOException))]
+        public void controller_initialized_with_null_fileio_fails()
+        {
+            ICollectionBase collectionBase = _mockHomeCollection.Object;
+            IFileIO nullFileIO = null;
+
+            controller = new HomeCollectionController(collectionBase, nullFileIO);
 
             Assert.IsFalse(true, "Expected the test to fail when initialized with a null object");
         }
@@ -37,9 +49,9 @@ namespace HomeCollector_UnitTests.Controllers
         {
             try
             {
-                ICollectionBase collectionBase = mockHomeCollection.Object;
+                ICollectionBase collectionBase = _mockHomeCollection.Object;
 
-                controller = new HomeCollectionController(collectionBase);
+                controller = new HomeCollectionController(collectionBase, _mockFileIO.Object);
 
                 Assert.IsNotNull(controller);
             }
@@ -53,10 +65,10 @@ namespace HomeCollector_UnitTests.Controllers
         public void controller_collectiontype_returns_collectable_base_type()
         {
             Type objType = typeof(ICollectionBase);
-            ICollectionBase collectableBase = mockHomeCollection.Object;
-            mockHomeCollection.Setup(b => b.CollectionType).Returns(objType);
+            ICollectionBase collectableBase = _mockHomeCollection.Object;
+            _mockHomeCollection.Setup(b => b.CollectionType).Returns(objType);
 
-            controller = new HomeCollectionController(collectableBase);
+            controller = new HomeCollectionController(collectableBase, _mockFileIO.Object);
             Type objTestType = controller.CollectionType;
 
             Assert.AreEqual(objType, objTestType);
@@ -69,7 +81,7 @@ namespace HomeCollector_UnitTests.Controllers
 
             controller.AddToCollection(mockHomeCollectionToAdd.Object);
 
-            mockHomeCollection.Verify(b => b.AddToCollection(It.IsAny<ICollectableBase>()), Times.Once);
+            _mockHomeCollection.Verify(b => b.AddToCollection(It.IsAny<ICollectableBase>()), Times.Once);
         }
 
         [TestMethod]
@@ -79,7 +91,7 @@ namespace HomeCollector_UnitTests.Controllers
 
             controller.RemoveFromCollection(mockHomeCollectionToRemove.Object);
 
-            mockHomeCollection.Verify(b => b.RemoveFromCollection(It.IsAny<ICollectableBase>()), Times.Once);
+            _mockHomeCollection.Verify(b => b.RemoveFromCollection(It.IsAny<ICollectableBase>()), Times.Once);
         }
 
         [TestMethod]
@@ -87,7 +99,7 @@ namespace HomeCollector_UnitTests.Controllers
         {
             IList<ICollectableBase> items = controller.GetCollection();
 
-            mockHomeCollection.Verify(b => b.Collectables, Times.Once);
+            _mockHomeCollection.Verify(b => b.Collectables, Times.Once);
         }
 
         [TestMethod]
@@ -95,8 +107,12 @@ namespace HomeCollector_UnitTests.Controllers
         {
             controller.ClearCollection();
 
-            mockHomeCollection.Verify(b => b.ClearCollection(), Times.Once);
+            _mockHomeCollection.Verify(b => b.ClearCollection(), Times.Once);
         }
+
+        // test savecollection - w/ & w/0 overwrite  - mock repo??
+
+        // test loadcollection
 
     }
 }

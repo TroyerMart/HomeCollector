@@ -11,7 +11,8 @@ namespace HomeCollector.Interfaces
         void WriteFile(string fullFilePath, string fileContent, bool overwrite);
 
         string ReadFile(string fullFilePath);
-        void DeleteFile(string fullFilePath, bool forceDeleteIfReadonly = false);
+        void DeleteFile(string fullFilePath);
+        void DeleteFile(string fullFilePath, bool forceDeleteIfReadonly);
 
         string GetFullFilePath(string path, string filename);
 
