@@ -30,7 +30,7 @@ namespace HomeCollector_UnitTests.Repositories
             ICollectionBase nullCollection = null;
             try
             {
-                HomeCollectionRepository repo = new HomeCollectionRepository(nullCollection, _mockFileIO.Object);
+                IHomeCollectionRepository repo = new HomeCollectionRepository(nullCollection, _mockFileIO.Object);
                 Assert.Fail("HomeCollectionRepository initialization was expected to fail when passed a null value");
             }
             catch
@@ -45,7 +45,7 @@ namespace HomeCollector_UnitTests.Repositories
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
             try
             {
-                HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+                IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
                 Assert.IsTrue(true);
             }
             catch
@@ -326,7 +326,7 @@ namespace HomeCollector_UnitTests.Repositories
         public void savecollection_fails_when_file_path_is_null()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
 
             string path = null;
             string filename = "filename";
@@ -346,7 +346,7 @@ namespace HomeCollector_UnitTests.Repositories
         public void savecollection_fails_when_file_path_is_blank()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
             
             string path = "";
             string filename = "filename";
@@ -365,7 +365,7 @@ namespace HomeCollector_UnitTests.Repositories
         public void savecollection_fails_when_filename_is_null()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
 
             string path = "filepath";
             string filename = null;
@@ -385,7 +385,7 @@ namespace HomeCollector_UnitTests.Repositories
         public void savecollection_fails_when_filename_is_blank()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
 
             string path = "filepath";
             string filename = "";
@@ -405,7 +405,7 @@ namespace HomeCollector_UnitTests.Repositories
         public void savecollection_calls_writefile_with_fullpath_set()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
             _mockFileIO.Setup(f => f.GetFullFilePath(It.IsAny<string>(), It.IsAny<string>())).Returns((string p, string f) => p + @"\" + f);
             //_mockFileIO.Setup(f => f.GetFullFilePath(It.IsAny<string>(), It.IsAny<string>())).Returns(@"filepath\filename");
 
@@ -423,7 +423,7 @@ namespace HomeCollector_UnitTests.Repositories
         public void savecollection_calls_writefile_with_overwrite_flag_set()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
 
             string path = "filepath";
             string filename = "filename";
@@ -438,7 +438,7 @@ namespace HomeCollector_UnitTests.Repositories
         public void savecollection_calls_writefile_with_serialize_json_set()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
 
             string path = "filepath";
             string filename = "filename";
@@ -455,7 +455,7 @@ namespace HomeCollector_UnitTests.Repositories
         public void loadcollection_fileio_not_found_throws_exception()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
             _mockFileIO.Setup(i => i.ReadFile(It.IsAny<string>())).Throws(new CollectionException());
             string fullFilePath = "badfilepath";
 
@@ -468,7 +468,7 @@ namespace HomeCollector_UnitTests.Repositories
         public void loadcollection_file_invalid_json_content_throws_exception()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
             string mockFileContent = "this is some invalid Json content";
             _mockFileIO.Setup(i => i.ReadFile(It.IsAny<string>())).Returns(mockFileContent);
             string fullFilePath = "filepath";
@@ -482,7 +482,7 @@ namespace HomeCollector_UnitTests.Repositories
         public void loadcollection_file_valid_json_content_returns_collection()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
 
             foreach (Type collectionType in CollectableBaseFactory.CollectableTypes)
             {
@@ -501,7 +501,7 @@ namespace HomeCollector_UnitTests.Repositories
         public void loadcollection_with_path_filename_calls_getfullfilepath()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            HomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
             _mockFileIO.Setup(f => f.GetFullFilePath(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((string p, string f) => p + @"\" + f);
 

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace HomeCollector.Repositories
 {
-    public class HomeCollectionRepository
+    public class HomeCollectionRepository: IHomeCollectionRepository
     {
         private ICollectionBase _homeCollection;
         private IFileIO _fileIO;

@@ -5,6 +5,7 @@ using HomeCollector.Interfaces;
 using Moq;
 using HomeCollector.Exceptions;
 using System.Collections.Generic;
+using HomeCollector.Repositories;
 
 namespace HomeCollector_UnitTests.Controllers
 {
@@ -13,14 +14,14 @@ namespace HomeCollector_UnitTests.Controllers
     {
         Mock<ICollectionBase> _mockHomeCollection;
         Mock<IFileIO> _mockFileIO = new Mock<IFileIO>();
-        HomeCollectionController controller;
+        HomeCollectionController _mockController;
 
         [TestInitialize]
         public void InitializeTest()
         {
             // setup the controller using a mock instance of a collection base object
             _mockHomeCollection = new Mock<ICollectionBase>();
-            controller = new HomeCollectionController(_mockHomeCollection.Object, _mockFileIO.Object);
+            _mockController = new HomeCollectionController(_mockHomeCollection.Object, _mockFileIO.Object);
         }
 
         [TestMethod, ExpectedException(typeof(CollectionException))]
@@ -28,7 +29,7 @@ namespace HomeCollector_UnitTests.Controllers
         {
             ICollectionBase nullBase = null;
 
-            controller = new HomeCollectionController(nullBase, _mockFileIO.Object);
+            _mockController = new HomeCollectionController(nullBase, _mockFileIO.Object);
 
             Assert.IsFalse(true, "Expected the test to fail when initialized with a null object");
         }
@@ -39,7 +40,7 @@ namespace HomeCollector_UnitTests.Controllers
             ICollectionBase collectionBase = _mockHomeCollection.Object;
             IFileIO nullFileIO = null;
 
-            controller = new HomeCollectionController(collectionBase, nullFileIO);
+            _mockController = new HomeCollectionController(collectionBase, nullFileIO);
 
             Assert.IsFalse(true, "Expected the test to fail when initialized with a null object");
         }
@@ -51,9 +52,9 @@ namespace HomeCollector_UnitTests.Controllers
             {
                 ICollectionBase collectionBase = _mockHomeCollection.Object;
 
-                controller = new HomeCollectionController(collectionBase, _mockFileIO.Object);
+                _mockController = new HomeCollectionController(collectionBase, _mockFileIO.Object);
 
-                Assert.IsNotNull(controller);
+                Assert.IsNotNull(_mockController);
             }
             catch
             {
@@ -68,8 +69,8 @@ namespace HomeCollector_UnitTests.Controllers
             ICollectionBase collectableBase = _mockHomeCollection.Object;
             _mockHomeCollection.Setup(b => b.CollectionType).Returns(objType);
 
-            controller = new HomeCollectionController(collectableBase, _mockFileIO.Object);
-            Type objTestType = controller.CollectionType;
+            _mockController = new HomeCollectionController(collectableBase, _mockFileIO.Object);
+            Type objTestType = _mockController.CollectionType;
 
             Assert.AreEqual(objType, objTestType);
         }
@@ -79,7 +80,7 @@ namespace HomeCollector_UnitTests.Controllers
         {
             Mock<ICollectableBase> mockHomeCollectionToAdd = new Mock<ICollectableBase>();
 
-            controller.AddToCollection(mockHomeCollectionToAdd.Object);
+            _mockController.AddToCollection(mockHomeCollectionToAdd.Object);
 
             _mockHomeCollection.Verify(b => b.AddToCollection(It.IsAny<ICollectableBase>()), Times.Once);
         }
@@ -89,30 +90,74 @@ namespace HomeCollector_UnitTests.Controllers
         {
             Mock<ICollectableBase> mockHomeCollectionToRemove = new Mock<ICollectableBase>();
 
-            controller.RemoveFromCollection(mockHomeCollectionToRemove.Object);
+            _mockController.RemoveFromCollection(mockHomeCollectionToRemove.Object);
 
             _mockHomeCollection.Verify(b => b.RemoveFromCollection(It.IsAny<ICollectableBase>()), Times.Once);
         }
 
         [TestMethod]
-        public void calling_controller_getcollection_calls_homecollection_getcollection()
+        public void calling_controller_tolist_calls_homecollection_collectables()
         {
-            IList<ICollectableBase> items = controller.GetCollection();
+            IList<ICollectableBase> items = _mockController.ToList();
 
             _mockHomeCollection.Verify(b => b.Collectables, Times.Once);
         }
 
         [TestMethod]
-        public void calling_controller_clearcollection_calls_homecontroller_clearcollection()
+        public void calling_controller_getcollection_returns_current_icollectionbase_instance()
         {
-            controller.ClearCollection();
+            // controller is initialized with _mockHomeCollection
+
+            ICollectionBase collection = _mockController.GetCollection();
+
+            Assert.AreEqual(_mockHomeCollection.Object, collection);
+        }
+
+        [TestMethod]
+        public void calling_controller_clearcollection_calls_homecollection_clearcollection()
+        {
+            _mockController.ClearCollection();
 
             _mockHomeCollection.Verify(b => b.ClearCollection(), Times.Once);
         }
 
-        // test savecollection - w/ & w/0 overwrite  - mock repo??
+        [TestMethod]
+        public void calling_controller_savecollection_calls_repository_savecollection()
+        {
+            Mock<IHomeCollectionRepository> mockRepo = new Mock<IHomeCollectionRepository>();
+            HomeCollectionController mockController = new HomeCollectionController(_mockHomeCollection.Object, _mockFileIO.Object, mockRepo.Object);
+            string fullFilePath = "fullfilepath";
+
+            mockController.SaveCollection(fullFilePath);
+
+            mockRepo.Verify(r => r.SaveCollection(It.IsAny<string>(), false), Times.Once);
+        }
+
+        [TestMethod]
+        public void calling_controller_savecollection_with_overwrite_calls_repository_savecollection()
+        {
+            Mock<IHomeCollectionRepository> mockRepo = new Mock<IHomeCollectionRepository>();
+            HomeCollectionController mockController = new HomeCollectionController(_mockHomeCollection.Object, _mockFileIO.Object, mockRepo.Object);
+            string fullFilePath = "fullfilepath";
+            bool overWriteFile = true;
+
+            mockController.SaveCollection(fullFilePath, overWriteFile);
+
+            mockRepo.Verify(r => r.SaveCollection(It.IsAny<string>(), true), Times.Once);
+        }
 
         // test loadcollection
+        [TestMethod]
+        public void calling_controller_loadcollection_calls_repository_loadcollection()
+        {
+            Mock<IHomeCollectionRepository> mockRepo = new Mock<IHomeCollectionRepository>();
+            HomeCollectionController mockController = new HomeCollectionController(_mockHomeCollection.Object, _mockFileIO.Object, mockRepo.Object);
+            string fullFilePath = "fullfilepath";
+
+            mockController.LoadCollection(fullFilePath);
+
+            mockRepo.Verify(r => r.LoadCollection(It.IsAny<string>()), Times.Once);
+        }
 
     }
 }
