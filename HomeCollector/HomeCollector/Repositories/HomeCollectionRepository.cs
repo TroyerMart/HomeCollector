@@ -18,6 +18,8 @@ namespace HomeCollector.Repositories
 {
     public class HomeCollectionRepository: IHomeCollectionRepository
     {
+        public const string FILE_EXTENSION = "hcol";
+
         private ICollectionBase _homeCollection;
         private IFileIO _fileIO;
 

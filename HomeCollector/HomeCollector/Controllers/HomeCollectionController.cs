@@ -123,7 +123,7 @@ namespace HomeCollector.Controllers
 
 
 
-        /****************************************** help methods **********************************************************/
+        /****************************************** helper methods **********************************************************/
         internal IHomeCollectionRepository Repository()
         {
             try
