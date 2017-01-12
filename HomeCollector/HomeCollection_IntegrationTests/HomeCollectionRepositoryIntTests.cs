@@ -15,7 +15,6 @@ namespace HomeCollector_IntegrationTests
         [TestMethod]
         public void create_and_save_test_collection_to_disk()
         {
-            //Type collectableType = CollectableBaseFactory.BookType;
             int numberOfCollectables = 2;
             int numberOfItemsPerCollectable = 3;
             foreach (Type collectionType in CollectableBaseFactory.CollectableTypes)
@@ -42,6 +41,24 @@ namespace HomeCollector_IntegrationTests
                 }
             }
             
+        }
+
+        [TestMethod]
+        public void load_test_book_collection_from_disk()
+        {
+            // I really don't like having to initialize this.  Should just be able pass variable, or not require it.  Expose instead.
+            string collectionName = "Star Trek Books - 1";
+            ICollectionBase testCollection = new HomeCollection(collectionName, CollectableBaseFactory.BookType);
+
+            // Initialize a repository
+            IFileIO fileIO = new FileIO();
+            HomeCollectionRepository repo = new HomeCollectionRepository(testCollection, fileIO);
+
+            string fullFilePath = Environment.CurrentDirectory + @"\";
+            fullFilePath += collectionName + @"." + HomeCollectionRepository.FILE_EXTENSION;
+
+            ICollectionBase books = repo.LoadCollection(fullFilePath);
+
         }
 
         /****** helper methods ***********************************************************************/

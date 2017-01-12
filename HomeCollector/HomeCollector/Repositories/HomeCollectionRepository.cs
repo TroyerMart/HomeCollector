@@ -168,19 +168,24 @@ namespace HomeCollector.Repositories
                 switch (collectionType.Name)
                 {
                     case "BookBase":
+                        ValidateBookCollectableFields(collectable);
                         newCollectable = JsonConvert.DeserializeObject<BookBase>(collectable.ToString());
                         break;
                     case "StampBase":
+                        ValidateStampCollectableFields(collectable);
                         newCollectable = JsonConvert.DeserializeObject<StampBase>(collectable.ToString());
                         break;
                     default:
                         throw new CollectableParseException($"Unable to parse Json.  Unsupported collection type={collectionType}");
                 }
-                foreach (var item in items)
+                if (items != null)
                 {
-                    // add custom try/catch??
-                    ICollectableItem newItem = GetCollectableItemFromJson(item.ToString(), collectionType);
-                    newCollectable.AddItem(newItem);
+                    foreach (var item in items)
+                    {
+                        // add custom try/catch??
+                        ICollectableItem newItem = GetCollectableItemFromJson(item.ToString(), collectionType);
+                        newCollectable.AddItem(newItem);
+                    }
                 }
                 return newCollectable;
 
@@ -213,6 +218,29 @@ namespace HomeCollector.Repositories
                 throw new CollectableItemInstanceParseException($"Unable to parse Json into a collectable item.  Type={collectionType}, Json={jsonItem}", ex);
             }
             return item;
+        }
+
+        internal static void ValidateBookCollectableFields(dynamic collectable)
+        {
+            if (collectable.DatePublished==null || collectable.DatePublished.ToString().Trim()=="")
+            {
+                collectable.DatePublished = DateTime.MinValue.ToShortDateString();
+            }
+            if (collectable.Year == null)
+            {
+                collectable.Year = 0;
+            }
+        }
+        internal static void ValidateStampCollectableFields(dynamic collectable)
+        {
+            if (collectable.FirstDayOfIssue==null | collectable.FirstDayOfIssue.ToString().Trim()=="")
+            {
+                collectable.FirstDayOfIssue = DateTime.MinValue.ToShortDateString();
+            }
+            if (collectable.YearOfIssue == null)
+            {
+                collectable.YearOfIssue = 0;
+            }
         }
 
     }
