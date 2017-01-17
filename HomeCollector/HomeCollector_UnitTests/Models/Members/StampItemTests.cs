@@ -46,9 +46,9 @@ namespace HomeCollector_UnitTests.Models.Members
         {
             StampItem stamp = new StampItem();
 
-            StampConditionEnum defaultValue = stamp.Condition;
+            string defaultValue = stamp.Condition;
 
-            Assert.AreEqual(StampConditionEnum.Undefined, defaultValue);
+            Assert.AreEqual(StampItem.CONDITION_DEFAULT, defaultValue);
         }
 
 
@@ -95,5 +95,36 @@ namespace HomeCollector_UnitTests.Models.Members
             Assert.AreEqual(CollectableBaseFactory.StampType, stampType);
         }
 
+        // test defaults - condition
+        [TestMethod]
+        public void validatecondition_returns_false_when_passed_null_condition()
+        {
+            string invalidCondition = null;
+
+            bool isValid = StampItem.ValidateCondition(invalidCondition);
+
+            Assert.IsFalse(isValid, $"Expected ValidateCondition to return false an unexpected condition: {invalidCondition}");
+        }
+
+        [TestMethod]
+        public void validatecondition_returns_false_when_passed_unexpected_condition()
+        {
+            string invalidCondition = "invalid";
+
+            bool isValid = StampItem.ValidateCondition(invalidCondition);
+
+            Assert.IsFalse(isValid, $"Expected ValidateCondition to return false an unexpected condition: {invalidCondition}");
+        }
+
+        [TestMethod]
+        public void validate_stamp_conditions_set_successfully()
+        {
+            foreach (string condition in StampItem.STAMP_CONDITIONS)
+            {
+                bool isValid = StampItem.ValidateCondition(condition);
+
+                Assert.IsTrue(isValid);
+            }
+        }
     }
 }

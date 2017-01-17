@@ -16,6 +16,7 @@ namespace HomeCollector.Models
         private List<ICollectableItem> _items;
         private string _displayName = DISPLAYNAME_DEFAULT;
         private int _year = 0;
+        private int _month = 0;
 
         // from ICollectableBase
         public Type CollectableType { get { return GetType(); } }
@@ -48,7 +49,20 @@ namespace HomeCollector.Models
                     }
                 }
             }
-        public DateTime DatePublished { get; set; } = DateTime.MinValue;
+        public int Month
+        {
+            get { return _month; }
+            set
+            {
+                if (value >= 0)
+                    _month = value;
+                else
+                {
+                    throw new CollectableException($"Unable to set book month {value}.  Month must not be negative.");
+                }
+            }
+        }
+
         public string Edition { get; set; }
         public string Series { get; set; }
         public string BookCode { get; set; }

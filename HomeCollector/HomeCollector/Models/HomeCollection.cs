@@ -19,7 +19,7 @@ namespace HomeCollector.Models
         {
             if (!CollectableBaseFactory.IsCollectableType(collectionType))
             {
-                throw new CollectionException($"Type {collectionType} must be of a valid Collectable Type");
+                throw new CollectionException($"Type {collectionType?.Name} must be of a valid Collectable Type");
             }
             CollectionName = collectionName;
             _collectionType = collectionType;
@@ -56,7 +56,7 @@ namespace HomeCollector.Models
             Type collectableType = collectableToAdd.CollectableType;
             if (collectableType != CollectionType)
             {
-                throw new CollectionException($"Cannot add a collectable of an invalid type to the collection, Type={collectableType}, but expected {CollectionType}");
+                throw new CollectionException($"Cannot add a collectable of an invalid type to the collection, Type={collectableType.Name}, but expected {CollectionType.Name}");
             }
             try
             {

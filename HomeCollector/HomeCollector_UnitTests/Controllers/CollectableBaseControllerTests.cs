@@ -102,5 +102,6 @@ namespace HomeCollector_UnitTests.Controllers
             mockCollectableBase.Verify(b => b.IsSame(It.IsAny<ICollectableBase>(), It.IsAny<bool>()), Times.Once);
         }
 
+
     }
 }

@@ -30,13 +30,13 @@ namespace HomeCollector_UnitTests.Factories
 
         // test defaults
         [TestMethod]
-        public void create_new_stamp_from_factory_country_defaults_to_usa()
+        public void create_new_stamp_from_factory_country_set_to_country_default()
         {
             Type stampType = CollectableBaseFactory.StampType;
 
             StampBase newStamp = (StampBase)CollectableBaseFactory.CreateCollectableBase(stampType);
 
-            Assert.IsTrue(newStamp.Country == StampCountryEnum.USA);
+            Assert.IsTrue(newStamp.Country == StampBase.COUNTRY_DEFAULT);
         }
 
         [TestMethod]

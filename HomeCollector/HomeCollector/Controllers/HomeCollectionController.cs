@@ -19,7 +19,7 @@ namespace HomeCollector.Controllers
         {
             if (homeCollection == null)
             {
-                throw new CollectionException("Injected controller must be initialized with a collection base object");
+                throw new CollectionException("Collection controller must be initialized with a collection base object");
             }
             _homeCollection = homeCollection;
             if (fileIO == null)
@@ -34,7 +34,7 @@ namespace HomeCollector.Controllers
         {
             if (homeCollection == null)
             {
-                throw new CollectionException("Injected controller must be initialized with a collection base object");
+                throw new CollectionException("Collection controller must be initialized with a collection base object");
             }
             _homeCollection = homeCollection;
             if (fileIO == null)
@@ -47,6 +47,17 @@ namespace HomeCollector.Controllers
                 throw new FileIOException("Injected repository must not be null");
             }
             _repo = repo;
+        }
+
+        public HomeCollectionController(IFileIO fileIO)
+        {   // used when loading a collection with the controller
+            if (fileIO == null)
+            {
+                throw new FileIOException("Injected file IO must not be null");
+            }
+            _fileIO = fileIO;
+            _homeCollection = null;
+            _repo = null;
         }
 
         public Type CollectionType { get { return _homeCollection.CollectionType; } }
@@ -120,8 +131,7 @@ namespace HomeCollector.Controllers
             return _homeCollection;
         }
 
-
-
+        // add ImportCollection - adds content to an existing collection of same type
 
         /****************************************** helper methods **********************************************************/
         internal IHomeCollectionRepository Repository()
@@ -130,7 +140,14 @@ namespace HomeCollector.Controllers
             {
                 if (_repo == null)
                 {   
-                    _repo = new HomeCollectionRepository(_homeCollection, _fileIO);
+                    if (_homeCollection == null)
+                    {
+                        _repo = new HomeCollectionRepository(_fileIO);
+                    }
+                    else
+                    {
+                        _repo = new HomeCollectionRepository(_homeCollection, _fileIO);
+                    }                    
                 }                
                 return _repo;
             }

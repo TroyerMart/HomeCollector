@@ -25,7 +25,7 @@ namespace HomeCollector_UnitTests.Repositories
         }
 
         [TestMethod]
-        public void initialize_homecollection_repository_with_null_fails()
+        public void initialize_homecollectionrepository_with_null_fails()
         {
             ICollectionBase nullCollection = null;
             try
@@ -40,7 +40,7 @@ namespace HomeCollector_UnitTests.Repositories
         }
 
         [TestMethod]
-        public void initialize_homecollection_repository_with_collection_success()
+        public void initialize_homecollectionrepository_with_collection_success()
         {
             Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
             try
@@ -51,6 +51,21 @@ namespace HomeCollector_UnitTests.Repositories
             catch
             {
                 Assert.Fail("HomeCollectionRepository was not successfully initialized");
+            }
+        }
+
+        [TestMethod]
+        public void initialize_homecollectionrepository_collectionless_constructor_succeeds()
+        {
+            try
+            {
+                IHomeCollectionRepository repo = new HomeCollectionRepository(_mockFileIO.Object);
+
+                Assert.IsInstanceOfType(repo, typeof(HomeCollectionRepository));
+            }
+            catch
+            {
+                Assert.Fail("HomeCollectionRepository initialization was expected to successfully initialize");
             }
         }
 
@@ -180,7 +195,7 @@ namespace HomeCollector_UnitTests.Repositories
             Assert.AreEqual(collectable.CollectableType, newCollectable.CollectableType);
             Assert.AreEqual(collectable.Author, newCollectable.Author);
             Assert.AreEqual(collectable.BookCode, newCollectable.BookCode);
-            Assert.AreEqual(collectable.DatePublished, newCollectable.DatePublished);
+            Assert.AreEqual(collectable.Month, newCollectable.Month);
             Assert.AreEqual(collectable.Description, newCollectable.Description);
             Assert.AreEqual(collectable.DisplayName, newCollectable.DisplayName);
             Assert.AreEqual(collectable.Edition, newCollectable.Edition);
@@ -400,6 +415,23 @@ namespace HomeCollector_UnitTests.Repositories
                 Assert.IsTrue(true);
             }
         }
+        [TestMethod]
+        public void savecollection_fails_when_collection_is_null()
+        {
+            // initalize repository without a collection
+            IHomeCollectionRepository repo = new HomeCollectionRepository(_mockFileIO.Object);
+            string fullFilePath = "fullfilepath";
+
+            try
+            {
+                repo.SaveCollection(fullFilePath, false);
+                Assert.Fail("Expected save to fail when the collection is null");
+            }
+            catch (CollectionException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
 
         [TestMethod]
         public void savecollection_calls_writefile_with_fullpath_set()
@@ -454,8 +486,7 @@ namespace HomeCollector_UnitTests.Repositories
         [TestMethod, ExpectedException(typeof(CollectionException))]
         public void loadcollection_fileio_not_found_throws_exception()
         {
-            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(_mockFileIO.Object);
             _mockFileIO.Setup(i => i.ReadFile(It.IsAny<string>())).Throws(new CollectionException());
             string fullFilePath = "badfilepath";
 
@@ -467,8 +498,7 @@ namespace HomeCollector_UnitTests.Repositories
         [TestMethod, ExpectedException(typeof(CollectionException))]
         public void loadcollection_file_invalid_json_content_throws_exception()
         {
-            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(_mockFileIO.Object);
             string mockFileContent = "this is some invalid Json content";
             _mockFileIO.Setup(i => i.ReadFile(It.IsAny<string>())).Returns(mockFileContent);
             string fullFilePath = "filepath";
@@ -481,8 +511,7 @@ namespace HomeCollector_UnitTests.Repositories
         [TestMethod]
         public void loadcollection_file_valid_json_content_returns_collection()
         {
-            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(_mockFileIO.Object);
 
             foreach (Type collectionType in CollectableBaseFactory.CollectableTypes)
             {
@@ -500,8 +529,7 @@ namespace HomeCollector_UnitTests.Repositories
         [TestMethod]
         public void loadcollection_with_path_filename_calls_getfullfilepath()
         {
-            Mock<ICollectionBase> mockCollection = new Mock<ICollectionBase>();
-            IHomeCollectionRepository repo = new HomeCollectionRepository(mockCollection.Object, _mockFileIO.Object);
+            IHomeCollectionRepository repo = new HomeCollectionRepository(_mockFileIO.Object);
             _mockFileIO.Setup(f => f.GetFullFilePath(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((string p, string f) => p + @"\" + f);
 
@@ -519,6 +547,71 @@ namespace HomeCollector_UnitTests.Repositories
         }
 
 
+        // StripInvalidJsonChars - handle null, invalid characters, multiple instances
+        // test calls to strip before saving as JSON
+        [TestMethod, ExpectedException(typeof(CollectableParseException))]
+        public void stripinvalidjson_throws_exception_when_passed_null()
+        {
+            char padding = 'X';
+            string test = null;
+
+            string output = HomeCollectionRepository.StripInvalidJson(test, padding);
+
+            Assert.Fail("Expected exception to be thrown when passed null");
+        }
+
+        [TestMethod]
+        public void stripinvalidjson_replaces_single_invalid_character()
+        {
+            char padding = 'X';
+            foreach (char c in HomeCollectionRepository.INVALID_JSON_CHARS)
+            {
+                string test = $"test{c}test";
+                string expected = $"test{padding}test";
+
+                string output = HomeCollectionRepository.StripInvalidJson(test, padding);
+
+                Assert.AreEqual(expected, output);
+            }
+        }
+
+        [TestMethod]
+        public void stripinvalidjson_replaces_multiple_invalid_characters()
+        {
+            char padding = 'v';
+            foreach (char c in HomeCollectionRepository.INVALID_JSON_CHARS)
+            {
+                string test = $"{c}test{c}test{c}";
+                string expected = $"{padding}test{padding}test{padding}";
+
+                string output = HomeCollectionRepository.StripInvalidJson(test, padding);
+
+                Assert.AreEqual(expected, output);
+            }
+        }
+
+        [TestMethod]
+        public void stripinvalidjson_replaces_multiple_mixed_invalid_characters()
+        {
+            char padding = 'X';
+            string test = "test";
+            string expected = "test";
+            string output = "";
+            foreach (char c in HomeCollectionRepository.INVALID_JSON_CHARS)
+            {
+                test += $"{c}test";
+                expected += $"{padding}test";
+            }
+            output = test;
+            foreach (char c in HomeCollectionRepository.INVALID_JSON_CHARS)
+            {
+                output = HomeCollectionRepository.StripInvalidJson(output, padding);
+            }
+
+            Assert.AreEqual(expected, output);
+        }
+
+
         /****** helper methods ***********************************************************************/
         private BookItem GetTestBookItem(int i)
         {
@@ -527,7 +620,7 @@ namespace HomeCollector_UnitTests.Repositories
                 EstimatedValue = i * 0.75M,
                 IsFavorite = false,
                 ItemDetails = $"Test{i}",
-                Condition = BookConditionEnum.Fine
+                Condition = "F"
             };
             return item;
         }
@@ -537,7 +630,7 @@ namespace HomeCollector_UnitTests.Repositories
             {
                 Author = $"Author{i}",
                 BookCode = $"ABC{i}",
-                DatePublished = DateTime.Today.AddDays(-i),
+                Month = (i+1) % 12,
                 Description = $"description{i}",
                 DisplayName = $"display{i}",
                 Edition = $"edition{i}",
@@ -556,7 +649,7 @@ namespace HomeCollector_UnitTests.Repositories
                 EstimatedValue = i * 0.50M,
                 IsFavorite = true,
                 ItemDetails = $"Test{i}",
-                Condition = StampConditionEnum.VeryFine,
+                Condition = "VF",
                 IsMintCondition = true
             };
             return item;
@@ -566,7 +659,7 @@ namespace HomeCollector_UnitTests.Repositories
             StampBase collectable = new StampBase()
             {
                 AlternateId = $"alternateid{i}",
-                Country = StampCountryEnum.USA,
+                Country = StampBase.COUNTRY_DEFAULT,
                 Description = $"description{i}",
                 DisplayName = $"displayname{i}",
                 FirstDayOfIssue = DateTime.Today.AddDays(- i * 100),

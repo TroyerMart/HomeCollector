@@ -62,7 +62,8 @@ namespace HomeCollector_UnitTests.Factories
         {
             BookBase book = (BookBase)CollectableBaseFactory.CreateCollectableBase(CollectableBaseFactory.BookType);
 
-            Assert.AreEqual(DateTime.MinValue, book.DatePublished);
+            Assert.AreEqual(0, book.Year);
+            Assert.AreEqual(0, book.Month);
         }
 
 

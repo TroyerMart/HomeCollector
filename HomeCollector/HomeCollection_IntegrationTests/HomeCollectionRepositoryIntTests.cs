@@ -46,13 +46,11 @@ namespace HomeCollector_IntegrationTests
         [TestMethod]
         public void load_test_book_collection_from_disk()
         {
-            // I really don't like having to initialize this.  Should just be able pass variable, or not require it.  Expose instead.
-            string collectionName = "Star Trek Books - 1";
-            ICollectionBase testCollection = new HomeCollection(collectionName, CollectableBaseFactory.BookType);
+            string collectionName = "Star Trek Books - VOY";
 
             // Initialize a repository
             IFileIO fileIO = new FileIO();
-            HomeCollectionRepository repo = new HomeCollectionRepository(testCollection, fileIO);
+            HomeCollectionRepository repo = new HomeCollectionRepository(fileIO);
 
             string fullFilePath = Environment.CurrentDirectory + @"\";
             fullFilePath += collectionName + @"." + HomeCollectionRepository.FILE_EXTENSION;
@@ -69,7 +67,7 @@ namespace HomeCollector_IntegrationTests
                 EstimatedValue = i * 0.75M,
                 IsFavorite = false,
                 ItemDetails = $"Test{i}",
-                Condition = BookConditionEnum.Fine
+                Condition = "F"
             };
             return item;
         }
@@ -79,7 +77,7 @@ namespace HomeCollector_IntegrationTests
             {
                 Author = $"Author{i}",
                 BookCode = $"ABC{i}",
-                DatePublished = DateTime.Today.AddDays(-i),
+                Month = (i + 1) % 12,
                 Description = $"description{i}",
                 DisplayName = $"display{i}",
                 Edition = $"edition{i}",
@@ -98,7 +96,7 @@ namespace HomeCollector_IntegrationTests
                 EstimatedValue = i * 0.50M,
                 IsFavorite = true,
                 ItemDetails = $"Test{i}",
-                Condition = StampConditionEnum.VeryFine,
+                Condition = "VF",
                 IsMintCondition = true
             };
             return item;
@@ -108,7 +106,7 @@ namespace HomeCollector_IntegrationTests
             StampBase collectable = new StampBase()
             {
                 AlternateId = $"alternateid{i}",
-                Country = StampCountryEnum.USA,
+                Country = StampBase.COUNTRY_DEFAULT,
                 Description = $"description{i}",
                 DisplayName = $"displayname{i}",
                 FirstDayOfIssue = DateTime.Today.AddDays(-i * 100),

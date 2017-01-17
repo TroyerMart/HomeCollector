@@ -12,8 +12,21 @@ namespace HomeCollector.Models.Members
 {
     public class BookItem : ICollectableItem
     {
-        decimal _estimatedValue = 0;
+        public const string CONDITION_DEFAULT = "UNDEFINED";
+        public static readonly List<string> BOOK_CONDITIONS = new List<string>
+        {   // http://www.alibris.com/glossary/condition
+            CONDITION_DEFAULT,
+            "N",    // New
+            "F",    // Fine - like new
+            "VG",   // Very Good - some signs of wear, can't be ex-library
+            "G",    // Good - Average used product
+            "F",    // Fair - obviously well-worn product
+            "P"     // Poor - extensive external wear, soiled, binding defects
+        };
 
+        private decimal _estimatedValue = 0;
+        private string _condition = CONDITION_DEFAULT;
+        
         public BookItem()
         {
         }
@@ -41,8 +54,31 @@ namespace HomeCollector.Models.Members
         }
 
         // Book properties
-        public BookConditionEnum Condition { get; set; } = BookConditionEnum.Undefined;
+        public string Condition
+        {
+            get { return _condition; }
+            set
+            {
+                if (ValidateCondition(value))
+                {
+                    _condition = value;
+                }
+                else
+                {
+                    throw new CollectableException($"Invalid book condition: {value}");
+                }
+            }
+        }
 
+        /************************** helper methods **********************************************************/
+        internal static bool ValidateCondition(string condition)
+        {
+            if (BOOK_CONDITIONS.Contains(condition))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 
 }

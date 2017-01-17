@@ -18,13 +18,17 @@ namespace HomeCollector.Repositories
 {
     public class HomeCollectionRepository: IHomeCollectionRepository
     {
-        public const string FILE_EXTENSION = "hcol";
+        public const string FILE_EXTENSION = "hcl";
+        public static readonly List<char> INVALID_JSON_CHARS = new List<char>()
+            {
+                '\\', '\"', '\n', '\t', '\''
+            };
 
         private ICollectionBase _homeCollection;
         private IFileIO _fileIO;
 
         public HomeCollectionRepository(ICollectionBase homeCollection, IFileIO fileIO)
-        {   
+        {
             if (fileIO == null)
             {
                 throw new FileIOException("File IO must not be null");
@@ -38,6 +42,17 @@ namespace HomeCollector.Repositories
             _fileIO = fileIO;
         }
 
+        public HomeCollectionRepository(IFileIO fileIO)
+        {   // we don't have or need an existing collection to call LoadCollection
+            if (fileIO == null)
+            {
+                throw new FileIOException("File IO must not be null");
+            }
+
+            _homeCollection = null;
+            _fileIO = fileIO;
+        }
+
         // save collection to disk
         public void SaveCollection(string fullFilePath)
         {
@@ -46,6 +61,10 @@ namespace HomeCollector.Repositories
         }
         public void SaveCollection(string fullFilePath, bool overwriteFile)
         {
+            if (_homeCollection == null)
+            {
+                throw new CollectionException("Unable to save a null collection");
+            }
             string jsonCollection = null;
             try
             {
@@ -112,6 +131,11 @@ namespace HomeCollector.Repositories
             return _homeCollection;
         }
 
+        // TODO: merge, import into existing??
+        // TODO: more robust JSON parsing - handle some bad characters, bad format, with logging and potentially continue to process
+        // TODO: import/export as spreadsheet/CSV
+        // TODO: validate fields for special characters - needs to be in other classes, though, not in repo
+
         // Internal methods
         internal static string ConvertCollectionToJson(ICollectionBase collectionToSerialize)
         {
@@ -176,7 +200,7 @@ namespace HomeCollector.Repositories
                         newCollectable = JsonConvert.DeserializeObject<StampBase>(collectable.ToString());
                         break;
                     default:
-                        throw new CollectableParseException($"Unable to parse Json.  Unsupported collection type={collectionType}");
+                        throw new CollectableParseException($"Unable to parse Json.  Unsupported collection type={collectionType.Name}");
                 }
                 if (items != null)
                 {
@@ -192,7 +216,7 @@ namespace HomeCollector.Repositories
             }
             catch (Exception ex)
             {
-                throw new CollectableParseException($"Unable to parse Json into a collectable object.  Type={collectionType}, Json={jsonCollectable}", ex);
+                throw new CollectableParseException($"Unable to parse Json into a collectable object.  Type={collectionType.Name}, Json={jsonCollectable}", ex);
             }
         }
 
@@ -210,12 +234,12 @@ namespace HomeCollector.Repositories
                         item = JsonConvert.DeserializeObject<StampItem>(jsonItem);
                         break;
                     default:
-                        throw new CollectableItemInstanceParseException($"Unable to parse Json.  Unsupported collection type={collectionType}");
+                        throw new CollectableItemInstanceParseException($"Unable to parse Json.  Unsupported collection type={collectionType.Name}");
                 }
             }
             catch (Exception ex)
             {
-                throw new CollectableItemInstanceParseException($"Unable to parse Json into a collectable item.  Type={collectionType}, Json={jsonItem}", ex);
+                throw new CollectableItemInstanceParseException($"Unable to parse Json into a collectable item.  Type={collectionType.Name}, Json={jsonItem}", ex);
             }
             return item;
         }
@@ -242,6 +266,22 @@ namespace HomeCollector.Repositories
                 collectable.YearOfIssue = 0;
             }
         }
+
+        public static string StripInvalidJson(string inputString, char padding = '\0' )
+        {
+            if (inputString == null)
+            {
+                throw new CollectableParseException($"StripInvalidJson requires a value to be passed in");
+            }
+            string outputString = inputString;
+
+            foreach (char c in INVALID_JSON_CHARS)
+            {
+                outputString = outputString.Replace(c, padding);
+            }
+            return outputString;
+        }
+
 
     }
 

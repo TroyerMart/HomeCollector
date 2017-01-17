@@ -36,10 +36,10 @@ namespace HomeCollector_UnitTests.Models.Members
         [TestMethod]
         public void bookcondition_value_defaults_to_undefined_for_new_item()
         {
-            BookConditionEnum expectedValue = BookConditionEnum.Undefined;
+            string expectedValue = BookItem.CONDITION_DEFAULT;
 
             BookItem book = new BookItem();
-            BookConditionEnum defaultValue = book.Condition;
+            string defaultValue = book.Condition;
 
             Assert.AreEqual(expectedValue, defaultValue);
         }
@@ -87,5 +87,37 @@ namespace HomeCollector_UnitTests.Models.Members
 
             Assert.AreEqual(CollectableBaseFactory.BookType, bookType);
         }
+
+        [TestMethod]
+        public void validatecondition_returns_false_when_passed_null_condition()
+        {
+            string invalidCondition = null;
+
+            bool isValid = BookItem.ValidateCondition(invalidCondition);
+
+            Assert.IsFalse(isValid, $"Expected ValidateCondition to return false an unexpected condition: {invalidCondition}");
+        }
+
+        [TestMethod]
+        public void validatecondition_returns_false_when_passed_unexpected_condition()
+        {
+            string invalidCondition = "invalid";
+
+            bool isValid = BookItem.ValidateCondition(invalidCondition);
+
+            Assert.IsFalse(isValid, $"Expected ValidateCondition to return false an unexpected condition: {invalidCondition}");
+        }
+
+        [TestMethod]
+        public void validatecondition_book_conditions_set_successfully()
+        {
+            foreach(string condition in BookItem.BOOK_CONDITIONS)
+            {
+                bool isValid = BookItem.ValidateCondition(condition);
+
+                Assert.IsTrue(isValid);
+            }
+        }
+      
     }
 }

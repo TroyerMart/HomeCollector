@@ -43,7 +43,6 @@ namespace HomeCollector.Controllers
             return _collectableBase.IsSame(itemToCompare, useAlternateId);
         }
     
-
     }
 
 }
