@@ -1,0 +1,7 @@
+{"CollectionName":"Star Trek Books - BNB","CollectionType":"HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+,"Collectables":[
+ {"CollectableType":"HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","DisplayName":"The Brave and the Bold, Book 1" ,"Description":"TOS/DS9" ,"Title":"The Brave and the Bold, Book 1" ,"Author":"Keith R.A. DeCandido" ,"Publisher":"" ,"Year":2002 ,"Month":0,"Series":"BNB" ,"BookCode":"BNB1" ,"ISBN":"" ,"Edition":"" ,"ItemInstances":[{"CollectableType":"HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","ItemDetails":"Copies=" ,"IsFavorite":false ,"EstimatedValue":0 ,"Condition":"UNDEFINED" } ]}
+,{"CollectableType":"HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","DisplayName":"The Brave and the Bold, Book 2" ,"Description":"TNG/VOY" ,"Title":"The Brave and the Bold, Book 2" ,"Author":"Keith R.A. DeCandido" ,"Publisher":"" ,"Year":2002 ,"Month":0,"Series":"BNB" ,"BookCode":"BNB2" ,"ISBN":"" ,"Edition":"" ,"ItemInstances":[{"CollectableType":"HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","ItemDetails":"Copies=" ,"IsFavorite":false ,"EstimatedValue":0 ,"Condition":"UNDEFINED" } ]}
+
+]
+}

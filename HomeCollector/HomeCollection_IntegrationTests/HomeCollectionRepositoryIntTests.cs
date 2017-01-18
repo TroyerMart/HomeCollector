@@ -46,7 +46,7 @@ namespace HomeCollector_IntegrationTests
         [TestMethod]
         public void load_test_book_collection_from_disk()
         {
-            string collectionName = "Star Trek Books - VOY";
+            string collectionName = "Star Trek Books - GAT";
 
             // Initialize a repository
             IFileIO fileIO = new FileIO();
@@ -56,6 +56,22 @@ namespace HomeCollector_IntegrationTests
             fullFilePath += collectionName + @"." + HomeCollectionRepository.FILE_EXTENSION;
 
             ICollectionBase books = repo.LoadCollection(fullFilePath);
+
+        }
+
+        [TestMethod]
+        public void load_test_stamp_collection_from_disk()
+        {
+            string collectionName = "Test StampBase Collection_formatted";
+
+            // Initialize a repository
+            IFileIO fileIO = new FileIO();
+            HomeCollectionRepository repo = new HomeCollectionRepository(fileIO);
+
+            string fullFilePath = Environment.CurrentDirectory + @"\";
+            fullFilePath += collectionName + @"." + HomeCollectionRepository.FILE_EXTENSION;
+
+            ICollectionBase stamps = repo.LoadCollection(fullFilePath);
 
         }
 
@@ -112,7 +128,7 @@ namespace HomeCollector_IntegrationTests
                 FirstDayOfIssue = DateTime.Today.AddDays(-i * 100),
                 IsPostageStamp = true,
                 ScottNumber = $"scottnumber{i}",
-                YearOfIssue = 2000 + i
+                IssueYearStart = 2000 + i
             };
             return collectable;
         }

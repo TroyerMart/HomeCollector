@@ -1,0 +1,7 @@
+{"CollectionName":"Star Trek Books - BDL","CollectionType":"HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+,"Collectables":[
+ {"CollectableType":"HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","DisplayName":"The Badlands - Book 1" ,"Description":"TOS/TNG" ,"Title":"The Badlands - Book 1" ,"Author":"Susan Wright" ,"Publisher":"" ,"Year":2000 ,"Month":0,"Series":"BDL" ,"BookCode":"BDL1" ,"ISBN":"" ,"Edition":"" ,"ItemInstances":[{"CollectableType":"HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","ItemDetails":"Copies=" ,"IsFavorite":false ,"EstimatedValue":0 ,"Condition":"UNDEFINED" } ]}
+,{"CollectableType":"HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","DisplayName":"The Badlands - Book 2" ,"Description":"DS9/VOY" ,"Title":"The Badlands - Book 2" ,"Author":"Susan Wright" ,"Publisher":"" ,"Year":2000 ,"Month":0,"Series":"BDL" ,"BookCode":"BDL2" ,"ISBN":"" ,"Edition":"" ,"ItemInstances":[{"CollectableType":"HomeCollector.Models.BookBase, HomeCollector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","ItemDetails":"Copies=" ,"IsFavorite":false ,"EstimatedValue":0 ,"Condition":"UNDEFINED" } ]}
+
+]
+}

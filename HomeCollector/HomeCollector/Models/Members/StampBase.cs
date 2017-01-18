@@ -23,6 +23,9 @@ namespace HomeCollector.Models
         private List<ICollectableItem> _items;
         private string _displayName = DISPLAYNAME_DEFAULT;
         private string _country = COUNTRY_DEFAULT;
+        private int _issueYearStart = 0;
+        private int _issueYearEnd = 0;
+        private DateTime _firstDayOfIssue;
 
         // from ICollectableBase
         public Type CollectableType { get { return GetType(); } }
@@ -40,10 +43,10 @@ namespace HomeCollector.Models
         }
         public IList<ICollectableItem> ItemInstances { get { return _items; } }
 
-        public string Description { get; set; }    // description of the generic item
+        public string Description { get; set; }    // description of the generic item - Type Ia, watermark, etc.
 
         // from IStampBase
-        public String Country {
+        public string Country {
             get { return _country; }
             set {
                 if (ValidateCountry(value))
@@ -57,13 +60,56 @@ namespace HomeCollector.Models
             }
         }
     
-    public bool IsPostageStamp { get; set; } = true;
-    public string ScottNumber { get; set; }
-    public string AlternateId { get; set; }
-    public int YearOfIssue { get; set; }
-    public DateTime FirstDayOfIssue { get; set; }
+        public bool IsPostageStamp { get; set; } = true;
+        public string ScottNumber { get; set; }
+        public string AlternateId { get; set; }
+        public int IssueYearStart {
+            get { return _issueYearStart; }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new CollectableException($"Unable to set IssueYearStart {value}.  Value must not be negative.");
+                }
+                _issueYearStart = value;
+            }
+        }    
 
-    public StampBase()
+        public int IssueYearEnd
+        {
+            get { return _issueYearEnd; }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new CollectableException($"Unable to set IssueYearEnd {value}.  Value must not be negative.");
+                }
+                if (value == 0 && _issueYearStart > 0)
+                {
+                    _issueYearEnd = _issueYearStart;
+                }
+                else
+                {
+                    _issueYearEnd = value;
+                }                
+            }
+        }    
+
+        public DateTime FirstDayOfIssue {
+            get { return _firstDayOfIssue; }
+            set
+            {
+                _firstDayOfIssue = new DateTime(value.Year, value.Month, value.Day);
+            }
+        }   
+
+        public string Perforation { get; set; }
+        public bool IsWatermarked { get; set; } = false;
+        public string CatalogImageCode { get; set; }
+        public string Color { get; set; }
+        public string Denomination { get; set; }
+
+        public StampBase()
     {
         _items = new List<ICollectableItem>();
     }

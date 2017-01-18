@@ -9,18 +9,19 @@ namespace HomeCollector.Interfaces
     
     public interface IStampBase
     {
-        String Country { get; set; }
+        string Country { get; set; }
         bool IsPostageStamp { get; set; }
         string ScottNumber { get; set; }
         string AlternateId { get; set; }
-        int YearOfIssue { get; set; }
+        int IssueYearStart { get; set; }  
+        int IssueYearEnd { get; set; }  
         DateTime FirstDayOfIssue { get; set; }
 
-        //string Perforation { get; set; }
-        //bool IsWatermarked { get; set; }
-        //string CatalogImageCode { get; set; }
-        //string Color { get; set; }
-        //double Denomination { get; set; }
+        string Perforation { get; set; }
+        bool IsWatermarked { get; set; }
+        string CatalogImageCode { get; set; }
+        string Color { get; set; }
+        string Denomination { get; set; }        
 
     }
 

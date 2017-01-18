@@ -225,7 +225,7 @@ namespace HomeCollector_UnitTests.Repositories
             Assert.AreEqual(collectable.FirstDayOfIssue, newCollectable.FirstDayOfIssue);
             Assert.AreEqual(collectable.IsPostageStamp, newCollectable.IsPostageStamp);
             Assert.AreEqual(collectable.ScottNumber, newCollectable.ScottNumber);
-            Assert.AreEqual(collectable.YearOfIssue, newCollectable.YearOfIssue);
+            Assert.AreEqual(collectable.IssueYearStart, newCollectable.IssueYearStart);
         }
 
         [TestMethod]
@@ -665,7 +665,7 @@ namespace HomeCollector_UnitTests.Repositories
                 FirstDayOfIssue = DateTime.Today.AddDays(- i * 100),
                 IsPostageStamp = true,
                 ScottNumber = $"scottnumber{i}",
-                YearOfIssue =2000 + i
+                IssueYearStart =2000 + i
             };
             return collectable;
         }
