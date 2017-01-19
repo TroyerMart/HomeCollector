@@ -62,7 +62,8 @@ namespace HomeCollector_IntegrationTests
         [TestMethod]
         public void load_test_stamp_collection_from_disk()
         {
-            string collectionName = "Test StampBase Collection_formatted";
+            string collectionName = "USA Stamps - 1";
+            //string collectionName = "Test StampBase Collection_formatted";
 
             // Initialize a repository
             IFileIO fileIO = new FileIO();
