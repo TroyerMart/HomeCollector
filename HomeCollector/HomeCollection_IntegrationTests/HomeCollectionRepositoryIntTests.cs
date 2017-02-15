@@ -46,7 +46,7 @@ namespace HomeCollector_IntegrationTests
         [TestMethod]
         public void load_test_book_collection_from_disk()
         {
-            string collectionName = "Star Trek Books - GAT";
+            string collectionName = "Star Trek Books - YTH";
 
             // Initialize a repository
             IFileIO fileIO = new FileIO();
@@ -62,7 +62,7 @@ namespace HomeCollector_IntegrationTests
         [TestMethod]
         public void load_test_stamp_collection_from_disk()
         {
-            string collectionName = "USA Stamps - 1";
+            string collectionName = "USA Stamps - Special";
             //string collectionName = "Test StampBase Collection_formatted";
 
             // Initialize a repository

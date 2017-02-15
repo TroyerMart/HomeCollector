@@ -289,5 +289,88 @@ namespace HomeCollector_UnitTests.Factories
             Assert.Fail("Expected GetTypeFromFullName to fail when unable to parse type from name");
         }
 
+
+        [TestMethod, ExpectedException(typeof(CollectableException))] 
+        public void getfriendlynamefromtype_null_type_throws_exceptions()
+        {
+            Type collectableType = null;
+
+            string friendlyName = CollectableBaseFactory.GetFriendlyNameFromType(collectableType);
+
+            Assert.Fail("Exception should have been thrown");            
+        }
+
+        [TestMethod]
+        public void getfriendlynamefromtype_returns_collectable_type_successfully()
+        {
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                //string expectedName = collectableType.Name.Replace("Base", "");
+                string expectedFriendlyName = null;
+                switch (collectableType.Name)
+                {
+                    case "BookBase":
+                        expectedFriendlyName ="Book";
+                        break;
+                    case "StampBase":
+                        expectedFriendlyName = "Stamp";
+                        break;
+
+                    default:
+                        expectedFriendlyName = "";
+                        break;
+                }
+
+                string friendlyName = CollectableBaseFactory.GetFriendlyNameFromType(collectableType);
+
+                Assert.AreEqual(expectedFriendlyName, friendlyName);
+            }
+        }
+
+        [TestMethod, ExpectedException(typeof(CollectableException))]
+        public void gettypefromfriendlyname_empty_name_throws_exceptions()
+        {
+            string friendlyName = "";
+
+            Type CollectableType = CollectableBaseFactory.GetTypeFromFriendlyName(friendlyName);
+
+            Assert.Fail("Exception should have been thrown");
+        }
+
+        [TestMethod, ExpectedException(typeof(CollectableException))]
+        public void gettypefromfriendlyname_null_name_throws_exceptions()
+        {
+            string friendlyName = null;
+
+            Type CollectableType = CollectableBaseFactory.GetTypeFromFriendlyName(friendlyName);
+
+            Assert.Fail("Exception should have been thrown");
+        }
+
+        [TestMethod]
+        public void gettypefromfriendlyname_returns_collectable_type_successfully()
+        {
+            string friendlyName = null;
+            foreach (Type collectableType in CollectableBaseFactory.CollectableTypes)
+            {
+                switch (collectableType.Name)
+                {
+                    case "BookBase":
+                        friendlyName = "Book";
+                        break;
+                    case "StampBase":
+                        friendlyName = "Stamp";
+                        break;
+                    default:
+                        friendlyName = "";
+                        break;
+                }
+
+                Type friendlyType = CollectableBaseFactory.GetTypeFromFriendlyName(friendlyName);
+
+                Assert.AreEqual(collectableType, friendlyType);
+            }
+        }
+
     }
 }

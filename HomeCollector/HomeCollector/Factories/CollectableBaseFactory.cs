@@ -133,6 +133,35 @@ namespace HomeCollector.Factories
             throw new CollectableException($"Unable to parse a valid collectable type from string {fullTypeName}");
         }
 
+        public static string GetFriendlyNameFromType(Type collectableType)
+        {
+            string name;
+            if (collectableType == null)
+            {
+                throw new CollectableException($"Collectable name cannot be null");
+            }
+
+            // could explicitly check each type and assign the name, but this works as long as convention is followed for naming the types ("<name>Base")
+            name = collectableType.Name.Replace("Base", "");
+
+            return name;
+        }
+
+        public static Type GetTypeFromFriendlyName(string friendlyName)
+        {
+            if (string.IsNullOrWhiteSpace(friendlyName))
+            {
+                throw new CollectableException($"Type name cannot be null or blank");
+            }
+            foreach (Type collectableType in CollectableTypes)
+            {
+                if (GetFriendlyNameFromType(collectableType) == friendlyName)
+                {
+                    return collectableType;
+                }
+            }
+            throw new CollectableException($"Unable to parse a valid collectable type from string {friendlyName}");
+        }
 
     }
 
